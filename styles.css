@@ -1,0 +1,61 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+  --font-title: 1.75rem;
+  --font-subtitle: 1.25rem;
+  --background: #0A0A0A;
+  --text-color: #F1E3F7;
+}
+
+div{
+    /*border: 2px solid red;*/
+}
+
+body{
+    background-color: var(--background);
+    color: var(--text-color);
+    font-family: "Eczar", serif;
+    font-optical-sizing: auto;
+    /*font-weight: 400;*/
+    /*font-style: normal;*/
+}
+
+.topbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: 000;
+}
+
+.left{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    color: inherit;
+}
+
+.left>i{
+    cursor: pointer;
+    font-size: var(--font-subtitle);
+}
+
+.title-topbar{
+    font-size: var(--font-title);
+}
+
+.right{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.year{
+    font-size: var(--font-subtitle);
+}
