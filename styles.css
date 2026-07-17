@@ -86,12 +86,27 @@ body{
 
 .head{
     border: 2px solid var(--box-border);
-    border-radius: 1rem;
+    border-radius: 1.25rem;
     background-color: var(--box-color);
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    padding: 2rem 1rem;
+    gap: 1.5rem;
+}
+
+.head-top,.head-middle,.head-bottom{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.head-bottom{
+    width: 100%;   
+    gap: 1rem;
 }
 
 .head-percentage{
@@ -99,3 +114,40 @@ body{
     font-weight: 700;
     color: var(--wasted);
 }
+
+.head-time{
+    font-size: var(--font-title);
+    font-weight: 700;
+    background-color: var(--box-border);
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--box-color);
+    border-radius: 1.25rem;
+}
+
+
+.head-bottom-up{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.head-bottom-left,.head-bottom-percentage{
+    color: var(--wasted);
+}
+
+.progressbar{
+    width: 100%;
+    height: 0.5rem;
+    background-color: var(--box-border);
+    border-radius: 1.25rem;
+}
+
+.progress-fill {
+    width: 45.8%;
+    height: 100%;
+    background: var(--text-color);
+    border-radius: inherit;
+    transition: width 0.3s ease;
+}
+
