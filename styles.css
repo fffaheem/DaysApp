@@ -5,9 +5,10 @@
 }
 
 :root {
-  --font-title: 1.75rem;
-  --font-subtitle: 1.25rem;
+  --font-title: 1.5rem;
+  --font-subtitle: 1.125rem;
   --font-large: 4rem;
+  --font-small: 0.75rem;
   --background: #0A0A0A;
   --text-color: #F1E3F7;
   --box-color: #1C1C1C;
@@ -18,11 +19,13 @@
   --vacation:#3B82F6;
   --uncategorized:#5B4070;
   --future: #B4A0C4;
+  --border-radius:1.25rem;
+  --theme: #3B1E4A;
 }
 
-div{
+/*div{*/
     /*border: 2px solid red;*/
-}
+/*}*/
 
 body{
     background-color: var(--background);
@@ -43,10 +46,12 @@ body{
     /*font-weight: <weight>;*/
     /*font-style: normal;*/
     
-    line-height: auto;
     padding: 1rem;
 }
 
+/*===================================================*/
+/*TOP*/
+/*===================================================*/
 .topbar{
     display: flex;
     justify-content: space-between;
@@ -83,10 +88,12 @@ body{
 }
 
 
-
+/*========================================================*/
+/*Head*/
+/*========================================================*/
 .head{
     border: 2px solid var(--box-border);
-    border-radius: 1.25rem;
+    border-radius: var(--border-radius);
     background-color: var(--box-color);
     display: flex;
     justify-content: center;
@@ -94,6 +101,7 @@ body{
     flex-direction: column;
     padding: 2rem 1rem;
     gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .head-top,.head-middle,.head-bottom{
@@ -121,7 +129,7 @@ body{
     background-color: var(--box-border);
     padding: 0.5rem 1rem;
     border: 2px solid var(--box-color);
-    border-radius: 1.25rem;
+    border-radius: var(--border-radius);
 }
 
 
@@ -136,11 +144,11 @@ body{
     color: var(--wasted);
 }
 
-.progressbar{
+.progress-bar{
     width: 100%;
     height: 0.5rem;
     background-color: var(--box-border);
-    border-radius: 1.25rem;
+    border-radius: var(--border-radius);
 }
 
 .progress-fill {
@@ -151,3 +159,122 @@ body{
     transition: width 0.3s ease;
 }
 
+
+/*========================================================*/
+/*Dots*/
+/*========================================================*/
+.dot-out{
+    border: 2px solid var(--box-border);
+    border-radius: var(--border-radius);
+    background-color: var(--box-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+.dot-out-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.dot-out-year{
+    font-size: var(--font-subtitle);
+}
+.dot-out-icon{
+    background-color: var(--theme);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.dot-out-bottom{
+    display: flex;
+    /*justify-content: center;*/
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+.dot{
+    height: 1rem;
+    width: 1.4rem;
+    border-radius: 1rem;
+    border: 2px solid var(--uncategorized);
+}
+.productive{
+    background-color: var(--productive);
+}
+.wasted{
+    background-color: var(--wasted);
+}
+
+/*===========================================*/
+/*Stats*/
+/*===========================================*/
+.stats-out{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+}
+
+.stats-out-heading{
+    font-size: var(--font-subtitle);
+    padding-left: 1rem;
+}
+
+.stat-boxes{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 units */
+    gap: 1rem;
+}
+
+.stat-box:nth-child(1),
+.stat-box:nth-child(2),
+.stat-box:nth-child(3),
+.stat-box:nth-child(4),
+.stat-box:nth-child(5),
+.stat-box:nth-child(6) {
+  grid-column: span 2; /* 2/6 = 1 */
+}
+
+.stat-box:nth-child(7),
+.stat-box:nth-child(8) {
+  grid-column: span 3; /* 3/6 = 1.5 */
+}
+
+.stat-box:nth-child(9),
+.stat-box:nth-child(10) {
+  grid-column: 1 / -1; /* full width */
+}
+
+.stat-box{
+    background-color: var(--box-color);
+    border: 2px solid var(--box-border);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.info{
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: var(--font-small);
+    background-color: var(--box-border);
+    padding: 0.25rem 0.5rem;
+    border-radius: 100%;
+}
+
+.label{
+    font-size: var(--font-small);
+    
+}
