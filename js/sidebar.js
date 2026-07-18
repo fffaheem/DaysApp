@@ -31,19 +31,40 @@
   })
 
   let startX = 0;
+  let startY = 0;
   let currentX = 0;
+  let currentY = 0;
+  let directionChanged = false;
   document.addEventListener("touchstart", e => {
     startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    directionChanged = false;
   });
 
   document.addEventListener("touchmove", e => {
     currentX = e.touches[0].clientX;
+    currentY = e.touches[0].clientY;
+
+    // isActive is from dotFishEyeEffect if hold and press is active then do not do anything
+    if (isActive) {
+      currentX = 0;
+    }
+    
+    const dy = currentY - startY;
+    if (Math.abs(dy) > 50) {
+      directionChanged = true;
+    }
+
   })
   
   document.addEventListener("touchend", e => {
     const dx = currentX - startX;
 
-    if (dx > 50) {
+    if (directionChanged) {
+      return;
+    }
+      
+    if (dx > 50 ) {
       elements.sidebarOut.classList.add("sidebar-active");
       elements.body.classList.add("modal-active");
       elements.sidebar.classList.add("sidebar-slide");
