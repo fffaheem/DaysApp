@@ -9,8 +9,6 @@
   }
 
 
-
-
   elements.homeBtn.addEventListener("click", (e) => {
     elements.sidebarOut.classList.add("sidebar-active");
     elements.body.classList.add("modal-active");
@@ -29,7 +27,31 @@
       elements.sidebarOut.classList.remove("sidebar-active");
       elements.body.classList.remove("modal-active");
     }
-    // if(e.target.clase)
   })
+
+  let startX = 0;
+  let currentX = 0;
+  document.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+  });
+
+  document.addEventListener("touchmove", e => {
+    currentX = e.touches[0].clientX;
+  })
+  
+  document.addEventListener("touchend", e => {
+    const dx = currentX - startX;
+
+    if (dx > 50) {
+      elements.sidebarOut.classList.add("sidebar-active");
+      elements.body.classList.add("modal-active");
+      elements.sidebar.classList.add("sidebar-slide");
+    }
+    if (dx < -50) {
+      elements.sidebar.classList.remove("sidebar-slide");
+      elements.sidebarOut.classList.remove("sidebar-active");
+      elements.body.classList.remove("modal-active");
+    }
+  });
   
 })();

@@ -161,7 +161,7 @@ body{
 
 #sidebar-close-btn{
     cursor: pointer;
-    transition: all ease-in-out 300ms;
+    transition: transform ease-in-out 200ms;
 }
 #sidebar-close-btn:hover{
     transform: scale(1.25);
@@ -203,11 +203,21 @@ body{
     gap: 2rem;
     flex-direction: column;
 }
+.sidebar-debug-menu>div{
+    cursor: pointer;
+    transition: transform ease-in-out 200ms;
+}
 
 .sidebar-menu-item{
     display: flex;
     align-items: center;
-    gap: 1rem
+    gap: 1rem;
+    cursor: pointer;
+    transition: transform ease-in-out 200ms;
+}
+
+.sidebar-menu-item:hover,.sidebar-debug-menu>div:hover{
+    transform: scale(1.125);
 }
 
 /*========================================================*/
