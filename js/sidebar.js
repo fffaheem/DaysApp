@@ -6,6 +6,7 @@
     sidebarOut: document.querySelector(".sidebar-out"),
     sidebarCloseBtn: document.getElementById("sidebar-close-btn"),
     sidebar: document.querySelector(".sidebar"),
+    dotOutBottom: document.querySelector(".dot-out-bottom"),
   }
 
 

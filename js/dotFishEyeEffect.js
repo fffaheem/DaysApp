@@ -115,15 +115,70 @@ container.addEventListener("mousemove", e => {
 container.addEventListener("mouseleave", stopInteraction);
 
 // --- Mobile Touch Events ---
+// container.addEventListener("touchstart", e => {
+//     e.preventDefault(); 
+//     startInteraction(e.touches[0].pageX, e.touches[0].pageY);
+// }, { passive: false });
+
+// container.addEventListener("touchmove", e => {
+//     e.preventDefault();
+//     startInteraction(e.touches[0].pageX, e.touches[0].pageY);
+// }, { passive: false });
+
+// container.addEventListener("touchend", stopInteraction);
+// container.addEventListener("touchcancel", stopInteraction);
+
+
+// --- Mobile Touch Events (Long Press) ---
+const HOLD_DELAY = 250;      // ms
+const MOVE_THRESHOLD = 10;   // px
+
+let holdTimer = null;
+let touchStartX = 0;
+let touchStartY = 0;
+
 container.addEventListener("touchstart", e => {
-    e.preventDefault(); 
-    startInteraction(e.touches[0].pageX, e.touches[0].pageY);
-}, { passive: false });
+    const touch = e.touches[0];
+
+    touchStartX = touch.pageX;
+    touchStartY = touch.pageY;
+
+    holdTimer = setTimeout(() => {
+        startInteraction(touch.pageX, touch.pageY);
+    }, HOLD_DELAY);
+}, { passive: true });
 
 container.addEventListener("touchmove", e => {
-    e.preventDefault();
-    startInteraction(e.touches[0].pageX, e.touches[0].pageY);
+    const touch = e.touches[0];
+
+    const dx = touch.pageX - touchStartX;
+    const dy = touch.pageY - touchStartY;
+
+    // Cancel long press if finger moved too much before activation
+    if (!isActive && Math.hypot(dx, dy) > MOVE_THRESHOLD) {
+        clearTimeout(holdTimer);
+        return;
+    }
+
+    // Only prevent scrolling once the interaction has started
+    if (isActive) {
+        e.preventDefault();
+        startInteraction(touch.pageX, touch.pageY);
+    }
 }, { passive: false });
 
-container.addEventListener("touchend", stopInteraction);
-container.addEventListener("touchcancel", stopInteraction);
+container.addEventListener("touchend", () => {
+    clearTimeout(holdTimer);
+
+    if (isActive) {
+        stopInteraction();
+    }
+});
+
+container.addEventListener("touchcancel", () => {
+    clearTimeout(holdTimer);
+
+    if (isActive) {
+        stopInteraction();
+    }
+});
