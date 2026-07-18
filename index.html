@@ -18,10 +18,11 @@
 	
 	<!--lora-->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 	
-	<link rel="stylesheet" href="./styles.css">
+	<link rel="stylesheet" href="./css/common.css">
+	<link rel="stylesheet" href="./css/styles.css">
 </head>
 
 <!--<body class="modal-active">-->
@@ -46,30 +47,30 @@
             </div>
 
             <div class="sidebar-menu">
-                <div class="sidebar-menu-item">
+                <a class="sidebar-menu-item" href="./">
                     <i class="fa fa-home" aria-hidden="true"></i>
                     Home
-                </div>
-                <div class="sidebar-menu-item">
+                </a>
+                <a class="sidebar-menu-item" href="./">
                     <i class="fa fa-trophy" aria-hidden="true"></i>
                     Goals
-                </div>
-                <div class="sidebar-menu-item">
+                </a>
+                <a class="sidebar-menu-item" href="./">
                     <i class="fa fa-line-chart" aria-hidden="true"></i>
                     Statistics
-                </div>
-                <div class="sidebar-menu-item">
+                </a>
+                <a class="sidebar-menu-item" href="./">
                     <i class="fa fa-tree" aria-hidden="true"></i>
                     Progress Tree
-                </div>
-                <div class="sidebar-menu-item">
+                </a>
+                <a class="sidebar-menu-item" href="./">
                     <i class="fa fa-cog" aria-hidden="true"></i>
                     Settings
-                </div>
-                <div class="sidebar-menu-item">
+                </a>
+                <a class="sidebar-menu-item" href="./about.html">
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                     About
-                </div>
+                </a>
             </div>
 
             <div class="sidebar-debug">
@@ -109,7 +110,7 @@
     <div class="dot-out">
         <div class="dot-out-top">
             <h1 class="dot-out-year">Year Overview</h1>
-            <i class="dot-out-icon fa fa-arrow-right" aria-hidden="true"></i>
+            <i class="dot-out-icon fa fa-arrow-right" id="dot-out-icon-btn" aria-hidden="true"></i>
         </div>
         <div class="dot-out-bottom">
             <div class="dot productive"></div>
@@ -540,6 +541,7 @@
     </div>
 </body>
 
-<script src="./dotFishEyeEffect.js"></script>
-<script src="./script.js"></script>
+<script src="./js/dotFishEyeEffect.js"></script>
+<script src="./js/sidebar.js"></script>
+<script src="./js/script.js"></script>
 </html>
