@@ -80,8 +80,11 @@ function update() {
 
 function startInteraction(x, y) {
     if (!isActive) {
-        isActive = true;
-        container.classList.add("is-active");
+      isActive = true;
+      container.classList.add("is-active");
+
+      // Disable scrolling now
+      container.style.touchAction = "none";
     }
     mouseX = x;
     mouseY = y;
@@ -94,7 +97,7 @@ function startInteraction(x, y) {
 function stopInteraction() {
     isActive = false;
     container.classList.remove("is-active");
-    
+    container.style.touchAction = "";
     if (frame !== null) {
         cancelAnimationFrame(frame);
         frame = null;
@@ -114,21 +117,6 @@ container.addEventListener("mousemove", e => {
 });
 container.addEventListener("mouseleave", stopInteraction);
 
-// --- Mobile Touch Events ---
-// container.addEventListener("touchstart", e => {
-//     e.preventDefault(); 
-//     startInteraction(e.touches[0].pageX, e.touches[0].pageY);
-// }, { passive: false });
-
-// container.addEventListener("touchmove", e => {
-//     e.preventDefault();
-//     startInteraction(e.touches[0].pageX, e.touches[0].pageY);
-// }, { passive: false });
-
-// container.addEventListener("touchend", stopInteraction);
-// container.addEventListener("touchcancel", stopInteraction);
-
-
 // --- Mobile Touch Events (Long Press) ---
 const HOLD_DELAY = 250;      // ms
 const MOVE_THRESHOLD = 10;   // px
@@ -144,7 +132,7 @@ container.addEventListener("touchstart", e => {
     touchStartY = touch.pageY;
 
     // Prevent default scrolling right away if touching the dot container
-    e.preventDefault(); 
+    // e.preventDefault(); 
 
     holdTimer = setTimeout(() => {
         startInteraction(touch.pageX, touch.pageY);
