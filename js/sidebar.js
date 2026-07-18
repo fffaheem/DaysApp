@@ -35,19 +35,22 @@
   let currentX = 0;
   let currentY = 0;
   let directionChanged = false;
+  let isSwiping = false; // Tracks if the user actually dragged their finger
   document.addEventListener("touchstart", e => {
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
     directionChanged = false;
+    isSwiping = false;
   });
 
   document.addEventListener("touchmove", e => {
+    isSwiping = true;
     currentX = e.touches[0].clientX;
     currentY = e.touches[0].clientY;
 
     // isActive is from dotFishEyeEffect if hold and press is active then do not do anything
-    if (isActive) {
-      currentX = 0;
+    if (typeof isActive !== 'undefined' && isActive) {
+      currentX = startX; // Nullify the horizontal distance
     }
     
     const dy = currentY - startY;
@@ -59,7 +62,10 @@
   
   document.addEventListener("touchend", e => {
     const dx = currentX - startX;
-
+    if (!isSwiping) {
+      return;
+    }
+    
     if (directionChanged) {
       return;
     }
@@ -74,6 +80,8 @@
       elements.sidebarOut.classList.remove("sidebar-active");
       elements.body.classList.remove("modal-active");
     }
+
+    currentX = startX
   });
   
 })();

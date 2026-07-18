@@ -73,11 +73,11 @@ body{
 
 .left>i{
     cursor: pointer;
-    font-size: var(--font-subtitle);
+    /*font-size: var(--font-subtitle);*/
 }
 
 .title-topbar{
-    font-size: var(--font-title);
+    font-size: var(--font-subtitle);
 }
 
 .right{
