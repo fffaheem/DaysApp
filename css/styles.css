@@ -123,6 +123,7 @@
 /* When interacting, remove transition so it perfectly tracks the pointer */
 .dot-out-bottom.is-active .dot {
     transition: none;
+    touch-action: none;
 }
 
 /*.dot{

@@ -143,10 +143,13 @@ container.addEventListener("touchstart", e => {
     touchStartX = touch.pageX;
     touchStartY = touch.pageY;
 
+    // Prevent default scrolling right away if touching the dot container
+    e.preventDefault(); 
+
     holdTimer = setTimeout(() => {
         startInteraction(touch.pageX, touch.pageY);
     }, HOLD_DELAY);
-}, { passive: true });
+}, { passive: false }); // CRITICAL: Change passive to false here so preventDefault works!
 
 container.addEventListener("touchmove", e => {
     const touch = e.touches[0];
@@ -160,9 +163,10 @@ container.addEventListener("touchmove", e => {
         return;
     }
 
-    // Only prevent scrolling once the interaction has started
+    // Always prevent default when interacting or preparing to interact
+    e.preventDefault();
+    
     if (isActive) {
-        e.preventDefault();
         startInteraction(touch.pageX, touch.pageY);
     }
 }, { passive: false });
