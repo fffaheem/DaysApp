@@ -4,7 +4,7 @@
     body: document.querySelector("body"),
     homeBtn: document.getElementById("home-btn"),
     sidebarOut: document.querySelector(".sidebar-out"),
-    sidebarCloseBtn: document.getElementById("sidebar-close-btn"),
+    // sidebarCloseBtn: document.getElementById("sidebar-close-btn"),
     sidebar: document.querySelector(".sidebar"),
     dotOutBottom: document.querySelector(".dot-out-bottom"),
   }
@@ -16,11 +16,11 @@
     elements.sidebar.classList.add("sidebar-slide");
   })
 
-  elements.sidebarCloseBtn.addEventListener("click", (e) => {
-    elements.sidebar.classList.remove("sidebar-slide");
-    elements.sidebarOut.classList.remove("sidebar-active");
-    elements.body.classList.remove("modal-active");
-  })
+  // elements.sidebarCloseBtn.addEventListener("click", (e) => {
+  //   elements.sidebar.classList.remove("sidebar-slide");
+  //   elements.sidebarOut.classList.remove("sidebar-active");
+  //   elements.body.classList.remove("modal-active");
+  // })
 
   elements.sidebarOut.addEventListener("click", (e) => {
     if (e.target === elements.sidebarOut) {

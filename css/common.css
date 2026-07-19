@@ -8,6 +8,7 @@
     --font-title: 1.25rem;
     --font-subtitle: 1.125rem;
     --font-large: 4rem;
+    --font-medium: 2rem;
     --font-small: 0.75rem;
     --font-extra-small: 0.5rem;
     --max-width: 50rem;
@@ -141,12 +142,14 @@ body{
 }
 
 .sidebar-heading{
-    font-size: var(--font-title);
-    margin-bottom: 5rem;
+    font-size: var(--font-medium);
+    margin-bottom: 3rem;
     display: flex;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
     align-items: center;
     width: 100%;
+    gap: 1rem;
+    padding: 0.5rem;
 }
 
 .sidebar-heading-title{
@@ -212,6 +215,13 @@ body{
     text-decoration: none;
     color: inherit;
     transition: transform ease-in-out 200ms;
+    
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.sidebar-mrenu-item-active{
+    background: var(--theme);
 }
 
 .sidebar-menu-item:hover,.sidebar-debug-menu>div:hover{
