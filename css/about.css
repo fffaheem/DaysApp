@@ -1,0 +1,113 @@
+ .about-head{
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     margin: 5rem auto 2rem auto;
+     flex-direction: column;
+     gap: 1rem;
+    max-width: var(--max-width);
+}
+
+.about-head-title{
+    font-size: var(--font-large);
+    font-weight: 700;
+}
+.about-head-text{
+    text-align: justify;
+}
+
+.about-core-pillars{
+    display: flex;
+    margin: 5rem auto 2rem auto;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: var(--max-width);
+}
+
+.about-core-pillars-heading{
+    font-size: var(--font-title);
+}
+
+.about-core-pillar-item-out{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    background: var(--box-color);
+    padding: 1.25rem;
+    border-radius: var(--border-radius);
+}
+
+.about-core-pillar-item-out > i{
+    background: var(--theme);
+    font-size: 1.25rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    margin-top: 0.2rem;
+}
+
+.about-core-pillar-item-out:nth-child(1) > i {
+    color: var(--productive);
+}
+
+.about-core-pillar-item-out:nth-child(2) > i {
+    color: var(--vacation);
+}
+
+.about-core-pillar-item-out:nth-child(3) > i {
+    color: var(--wasted);
+}
+
+.about-message{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: justify;
+    flex-direction: column;
+    margin: 2rem auto 2rem auto;
+    gap: 1rem;
+    max-width: var(--max-width);
+    background: var(--box-color);
+    padding: 1.25rem;
+    border-radius: var(--border-radius);
+}
+
+.about-motto, .about-dev{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: justify;
+    flex-direction: column;
+    margin: 2rem auto 2rem auto;
+    gap: 1rem;
+    max-width: var(--max-width);
+    padding: 1.25rem;
+}
+
+.about-motto>div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.about-motto>div:nth-child(2){
+    font-weight: 700;
+    font-size: var(--font-subtitle);
+}
+
+.about-social{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.about-social a{
+    text-decoration: none;
+    color: inherit;
+    text-decoration: underline;
+}

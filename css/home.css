@@ -30,7 +30,7 @@
 }
 
 .head-percentage{
-    font-size: var(--font-large);
+    font-size: var(--font-extra-large);
     font-weight: 700;
     color: var(--wasted);
 }
