@@ -1,16 +1,27 @@
  .goals-search{
      display: flex;
-     justify-content: center;
-     align-items: center;
-     margin: 5rem auto 2rem auto;
-     flex-direction: column;
-     gap: 1rem;
-    max-width: var(--max-width);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+    /* max-width: var(--max-width); */
+    position: fixed;
+    width: 100%;
+    padding-top: 5rem;
+    padding-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    top: 0;
+    z-index: 999;
+    left: 50%;
+    background-color: var(--background);
+    transform: translateX(-50%);
 }
 
 .goals-search-inputs{
     position: relative;
     width: 100%;
+    max-width: var(--max-width);
 }
 
 .goals-search-inputs > i{
@@ -36,6 +47,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    max-width: var(--max-width);
 }
 
 .goals-status-filter{
@@ -68,6 +80,7 @@
     align-items: flex-start;
     gap: 1rem;
     width: 100%;
+    max-width: var(--max-width);
 }
 
 .goals-month-year-filter button{
@@ -106,4 +119,8 @@
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     cursor: pointer;
+}
+
+.goals-out{
+    margin-top: 18rem;
 }
