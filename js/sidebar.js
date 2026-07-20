@@ -7,6 +7,7 @@
     // sidebarCloseBtn: document.getElementById("sidebar-close-btn"),
     sidebar: document.querySelector(".sidebar"),
     dotOutBottom: document.querySelector(".dot-out-bottom"),
+    goalsStatusFilterOut: document.querySelector(".goals-status-filter-out"),
   }
 
 
@@ -47,10 +48,14 @@
     isSwiping = true;
     currentX = e.touches[0].clientX;
     currentY = e.touches[0].clientY;
-
+    
+    if (elements.goalsStatusFilterOut && elements.goalsStatusFilterOut.contains(e.target)) {
+      isSwiping = false;
+    }
     // isActive is from dotFishEyeEffect if hold and press is active then do not do anything
     if (typeof isActive !== 'undefined' && isActive) {
-      currentX = startX; // Nullify the horizontal distance
+      // currentX = startX; // Nullify the horizontal distance
+      isSwiping = false;
     }
     
     const dy = currentY - startY;
