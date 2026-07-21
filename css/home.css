@@ -48,13 +48,26 @@
 
 .head-bottom-up{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     width: 100%;
+    position: relative;
+}
+
+.head-bottom-elapsed{
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .head-bottom-left,.head-bottom-percentage{
     color: var(--wasted);
+}
+
+.head-bottom-percentage{
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .progress-bar{
