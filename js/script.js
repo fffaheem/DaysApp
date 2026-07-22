@@ -1,5 +1,4 @@
 (() => {
-
   let elements = {
     body: document.querySelector("body"),
     headPercentage: document.querySelector(".head-percentage"),
@@ -10,9 +9,10 @@
     headBottomLeft: document.querySelector("#head-bottom-left"),
     headBottomPercentage: document.querySelector(".head-bottom-percentage"),
     progressFill: document.querySelector("#progressFill"),
+    dotOutBottom: document.querySelector(".dot-out-bottom"),
   }
 
-  
+  // For head
   function getYearProgress(now) {
     const startOfYear = new Date(now.getFullYear(), 0, 1);
     const startOfNextYear = new Date(now.getFullYear() + 1, 0, 1);
@@ -72,7 +72,6 @@
         leftPercentage: `${((leftMs / totalMs) * 100).toFixed(2)}%`
     };
   }
-
   
   function displayHeadTop(now) {
     if (elements.headTime.dataset.value === "full") {
@@ -104,7 +103,46 @@
     displayHeadMiddle(now);
     displayHeadBottom(now);
   }
+  // head end
 
+  // for dots
+  function getDots() {
+    return new Promise((resolve, reject) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const year = today.getFullYear();
+      const dots = [];
+    
+      const tx = db.transaction("HomeDots", "readwrite");
+      const store = tx.objectStore("HomeDots");
+      const request = store.openCursor();
+      request.onsuccess = (e) => {
+        const cursor = e.target.result;
+        if (!cursor) {
+          resolve(dots);
+          return;
+        }
+        if (cursor.key.startsWith(year)) {
+          dots.push(cursor.value);
+        }
+        cursor.continue();
+      }
+    })
+  }
+  // let populateDots = async ()=> {
+  async function populateDots(){
+    let dots = await getDots();
+    // elements.dotOutBottom.innerHTML = ""
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < dots.length; i++) {
+      let dot = document.createElement("div")
+      dot.classList.add("dot")
+      dot.classList.add(dots[i].status.toLowerCase())
+
+      fragment.appendChild(dot);
+    }
+    elements.dotOutBottom.replaceChildren(fragment);
+  }
 
   elements.headTime.addEventListener("click", (e) => {
     if (e.target.dataset.value == "full") {
@@ -114,12 +152,15 @@
     }
   })
 
+  document.addEventListener("dbReady", init)
+
 
   function init() {
-    setInterval(populateHead, 1000)
+    setInterval(populateHead, 1000);
+    populateDots();
   }
 
-  init();
+  // init();
   
   
 })();

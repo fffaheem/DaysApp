@@ -173,6 +173,12 @@
 .wasted{
     background-color: var(--wasted);
 }
+.neutral{
+    background-color: var(--neutral);
+}
+.vacation{
+    background-color: var(--vacation);
+}
 
 /*===========================================*/
 /*Stats*/

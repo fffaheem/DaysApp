@@ -19,6 +19,7 @@ request.onsuccess = (e) => {
   db = e.target.result;
   addDefaultSettings(db);
   initializeCurrentYearDots(db);
+  document.dispatchEvent(new Event("dbReady"));
 };
 
 request.onerror = (e) => {
