@@ -138,10 +138,12 @@
       let dot = document.createElement("div")
       dot.classList.add("dot")
       dot.classList.add(dots[i].status.toLowerCase())
-
+      dot.dataset.value = dots[i].date
       fragment.appendChild(dot);
     }
     elements.dotOutBottom.replaceChildren(fragment);
+
+    document.dispatchEvent(new Event("dotsReady"));
   }
 
   elements.headTime.addEventListener("click", (e) => {
