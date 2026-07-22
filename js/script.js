@@ -146,6 +146,31 @@
     }
     elements.topbarYearSelector.replaceChildren(fragment)
   }
+
+  function topYearSelectorHandler(e) {
+    const target = e.target.closest("div");
+    if (!target) return;
+    
+    clearInterval(intervalId);
+    
+    const today = new Date();
+    const year = today.getFullYear();
+    
+    const dateSelected = new Date(target.dataset.value,11,31);
+    dateSelected.setHours(23, 59, 59, 0);
+    const yearSelected = dateSelected.getFullYear()
+    
+    if (yearSelected == year) {
+      intervalId = setInterval(() => {
+        populateHead(new Date());
+      }, 1000);
+    } else {
+      populateHead(dateSelected);
+    }
+    
+    elements.topbarYearSelector.classList.toggle("active");
+    elements.rightYear.innerText = target.textContent.trim();
+  }
   
   // let populateDots = async ()=> {
   async function populateDots(dots){
@@ -168,31 +193,8 @@
     populateTopbarYearSelector(years);
     populateDots(dots);
 
-
-    elements.topbarYearSelector.querySelectorAll("div").forEach((d) => {
-      d.addEventListener("click", (e) => {
-        clearInterval(intervalId);
-        
-        const today = new Date();
-        const year = today.getFullYear();
-        
-        const dateSelected = new Date(e.target.dataset.value,11,31);
-        dateSelected.setHours(23, 59, 59, 0);
-        const yearSelected = dateSelected.getFullYear()
-        
-        if (yearSelected == year) {
-          intervalId = setInterval(() => {
-            populateHead(new Date());
-          }, 1000);
-        } else {
-          populateHead(dateSelected);
-        }
-        
-        elements.topbarYearSelector.classList.toggle("active");
-        elements.rightYear.innerText = e.target.textContent.trim();
-      })
-    })
-    
+    // async even listeners
+    elements.topbarYearSelector.addEventListener("click", topYearSelectorHandler);
   }
 
   // Event listeners
