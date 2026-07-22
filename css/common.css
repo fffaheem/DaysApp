@@ -87,10 +87,45 @@ body{
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
 }
 
 .year{
     font-size: var(--font-subtitle);
+}
+
+.topbar-year-selector{
+    /*display: flex;*/
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 3.4rem;
+    right: 1rem;
+    padding: 1rem;
+    gap: 1.5rem;
+    background-color: var(--box-color);
+    border:2px solid var(--background);
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    z-index: 1000;
+    transition: transform ease-in-out 250ms;
+    cursor: pointer;
+    user-select: none;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+.topbar-year-selector.active{
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.topbar-year-selector>div:hover{
+    transform: scale(1.125);
 }
 
 /*=====================================================*/

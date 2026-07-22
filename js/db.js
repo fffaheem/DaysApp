@@ -18,6 +18,7 @@ request.onupgradeneeded = (e) => {
 request.onsuccess = (e) => {
   db = e.target.result;
   addDefaultSettings(db);
+  initializeLastYear(db);
   initializeCurrentYearDots(db);
   document.dispatchEvent(new Event("dbReady"));
 };
@@ -92,14 +93,55 @@ function initializeCurrentYearDots(db) {
           store.add({
               date: dateString,
               status: current < today ? "NEUTRAL" : "FUTURE",
-              note: "",
-              tasks: []
+              note: ""
           });
   
           current.setDate(current.getDate() + 1);
       }
   
       console.log("Year generated.");
+  };
+  
+  request.onerror = () => {
+      console.error(request.error);
+  };
+}
+
+function initializeLastYear(db) {
+  const firstDay = `2025-01-01`;
+  
+  const tx = db.transaction("HomeDots", "readwrite");
+  const store = tx.objectStore("HomeDots");
+  
+  const request = store.get(firstDay);
+  
+  request.onsuccess = () => {
+  
+      // Already initialized
+      if (request.result) {
+          return;
+      }
+  
+      const start = new Date(2025, 1, 1);
+      const end = new Date(2025, 11, 31);
+  
+      while (start <= end) {
+  
+          // Format YYYY-MM-DD in LOCAL time
+          const yyyy = start.getFullYear();
+          const mm = String(start.getMonth() + 1).padStart(2, "0");
+          const dd = String(start.getDate()).padStart(2, "0");
+  
+          const dateString = `${yyyy}-${mm}-${dd}`;
+  
+          store.add({
+              date: dateString,
+              status: "NEUTRAL",
+              note: ""
+          });
+  
+          start.setDate(start.getDate() + 1);
+      }
   };
   
   request.onerror = () => {

@@ -1,6 +1,9 @@
 (() => {
   let elements = {
     body: document.querySelector("body"),
+    right: document.querySelector(".right"),
+    rightYear: document.querySelector(".year"),
+    topbarYearSelector: document.querySelector(".topbar-year-selector"),
     headPercentage: document.querySelector(".head-percentage"),
     headPercentageLabel: document.querySelector(".head-percentage-label"),
     headTime: document.querySelector(".head-time"),
@@ -60,20 +63,27 @@
   function getYearLeft(now) {
 
     const startOfYear = new Date(now.getFullYear(), 0, 1);
-    const startOfNextYear = new Date(now.getFullYear() + 1, 0, 1);
+    const startOfNextYear = new Date(now.getFullYear(), 11, 31);
+    startOfNextYear.setHours(23, 59, 59, 0);
 
     const elapsedMs = now - startOfYear;
     const totalMs = startOfNextYear - startOfYear;
     const leftMs = startOfNextYear - now;
 
     return {
-        elapsed: Math.floor(elapsedMs / (1000 * 60 * 60 * 24)),
-        left: Math.ceil(leftMs / (1000 * 60 * 60 * 24)),
-        leftPercentage: `${((leftMs / totalMs) * 100).toFixed(2)}%`
+        elapsed: Math.floor(elapsedMs / (1000 * 60 * 60 * 24))+1,
+        left: Math.floor(leftMs / (1000 * 60 * 60 * 24)),
+        leftPercentage: `${((leftMs / totalMs) * 100).toFixed(2)}`
     };
   }
   
   function displayHeadTop(now) {
+    const { year, progress } = getYearProgress(now);
+    elements.headPercentage.innerText = progress;
+    elements.headPercentageLabel.innerText = year;
+  }
+  
+  function displayHeadMiddle(now) {
     if (elements.headTime.dataset.value === "full") {
       elements.headTime.innerText = getTimeUntilYearEnd(now)
       elements.headLabel.innerText = "TIME REMAINING"
@@ -83,55 +93,62 @@
     }
   }
 
-  function displayHeadMiddle(now) {
-    const { year, progress } = getYearProgress(now);
-    elements.headPercentage.innerText = progress;
-    elements.headPercentageLabel.innerText = year;
-  }
-
   function displayHeadBottom(now) {
     const { elapsed, left, leftPercentage } = getYearLeft(now)
     elements.headBottomElapsed.innerText = elapsed
     elements.headBottomLeft.innerText =left
-    elements.headBottomPercentage.innerText =leftPercentage
-    elements.progressFill.style.setProperty("--progress", leftPercentage);
+    elements.headBottomPercentage.innerText = leftPercentage
+    elements.progressFill.style.setProperty("--progress", `${100-leftPercentage}%`);
   }
 
-  function populateHead() {
-    const now = new Date();
-    displayHeadTop(now);
-    displayHeadMiddle(now);
-    displayHeadBottom(now);
+  function populateHead(date) {
+    displayHeadTop(date);
+    displayHeadMiddle(date);
+    displayHeadBottom(date);
   }
   // head end
 
-  // for dots
-  function getDots() {
+  // for dots and topbar year
+  function getDistinctYearsAndDots() {
     return new Promise((resolve, reject) => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const year = today.getFullYear();
       const dots = [];
-    
+      const years = new Set();
       const tx = db.transaction("HomeDots", "readwrite");
       const store = tx.objectStore("HomeDots");
       const request = store.openCursor();
       request.onsuccess = (e) => {
         const cursor = e.target.result;
         if (!cursor) {
-          resolve(dots);
+          resolve({ dots, years });
           return;
         }
         if (cursor.key.startsWith(year)) {
           dots.push(cursor.value);
+          years.add(`${ cursor.key.substring(0, 4) } (Current)`)
+        } else {
+          years.add(cursor.key.substring(0, 4))
         }
         cursor.continue();
       }
     })
   }
+  
+  function populateTopbarYearSelector(years) {
+    const fragment = document.createDocumentFragment();
+    for (const year of years) {
+      let d = document.createElement("div")
+      d.innerText = year;
+      d.dataset.value = year.split("(")[0].trim()
+      fragment.appendChild(d)
+    }
+    elements.topbarYearSelector.replaceChildren(fragment)
+  }
+  
   // let populateDots = async ()=> {
-  async function populateDots(){
-    let dots = await getDots();
+  async function populateDots(dots){
     // elements.dotOutBottom.innerHTML = ""
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < dots.length; i++) {
@@ -146,6 +163,44 @@
     document.dispatchEvent(new Event("dotsReady"));
   }
 
+  async function init() {
+    let { dots, years } = await getDistinctYearsAndDots();
+    populateTopbarYearSelector(years);
+    populateDots(dots);
+
+
+    elements.topbarYearSelector.querySelectorAll("div").forEach((d) => {
+      d.addEventListener("click", (e) => {
+        clearInterval(intervalId);
+        
+        const today = new Date();
+        const year = today.getFullYear();
+        
+        const dateSelected = new Date(e.target.dataset.value,11,31);
+        dateSelected.setHours(23, 59, 59, 0);
+        const yearSelected = dateSelected.getFullYear()
+        
+        if (yearSelected == year) {
+          intervalId = setInterval(() => {
+            populateHead(new Date());
+          }, 1000);
+        } else {
+          populateHead(dateSelected);
+        }
+        
+        elements.topbarYearSelector.classList.toggle("active");
+        elements.rightYear.innerText = e.target.textContent.trim();
+      })
+    })
+    
+  }
+
+  // Event listeners
+  
+  elements.right.addEventListener("click", (e) => {
+    elements.topbarYearSelector.classList.toggle("active");
+  })
+  
   elements.headTime.addEventListener("click", (e) => {
     if (e.target.dataset.value == "full") {
       e.target.dataset.value = "hours"
@@ -153,16 +208,11 @@
       e.target.dataset.value = "full"
     }
   })
-
-  document.addEventListener("dbReady", init)
-
-
-  function init() {
-    setInterval(populateHead, 1000);
-    populateDots();
-  }
-
-  // init();
   
-  
+  document.addEventListener("dbReady",init)
+  let intervalId = null;
+  intervalId = setInterval(() => {
+      populateHead(new Date());
+  }, 1000);
+
 })();
