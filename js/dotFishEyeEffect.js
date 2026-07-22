@@ -111,12 +111,53 @@ document.addEventListener("dotsReady", () => {
       dot.style.setProperty('--push-y', '0px');
       dot.style.zIndex = "1";
     });
+
+    removeToolkit();
+      
+  }
+
+  function removeToolkit() {
+    let toolkit = document.querySelector(".toolkit");
+    toolkit.classList.remove("active");
+  }
+
+  function addToolkit(e) {
+    let toolkit = document.querySelector(".toolkit");
+    let toolkitDate = document.querySelector(".toolkit-date");
+    let toolkitStatus = document.querySelector(".toolkit-status");
+    if (e.target.classList.contains("dot")) {
+      toolkit.classList.add("active");
+      const date = new Date(e.target.dataset.value);
+      
+      const formatted = date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "2-digit",
+        weekday: "long",
+      }).replace(",", " -");
+
+      toolkitDate.textContent = formatted;
+      let status = `Dtoolkit-${e.target.classList[1]}`;
+      toolkit.classList.forEach(className => {
+        if (className.startsWith("D")) {
+          toolkit.classList.remove(className);
+        }
+      });
+      toolkit.classList.add(status)
+      toolkitStatus.classList.forEach(className => {
+        if (className.startsWith("D")) {
+          toolkitStatus.classList.remove(className);
+        }
+      });
+      toolkitStatus.classList.add(status)
+    }
   }
 
   // --- Desktop Events ---
   container.addEventListener("mousemove", e => {
     startInteraction(e.pageX, e.pageY);
+    addToolkit(e);
   });
+  
   container.addEventListener("mouseleave", stopInteraction);
 
   // --- Mobile Touch Events (Long Press) ---
