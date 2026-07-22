@@ -97,7 +97,7 @@
     const { elapsed, left, leftPercentage } = getYearLeft(now)
     elements.headBottomElapsed.innerText = elapsed
     elements.headBottomLeft.innerText =left
-    elements.headBottomPercentage.innerText = leftPercentage
+    elements.headBottomPercentage.innerText = `${leftPercentage}%`;
     elements.progressFill.style.setProperty("--progress", `${100-leftPercentage}%`);
   }
 

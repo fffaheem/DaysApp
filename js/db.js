@@ -1,4 +1,4 @@
-const request = indexedDB.open("Days",2)
+const request = indexedDB.open("Days",1)
 let db = null;
 
 request.onupgradeneeded = (e) => {
@@ -83,20 +83,29 @@ function initializeCurrentYearDots(db) {
   
       while (current <= end) {
   
-          // Format YYYY-MM-DD in LOCAL time
-          const yyyy = current.getFullYear();
-          const mm = String(current.getMonth() + 1).padStart(2, "0");
-          const dd = String(current.getDate()).padStart(2, "0");
+        // Format YYYY-MM-DD in LOCAL time
+        const yyyy = current.getFullYear();
+        const mm = String(current.getMonth() + 1).padStart(2, "0");
+        const dd = String(current.getDate()).padStart(2, "0");
+
+        const dateString = `${yyyy}-${mm}-${dd}`;
+        let status = null;
+        if (current < today) {
+          status = "NEUTRAL"
+        } else if (current > today) {
+          status = "FUTURE"
+        } else {
+          status = "PRESENT"
+        }
   
-          const dateString = `${yyyy}-${mm}-${dd}`;
+        store.add({
+            date: dateString,
+            status: status,
+            note: ""
+        });
   
-          store.add({
-              date: dateString,
-              status: current < today ? "NEUTRAL" : "FUTURE",
-              note: ""
-          });
-  
-          current.setDate(current.getDate() + 1);
+        current.setDate(current.getDate() + 1);
+        
       }
   
       console.log("Year generated.");

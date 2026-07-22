@@ -179,6 +179,9 @@
 .vacation{
     background-color: var(--vacation);
 }
+.present{
+    background-color: var(--text-color);
+}
 
 /*===========================================*/
 /*Stats*/
