@@ -166,6 +166,13 @@ document.addEventListener("dotsReady", () => {
   
   container.addEventListener("mouseleave", stopInteraction);
 
+  container.addEventListener("click", (e) => {
+    if (e.target.classList.contains("dot")) {
+      console.log(e.target)
+      stopInteraction()
+    }
+  })
+
   // --- Mobile Touch Events (Long Press) ---
   const HOLD_DELAY = 250;      // ms
   const MOVE_THRESHOLD = 10;   // px
@@ -210,10 +217,15 @@ document.addEventListener("dotsReady", () => {
     }
   }, { passive: false });
 
-  container.addEventListener("touchend", () => {
+  container.addEventListener("touchend", e => {
+    const touch = e.changedTouches[0];
     clearTimeout(holdTimer);
 
     if (isActive) {
+      const dot = document.elementFromPoint(touch.clientX, touch.clientY)?.closest(".dot");
+      if (dot) {
+        console.log(dot)
+      }
       stopInteraction();
     }
   });
