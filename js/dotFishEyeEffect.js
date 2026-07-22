@@ -158,20 +158,25 @@ document.addEventListener("dotsReady", () => {
     addToolkit(dot)
   }
 
-  // --- Desktop Events ---
-  container.addEventListener("mousemove", e => {
+  // Desktop Events (Fixed 'Stuck on Tap' bug) ---
+  // Using Pointer Events, but explicitly ignoring mobile touch
+  container.addEventListener("pointermove", e => {
+    if (e.pointerType === "touch") return; 
     startInteraction(e.pageX, e.pageY);
     addToolkit(e.target);
   });
   
-  container.addEventListener("mouseleave", stopInteraction);
+  container.addEventListener("pointerleave", e => {
+    if (e.pointerType === "touch") return;
+    stopInteraction();
+  });
 
   container.addEventListener("click", (e) => {
     if (e.target.classList.contains("dot")) {
-      console.log(e.target)
-      stopInteraction()
+      console.log(e.target);
+      stopInteraction();
     }
-  })
+  });
 
   // --- Mobile Touch Events (Long Press) ---
   const HOLD_DELAY = 250;      // ms
@@ -237,4 +242,11 @@ document.addEventListener("dotsReady", () => {
       stopInteraction();
     }
   });
+
+  // Prevent the native mobile "long press" menu (text selection/save image) from popping up
+  container.addEventListener("contextmenu", e => {
+    e.preventDefault();
+  });
+
+  
 })
