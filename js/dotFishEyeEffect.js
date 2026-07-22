@@ -121,13 +121,13 @@ document.addEventListener("dotsReady", () => {
     toolkit.classList.remove("active");
   }
 
-  function addToolkit(e) {
+  function addToolkit(target) {
     let toolkit = document.querySelector(".toolkit");
     let toolkitDate = document.querySelector(".toolkit-date");
     let toolkitStatus = document.querySelector(".toolkit-status");
-    if (e.target.classList.contains("dot")) {
+    if (target.classList.contains("dot")) {
       toolkit.classList.add("active");
-      const date = new Date(e.target.dataset.value);
+      const date = new Date(target.dataset.value);
       
       const formatted = date.toLocaleDateString("en-US", {
         month: "long",
@@ -136,7 +136,7 @@ document.addEventListener("dotsReady", () => {
       }).replace(",", " -");
 
       toolkitDate.textContent = formatted;
-      let status = `Dtoolkit-${e.target.classList[1]}`;
+      let status = `Dtoolkit-${target.classList[1]}`;
       toolkit.classList.forEach(className => {
         if (className.startsWith("D")) {
           toolkit.classList.remove(className);
@@ -152,10 +152,16 @@ document.addEventListener("dotsReady", () => {
     }
   }
 
+  function addToolkitAtPoint(x, y) {
+    const dot = document.elementFromPoint(x, y)?.closest(".dot");
+    if (!dot) return;
+    addToolkit(dot)
+  }
+
   // --- Desktop Events ---
   container.addEventListener("mousemove", e => {
     startInteraction(e.pageX, e.pageY);
-    addToolkit(e);
+    addToolkit(e.target);
   });
   
   container.addEventListener("mouseleave", stopInteraction);
@@ -179,6 +185,7 @@ document.addEventListener("dotsReady", () => {
 
     holdTimer = setTimeout(() => {
       startInteraction(touch.pageX, touch.pageY);
+      addToolkitAtPoint(touch.clientX, touch.clientY);
     }, HOLD_DELAY);
   }, { passive: false }); // CRITICAL: Change passive to false here so preventDefault works!
 
@@ -199,6 +206,7 @@ document.addEventListener("dotsReady", () => {
     
     if (isActive) {
       startInteraction(touch.pageX, touch.pageY);
+      addToolkitAtPoint(touch.clientX, touch.clientY);
     }
   }, { passive: false });
 
