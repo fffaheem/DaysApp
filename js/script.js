@@ -197,7 +197,7 @@
   }
 
   function topYearSelectorHandler(e) {
-    const target = e.target.closest("div");
+    const target = e.target.closest("div[data-value]");
     if (!target) return;
     
     clearInterval(intervalId);
