@@ -126,9 +126,14 @@
     let defaultDayStatus = await get_default_from_setting();
     return new Promise((resolve, reject) => {
 
-      const today = new Date().toISOString().slice(0, 10);
-      const range = IDBKeyRange.upperBound(today);
-        
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const dd = String(today.getDate()).padStart(2, "0");
+      const dateString = `${yyyy}-${mm}-${dd}`;
+      
+      const range = IDBKeyRange.upperBound(dateString);
+      
       let tx = db.transaction("HomeDots", "readwrite");
       let store = tx.objectStore("HomeDots");
       let request = store.openCursor(range);
@@ -138,7 +143,7 @@
           return;
         }
 
-        if (cursor.value.date === today) {
+        if (cursor.value.date === dateString) {
           cursor.update({
             ...cursor.value,
             status: "PRESENT"
