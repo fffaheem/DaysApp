@@ -1,0 +1,45 @@
+(() => {
+  const params = new URLSearchParams(window.location.search);
+  let data = params.get("date");
+
+  function verifyDate(date) {
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!date || !regex.test(date) || isNaN(new Date(date).getTime())) {
+      window.location.href = "./index.html";
+      return;
+    }
+    
+    const year = (new Date(date)).getFullYear();
+
+
+    const tx = db.transaction("HomeDots", "readonly");
+    const store = tx.objectStore("HomeDots");
+    store.getAllKeys().onsuccess = (e) => {
+      const years = [...new Set(
+          e.target.result.map(date => date.slice(0, 4))
+      )];
+
+      if (!years.includes(String(year))) {
+        window.location.href = "./index.html";
+        return;
+      }
+    
+    };
+  }
+  
+  async function init() {
+    verifyDate(data)
+  }
+  
+        
+  // const formatted = date.toLocaleDateString("en-US", {
+  //   month: "long",
+  //   day: "2-digit",
+  //   weekday: "long",
+  // }).replace(",", " -");
+
+  document.addEventListener("dbReady",init)
+  
+})();
+
+  

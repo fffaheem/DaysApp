@@ -221,9 +221,7 @@
     elements.rightYear.innerText = target.textContent.trim();
   }
   
-  // let populateDots = async ()=> {
   async function populateDots(dots){
-    // elements.dotOutBottom.innerHTML = ""
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < dots.length; i++) {
       let dot = document.createElement("div")

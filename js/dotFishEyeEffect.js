@@ -175,6 +175,7 @@ document.addEventListener("dotsReady", () => {
     if (e.target.classList.contains("dot")) {
       console.log(e.target);
       stopInteraction();
+      window.location.href = `./dotOpen.html?date=${e.target.dataset.value}`
     }
   });
 
@@ -229,7 +230,7 @@ document.addEventListener("dotsReady", () => {
     if (isActive) {
       const dot = document.elementFromPoint(touch.clientX, touch.clientY)?.closest(".dot");
       if (dot) {
-        console.log(dot)
+        window.location.href = `./dotOpen.html?date=${dot.dataset.value}`
       }
       stopInteraction();
     }
