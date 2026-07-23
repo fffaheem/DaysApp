@@ -24,8 +24,8 @@
     const total = startOfNextYear - startOfYear;
 
     return {
-        year: `OF ${now.getFullYear()} GONE`,
-        progress: `${((elapsed / total) * 100).toFixed(2)}%`
+      year: `OF ${now.getFullYear()} GONE`,
+      progress: `${((elapsed / total) * 100).toFixed(2)}%`
     };
   }
 
@@ -71,9 +71,9 @@
     const leftMs = startOfNextYear - now;
 
     return {
-        elapsed: Math.floor(elapsedMs / (1000 * 60 * 60 * 24))+1,
-        left: Math.floor(leftMs / (1000 * 60 * 60 * 24)),
-        leftPercentage: `${((leftMs / totalMs) * 100).toFixed(2)}`
+      elapsed: Math.floor(elapsedMs / (1000 * 60 * 60 * 24)) + 1,
+      left: Math.floor(leftMs / (1000 * 60 * 60 * 24)),
+      leftPercentage: `${((leftMs / totalMs) * 100).toFixed(2)}`
     };
   }
   
@@ -96,9 +96,9 @@
   function displayHeadBottom(now) {
     const { elapsed, left, leftPercentage } = getYearLeft(now)
     elements.headBottomElapsed.innerText = elapsed
-    elements.headBottomLeft.innerText =left
+    elements.headBottomLeft.innerText = left
     elements.headBottomPercentage.innerText = `${leftPercentage}%`;
-    elements.progressFill.style.setProperty("--progress", `${100-leftPercentage}%`);
+    elements.progressFill.style.setProperty("--progress", `${100 - leftPercentage}%`);
   }
 
   function populateHead(date) {
@@ -109,6 +109,55 @@
   // head end
 
   // for dots and topbar year
+
+  function get_default_from_setting() {
+    return new Promise((resolve, reject) => {
+      let tx = db.transaction("Preferences", "readonly");
+      let store = tx.objectStore("Preferences");
+      store.get("user_settings").onsuccess = (e) => {
+        const setting = e.target.result;
+        let defaultDayStatus = setting.defaultDayStatus;
+        resolve(defaultDayStatus);
+      };
+    });
+  };
+
+  async function update_dots_today() {
+    let defaultDayStatus = await get_default_from_setting();
+    return new Promise((resolve, reject) => {
+
+      const today = new Date().toISOString().slice(0, 10);
+      const range = IDBKeyRange.upperBound(today);
+        
+      let tx = db.transaction("HomeDots", "readwrite");
+      let store = tx.objectStore("HomeDots");
+      let request = store.openCursor(range);
+      request.onsuccess = (e) => {
+        const cursor = e.target.result;
+        if (!cursor) {
+          return;
+        }
+
+        if (cursor.value.date === today) {
+          cursor.update({
+            ...cursor.value,
+            status: "PRESENT"
+          });
+        }else if(cursor.value.status === "PRESENT" || cursor.value.status === "FUTURE") {
+          cursor.update({
+            ...cursor.value,
+            status: defaultDayStatus
+          });
+        }
+        
+        cursor.continue();
+      }
+
+      tx.oncomplete = () => resolve();
+      request.onerror = () => reject(request.error);
+    })
+  }
+  
   function getDistinctYearsAndDots() {
     return new Promise((resolve, reject) => {
       const today = new Date();
@@ -189,6 +238,7 @@
   }
 
   async function init() {
+    await update_dots_today();
     let { dots, years } = await getDistinctYearsAndDots();
     populateTopbarYearSelector(years);
     populateDots(dots);

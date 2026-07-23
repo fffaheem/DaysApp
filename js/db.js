@@ -27,13 +27,15 @@ request.onerror = (e) => {
   console.log("Error")
 }
 
+let defaultSettings = {}
+
 function addDefaultSettings(db) {
-  const defaultSettings = {
+  defaultSettings = {
       id: "user_settings",
       theme: "dark",
       neutralWeight: 5,
       offDays: [],
-      defaultDayStatus: "WASTED",
+      defaultDayStatus: "NEUTRAL",
       lastSynced: null
   };
 
@@ -91,7 +93,7 @@ function initializeCurrentYearDots(db) {
         const dateString = `${yyyy}-${mm}-${dd}`;
         let status = null;
         if (current < today) {
-          status = "NEUTRAL"
+          status = defaultSettings.defaultDayStatus;
         } else if (current > today) {
           status = "FUTURE"
         } else {
