@@ -163,6 +163,11 @@
       if (data[i].date === convertToDbString(new Date(todayData.date))) {
         calenderDot.classList.add("active");
       }
+      
+      if (data[i].date === convertToDbString(new Date())) {
+        calenderDot.classList.add("today");
+      }
+      
       console.log(data[i].date, data[i].status);
       if (data[i].status.toLowerCase() === "productive") {
         calenderDot.classList.add("productive");

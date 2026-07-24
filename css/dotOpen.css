@@ -152,6 +152,10 @@
     color: var(--background);
 }
 
+.calender-dot.today{
+    border: 2px solid var(--text-color);
+}
+
 .calender-dot.future{
     border: 2px solid var(--future);
     background: color-mix(in srgb, var(--future) 50%, transparent);

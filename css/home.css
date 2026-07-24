@@ -249,6 +249,10 @@
     transition: width 0.2s, height 0.2s, margin 0.2s, transform 0.2s;
 }
 
+.dot.today{
+    border: 2px solid var(--text-color);
+}
+
 .productive{
     background-color: var(--productive);
 }

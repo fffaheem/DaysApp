@@ -225,12 +225,22 @@
     elements.rightYear.innerText = target.textContent.trim();
   }
   
-  async function populateDots(dots){
+  async function populateDots(dots) {
+    let today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+
+    today = `${yyyy}-${mm}-${dd}`;
+    
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < dots.length; i++) {
       let dot = document.createElement("div")
       dot.classList.add("dot")
       dot.classList.add(dots[i].status.toLowerCase())
+      if (dots[i].date === today) {
+        dot.classList.add("today")
+      }
       dot.dataset.value = dots[i].date
       fragment.appendChild(dot);
     }
