@@ -58,10 +58,11 @@
     position: absolute;
     top: 0;
     left: 0;
+    color: var(--wasted);
 }
 
 .head-bottom-left,.head-bottom-percentage{
-    color: var(--wasted);
+    color: var(--productive);
 }
 
 .head-bottom-percentage{
@@ -306,13 +307,15 @@
 }
 
 .stat-box:nth-child(7),
-.stat-box:nth-child(8) {
-  grid-column: span 3; /* 3/6 = 1.5 */
+.stat-box:nth-child(8),
+.stat-box:nth-child(9){
+  grid-column: span 2; /* 3/6 = 1.5 */
 }
 
-.stat-box:nth-child(9),
-.stat-box:nth-child(10) {
-  grid-column: 1 / -1; /* full width */
+.stat-box:nth-child(10),
+.stat-box:nth-child(11) {
+  /*grid-column: 1 / -1; */
+  grid-column: span 3;
 }
 
 .stat-box{
@@ -340,7 +343,7 @@
     color: var(--neutral);
 }
 
-#wasted-stat,.wasted-streak{
+#wasted-stat,#current-wasted-rate-stat,.wasted-streak{
     color: var(--wasted);
 }
 
