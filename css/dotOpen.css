@@ -220,11 +220,19 @@
     background: var(--productive);
 }
 
+.category.productive.active{
+    background: var(--productive);
+}
+
 .category.neutral{
     background: color-mix(in srgb, var(--neutral) 50%, transparent);
 }
 
 .category.neutral:hover{
+    background: var(--neutral);
+}
+
+.category.neutral.active{
     background: var(--neutral);
 }
 
@@ -236,11 +244,19 @@
     background: var(--wasted);
 }
 
+.category.wasted.active{
+    background: var(--wasted);
+}
+
 .category.vacation{
     background: color-mix(in srgb, var(--vacation) 50%, transparent);
 }
 
 .category.vacation:hover{
+    background: var(--vacation);
+}
+
+.category.vacation.active{
     background: var(--vacation);
 }
 
