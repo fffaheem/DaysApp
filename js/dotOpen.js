@@ -258,15 +258,11 @@
       elements.categoryVacation.classList.add("active");
     }
     
-    const url = new URL(window.location);
-    url.searchParams.set("status", target.dataset.value);
-    history.replaceState({}, "", url);
+    elements.saveBtn.dataset.value = target.dataset.value;
   }
 
   function saveRecord() {
-    const url = new URL(window.location);
-    const date = url.searchParams.get("date");
-    let status = url.searchParams.get("status");
+    let status = elements.saveBtn.dataset.value;
     const note = elements.note.value;
 
     const tx = db.transaction("HomeDots", "readwrite");
@@ -307,13 +303,6 @@
   }
   
   async function init() {
-    const url = new URL(window.location);
-    
-    if (url.searchParams.has("status")) {
-      url.searchParams.delete("status");
-      history.replaceState({}, "", url);
-    }
-
     verifyDate(date)
     let data = await getData(date);
     let todayData = data.filter((item) => {
