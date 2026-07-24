@@ -163,7 +163,7 @@
       if (data[i].date === convertToDbString(new Date(todayData.date))) {
         calenderDot.classList.add("active");
       }
-      
+      console.log(data[i].date, data[i].status);
       if (data[i].status.toLowerCase() === "productive") {
         calenderDot.classList.add("productive");
       }else if (data[i].status.toLowerCase() === "neutral") {
@@ -274,7 +274,7 @@
         return;
       }
       if (status) {
-        record.status = status;
+        record.status = status.toUpperCase();
       } else {
         status = record.status;
       }

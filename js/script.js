@@ -110,7 +110,7 @@
 
   // for dots and topbar year
 
-  function get_default_from_setting() {
+  function getDefaultFromSetting() {
     return new Promise((resolve, reject) => {
       let tx = db.transaction("Preferences", "readonly");
       let store = tx.objectStore("Preferences");
@@ -122,8 +122,8 @@
     });
   };
 
-  async function update_dots_today() {
-    let defaultDayStatus = await get_default_from_setting();
+  async function updateDotsToday() {
+    let defaultDayStatus = await getDefaultFromSetting();
     return new Promise((resolve, reject) => {
 
       const today = new Date();
@@ -142,8 +142,7 @@
         if (!cursor) {
           return;
         }
-
-        if (cursor.value.date === dateString) {
+        if (cursor.value.date === dateString && cursor.value.status === "FUTURE") {
           cursor.update({
             ...cursor.value,
             status: "PRESENT"
@@ -241,7 +240,7 @@
   }
 
   async function init() {
-    await update_dots_today();
+    await updateDotsToday();
     let { dots, years } = await getDistinctYearsAndDots();
     populateTopbarYearSelector(years);
     populateDots(dots);
