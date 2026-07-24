@@ -293,6 +293,7 @@
     display: grid;
     grid-template-columns: repeat(6, 1fr); /* 6 units */
     gap: 1rem;
+    user-select: none;
 }
 
 .stat-box:nth-child(1),
@@ -325,6 +326,29 @@
     align-items: center;
     flex-direction: column;
 }
+
+.stat{
+    font-weight: 900;
+    font-size: var(--font-subtitle);
+}
+
+#productive-stat,#productivity-rate-stat,#productivity-rate-so-far-stat,#best-productive-streak-stat,.productivity-streak{
+    color: var(--productive);
+}
+
+#neutral-stat,.neutral-streak{
+    color: var(--neutral);
+}
+
+#wasted-stat,.wasted-streak{
+    color: var(--wasted);
+}
+
+#vacation-stat,.vacation-streak{
+    color: var(--vacation);
+}
+
+
 
 .info{
     position: absolute;
