@@ -105,7 +105,7 @@
     elements.calenderSetterHead.textContent = formatted;
 
     let note = todayData.note
-    elements.note.textContent = note
+    elements.note.value = note
 
     elements.categoryProductive.classList.remove("active");
     elements.categoryNeutral.classList.remove("active");
@@ -168,7 +168,6 @@
         calenderDot.classList.add("today");
       }
       
-      console.log(data[i].date, data[i].status);
       if (data[i].status.toLowerCase() === "productive") {
         calenderDot.classList.add("productive");
       }else if (data[i].status.toLowerCase() === "neutral") {
