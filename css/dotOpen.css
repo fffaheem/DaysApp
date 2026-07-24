@@ -27,10 +27,6 @@
     transition: transform ease-in-out 250ms;
 }
 
-.calender-back:hover{
-    transform: scale(1.25);
-}
-
 .calender-back>i{
     font-size: var(--font-medium);
 }
@@ -75,10 +71,6 @@
     transition: transform ease-in-out 250ms;
 }
 
-.calender-change-btn:hover{
-    transform: scale(1.25);
-}
-
 .calender-month{
     font-size: var(--font-medium-small);
     font-weight: 700;
@@ -114,17 +106,9 @@
     transition: transform ease-in-out 250ms;
 }
 
-.calender-dot:hover{
-    transform: scale(1.125);
-}
-
 .calender-dot.productive{
     border: 2px solid var(--productive);
     background: color-mix(in srgb, var(--productive) 50%, transparent);
-}
-
-.calender-dot.productive:hover{
-    background: var(--productive);
 }
 
 .calender-dot.productive.active{
@@ -136,10 +120,6 @@
     background: color-mix(in srgb, var(--wasted) 50%, transparent);
 }
 
-.calender-dot.wasted:hover{
-    background: var(--wasted);
-}
-
 .calender-dot.wasted.active{
     background: var(--wasted);
 }
@@ -147,10 +127,6 @@
 .calender-dot.neutral{
     border: 2px solid var(--neutral);
     background: color-mix(in srgb, var(--neutral) 50%, transparent);
-}
-
-.calender-dot.neutral:hover{
-    background: var(--neutral);
 }
 
 .calender-dot.neutral.active{
@@ -162,10 +138,6 @@
     background: color-mix(in srgb, var(--vacation) 50%, transparent);
 }
 
-.calender-dot.vacation:hover{
-    background: var(--vacation);
-}
-
 .calender-dot.vacation.active{
     background: var(--vacation);
 }
@@ -173,11 +145,6 @@
 .calender-dot.present{
     border: 2px solid var(--text-color);
     background: color-mix(in srgb, var(--text-color) 70%, transparent);
-}
-
-.calender-dot.present:hover{
-    background: var(--text-color);
-    color: var(--background);
 }
 
 .calender-dot.present.active{
@@ -188,10 +155,6 @@
 .calender-dot.future{
     border: 2px solid var(--future);
     background: color-mix(in srgb, var(--future) 50%, transparent);
-}
-
-.calender-dot.future:hover{
-    background: var(--future);
 }
 
 .calender-dot.future.active{
@@ -241,20 +204,12 @@
     background: color-mix(in srgb, var(--productive) 50%, transparent);
 }
 
-.category.productive:hover{
-    background: var(--productive);
-}
-
 .category.productive.active{
     background: var(--productive);
 }
 
 .category.neutral{
     background: color-mix(in srgb, var(--neutral) 50%, transparent);
-}
-
-.category.neutral:hover{
-    background: var(--neutral);
 }
 
 .category.neutral.active{
@@ -265,20 +220,12 @@
     background: color-mix(in srgb, var(--wasted) 50%, transparent);
 }
 
-.category.wasted:hover{
-    background: var(--wasted);
-}
-
 .category.wasted.active{
     background: var(--wasted);
 }
 
 .category.vacation{
     background: color-mix(in srgb, var(--vacation) 50%, transparent);
-}
-
-.category.vacation:hover{
-    background: var(--vacation);
 }
 
 .category.vacation.active{
@@ -341,10 +288,6 @@
     transition: background ease-in-out 250ms;
 }
 
-.save-btn:hover{
-    background: var(--theme);
-}
-
 /* CSS for screens ypx wide or smaller */
 @media (max-width: 480px) {
     .calender-dot{
@@ -356,4 +299,65 @@
     .calender-setter{
         width: 29rem
     }
+}
+
+@media (hover: hover) {
+    .calender-back:hover{
+        transform: scale(1.25);
+    }
+    
+    .calender-change-btn:hover{
+        transform: scale(1.25);
+    }
+    
+    .calender-dot:hover{
+        transform: scale(1.125);
+    }
+
+    .calender-dot.productive:hover{
+        background: var(--productive);
+    }
+
+    .calender-dot.wasted:hover{
+        background: var(--wasted);
+    }
+
+    .calender-dot.neutral:hover{
+        background: var(--neutral);
+    }
+
+    .calender-dot.vacation:hover{
+        background: var(--vacation);
+    }
+    
+    .calender-dot.present:hover{
+        background: var(--text-color);
+        color: var(--background);
+    }
+
+    .calender-dot.future:hover{
+        background: var(--future);
+    }
+
+    .category.productive:hover{
+        background: var(--productive);
+    }
+
+    .category.neutral:hover{
+        background: var(--neutral);
+    }
+    
+    .category.wasted:hover{
+        background: var(--wasted);
+    }
+    
+    .category.vacation:hover{
+        background: var(--vacation);
+    }
+
+    .save-btn:hover{
+        background: var(--theme);
+    }
+
+
 }

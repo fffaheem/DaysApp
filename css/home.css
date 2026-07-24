@@ -206,11 +206,6 @@
     transition: transform ease-in-out 200ms;
 }
 
-.dot-out-icon:hover{
-    transform: scale(1.125);
-}
-
-
 .dot-out-bottom{
     display:flex;
     flex-wrap:wrap;
@@ -337,11 +332,17 @@
     transition: transform ease-in-out 200ms;
 }
 
-.info:hover{
-    transform: scale(1.5);
-}
-
 .label{
     font-size: var(--font-small);
     text-align: center;
+}
+
+@media (hover: hover){
+    .dot-out-icon:hover{
+        transform: scale(1.125);
+    }
+
+    .info:hover{
+        transform: scale(1.5);
+    }
 }

@@ -125,10 +125,6 @@ body{
     pointer-events: auto;
 }
 
-.topbar-year-selector>div:hover{
-    transform: scale(1.125);
-}
-
 /*=====================================================*/
 /*Side Bar*/
 /*=====================================================*/
@@ -199,9 +195,6 @@ body{
     cursor: pointer;
     transition: transform ease-in-out 200ms;
 }
-#sidebar-close-btn:hover{
-    transform: scale(1.25);
-}
 
 .sidebar-menu{
     display: flex;
@@ -261,6 +254,17 @@ body{
     background: var(--theme);
 }
 
-.sidebar-menu-item:hover,.sidebar-debug-menu>div:hover{
-    transform: scale(1.125);
+
+@media (hover: hover) {
+    .topbar-year-selector>div:hover{
+        transform: scale(1.125);
+    }
+    
+    .sidebar-menu-item:hover,.sidebar-debug-menu>div:hover{
+        transform: scale(1.125);
+    } 
+    
+    #sidebar-close-btn:hover{
+        transform: scale(1.25);
+    }
 }
