@@ -82,6 +82,9 @@ body{
 
 .title-topbar{
     font-size: var(--font-subtitle);
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 800;
 }
 
 .right{
