@@ -12,8 +12,7 @@
     border: 2px solid var(--box-color);
     padding: 1rem;
     border-radius: var(--border-radius);
-    /*flex-grow: 1;*/
-    /*max-width: var(--max-width);*/
+    width: 29rem
 }
 
 .calender-head{
@@ -102,7 +101,7 @@
     flex-direction: column;
     gap: 1.5rem;
     width: max-content;
-    /*height: -webkit-fill-available;*/
+    width: 22rem
 }
 
 .calender-setter-head{
@@ -200,14 +199,15 @@
     border-radius: 1.125rem;
 }
 
-/*height: 2.8rem;*/
-/*width: 2rem;*/
-
+/* CSS for screens ypx wide or smaller */
 @media (max-width: 480px) {
-    /* CSS for screens 480px wide or smaller */
-
     .calender-dot{
         height: 2.8rem;
         width: 2rem;
+    }
+}
+@media (max-width: 895.6px) {
+    .calender-setter{
+        width: 29rem
     }
 }

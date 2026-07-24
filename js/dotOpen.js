@@ -2,6 +2,12 @@
   const params = new URLSearchParams(window.location.search);
   let data = params.get("date");
 
+  let elements = {
+    body: document.querySelector("body"),
+    calenderDots: document.querySelector(".calender-dots"),
+    calenderSetter: document.querySelector("#calender-setter"),
+  }
+  
   function verifyDate(date) {
     const regex = /^\d{4}-\d{2}-\d{2}$/;
     if (!date || !regex.test(date) || isNaN(new Date(date).getTime())) {
@@ -37,7 +43,14 @@
   //   day: "2-digit",
   //   weekday: "long",
   // }).replace(",", " -");
-
+  document.addEventListener("click", (e) => {
+    const target = e.target.closest(".calender-dot");
+    elements.calenderSetter.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    console.log(target)
+  })
   document.addEventListener("dbReady",init)
   
 })();
