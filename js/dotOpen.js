@@ -6,6 +6,8 @@
     body: document.querySelector("body"),
     calenderMonth: document.querySelector(".calender-month"),
     calenderYear: document.querySelector(".calender-year"),
+    calenderChangeLeft: document.querySelector("#calender-change-left"),
+    calenderChangeRight: document.querySelector("#calender-change-right"),
     calenderDots: document.querySelector(".calender-dots"),
     calenderSetter: document.querySelector("#calender-setter"),
     calenderSetterHead: document.querySelector(".calender-setter-head"),
@@ -27,6 +29,10 @@
       d.getMonth() === month - 1 &&
       d.getDate() === day
     );
+  }
+
+  function mod(n, m) {
+    return ((n % m) + m) % m;
   }
   
   function verifyDate(date) {
@@ -99,6 +105,10 @@
     let note = todayData.note
     elements.note.textContent = note
 
+    elements.categoryProductive.classList.remove("active");
+    elements.categoryNeutral.classList.remove("active");
+    elements.categoryWasted.classList.remove("active");
+    elements.categoryVacation.classList.remove("active");
     let status = todayData.status.toLowerCase();
     if (status === "neutral") {
       elements.categoryNeutral.classList.add("active");
@@ -109,7 +119,6 @@
     } else if (status === "vacation") {
       elements.categoryVacation.classList.add("active");
     }
-    console.log(status)
   }
 
   function populateCalender(todayData,data) {
@@ -161,6 +170,8 @@
         calenderDot.classList.add("wasted");
       }else if (data[i].status.toLowerCase() === "vacation") {
         calenderDot.classList.add("vacation");
+      } else {
+        calenderDot.classList.add("future");
       }
       calenderDot.textContent = i + 1;
       fragment.appendChild(calenderDot);
@@ -168,6 +179,37 @@
     elements.calenderDots.replaceChildren(fragment);
   }
 
+  async function changeCalender(direction) {
+    const [y, m, d] = date.split("-").map(Number);
+    const datee = new Date(y, m - 1, d);
+    let month = datee.getMonth()
+    if (direction === "previous") {
+      month = mod(month - 1, 12);
+    } else {
+      month = mod(month + 1, 12);
+    }
+
+    let previousMonth = new Date(y, month, 1);
+    let newDate = convertToDbString(previousMonth);
+
+    // could just do this but wont
+    // window.location.href = `./dotOpen.html?date=${newDate}`;
+
+    const url = new URL(window.location);
+    url.searchParams.set("date", newDate);
+    history.replaceState({}, "", url);
+    date = newDate;
+    
+    let data = await getData(newDate);
+    let todayData = data.filter((item) => {
+      return item.date === newDate
+    })[0]
+    populateCalenderSetter(todayData);
+    populateCalender(todayData,data);
+  }
+
+  
+  
   function dotClick(e) {
     const target = e.target.closest(".calender-dot");
     if (!target) return;
@@ -185,9 +227,18 @@
     let todayData = data.filter((item) => {
       return item.date === date
     })[0]
+    console.log(todayData)
     populateCalenderSetter(todayData);
     populateCalender(todayData,data);
   }
+
+  elements.calenderChangeLeft.addEventListener("click", (e) => {
+    changeCalender("previous");
+  });
+
+  elements.calenderChangeRight.addEventListener("click", (e) => {
+    changeCalender("Upcoming");
+  });
   
   document.addEventListener("click", dotClick)
 
