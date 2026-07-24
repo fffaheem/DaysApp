@@ -45,6 +45,8 @@
   // }).replace(",", " -");
   document.addEventListener("click", (e) => {
     const target = e.target.closest(".calender-dot");
+    if (!target) return;
+    if (target.classList.length < 2) return;
     elements.calenderSetter.scrollIntoView({
             behavior: "smooth",
             block: "start"
