@@ -210,7 +210,7 @@
 
   
   
-  function dotClick(e) {
+  async function dotClick(e) {
     const target = e.target.closest(".calender-dot");
     if (!target) return;
     if (target.classList.length < 2) return;
@@ -218,7 +218,21 @@
             behavior: "smooth",
             block: "start"
         });
-    console.log(target)
+    const [y, m, d] = date.split("-").map(Number);
+    let newDate = new Date(y, m-1, target.textContent);
+    newDate = convertToDbString(newDate);
+
+    const url = new URL(window.location);
+    url.searchParams.set("date", newDate);
+    history.replaceState({}, "", url);
+    date = newDate;
+
+    let data = await getData(newDate);
+    let todayData = data.filter((item) => {
+      return item.date === newDate
+    })[0]
+    populateCalenderSetter(todayData);
+    populateCalender(todayData,data);
   }
   
   async function init() {
@@ -227,7 +241,6 @@
     let todayData = data.filter((item) => {
       return item.date === date
     })[0]
-    console.log(todayData)
     populateCalenderSetter(todayData);
     populateCalender(todayData,data);
   }
