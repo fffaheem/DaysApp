@@ -1,6 +1,6 @@
 .calender-out{
     margin-top: 6rem;
-    margin-bottom: 4rem;
+    margin-bottom: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,11 +8,37 @@
     flex-wrap: wrap;
 }
 
+.calender-total{
+    width: 29rem
+}
+
+.calender-back-out{
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+}
+
+.calender-back{
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: transform ease-in-out 250ms;
+}
+
+.calender-back:hover{
+    transform: scale(1.25);
+}
+
+.calender-back>i{
+    font-size: var(--font-medium);
+}
+
 .calender{
     border: 2px solid var(--box-color);
     padding: 1rem;
     border-radius: var(--border-radius);
-    width: 29rem
 }
 
 .calender-head{
@@ -22,18 +48,40 @@
     align-items: center;
 }
 
+.calender-head-right{
+    cursor: default;
+}
+.calender-head-left{
+    cursor: pointer;
+}
+
+.calender-change{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /*margin-bottom: 1rem;*/
+    gap: 1rem;
+}
+
+.calender-change-btn{
+    padding: 0.5rem 1rem;
+    flex-grow: 1;
+    background: var(--box-color);
+    color: var(--text-color);
+    font-size: var(--font-title);
+    border: 2px solid var(--box-border);
+    border-radius: 0.8rem;
+    cursor: pointer;
+    transition: transform ease-in-out 250ms;
+}
+
+.calender-change-btn:hover{
+    transform: scale(1.25);
+}
+
 .calender-month{
     font-size: var(--font-medium-small);
     font-weight: 700;
-}
-
-.calender-back{
-    background: none;
-    border: none;
-    color: var(--text-color);
-}
-.calender-back>i{
-    font-size: var(--font-title);
 }
 
 .calender-days{
@@ -43,6 +91,7 @@
     text-align: center;
     margin: 2rem 0;
     place-items: center;
+    cursor: default;
 }
 
 .calender-dots{
@@ -51,6 +100,7 @@
     gap:1rem;
     text-align: center;
     place-items: center;
+    user-select: none;
 }
 
 .calender-dot{
@@ -60,6 +110,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    transition: transform ease-in-out 250ms;
+}
+
+.calender-dot:hover{
+    transform: scale(1.125);
 }
 
 .calender-dot.productive{
@@ -67,9 +123,17 @@
     background: color-mix(in srgb, var(--productive) 50%, transparent);
 }
 
+.calender-dot.productive:hover{
+    background: var(--productive);
+}
+
 .calender-dot.wasted{
     border: 2px solid var(--wasted);
     background: color-mix(in srgb, var(--wasted) 50%, transparent);
+}
+
+.calender-dot.wasted:hover{
+    background: var(--wasted);
 }
 
 .calender-dot.neutral{
@@ -77,9 +141,17 @@
     background: color-mix(in srgb, var(--neutral) 50%, transparent);
 }
 
+.calender-dot.neutral:hover{
+    background: var(--neutral);
+}
+
 .calender-dot.vacation{
     border: 2px solid var(--vacation);
     background: color-mix(in srgb, var(--vacation) 50%, transparent);
+}
+
+.calender-dot.vacation:hover{
+    background: var(--vacation);
 }
 
 .calender-dot.present{
@@ -87,9 +159,18 @@
     background: color-mix(in srgb, var(--text-color) 70%, transparent);
 }
 
+.calender-dot.present:hover{
+    background: var(--text-color);
+    color: var(--background);
+}
+
 .calender-dot.future{
     border: 2px solid var(--future);
     background: color-mix(in srgb, var(--future) 50%, transparent);
+}
+
+.calender-dot.future:hover{
+    background: var(--future);
 }
 
 .calender-setter{
@@ -113,6 +194,7 @@
     font-size: var(--font-subtitle);
     font-weight: 700;
     margin-bottom: 1.5rem;
+    cursor: default;
 }
 
 .categories{
@@ -127,22 +209,39 @@
     padding: 0.7rem 0.5rem;
     padding-left: 1rem;
     border-radius: 0.5rem;
+    cursor: pointer;
 }
 
 .category.productive{
     background: color-mix(in srgb, var(--productive) 50%, transparent);
 }
 
+.category.productive:hover{
+    background: var(--productive);
+}
+
 .category.neutral{
     background: color-mix(in srgb, var(--neutral) 50%, transparent);
+}
+
+.category.neutral:hover{
+    background: var(--neutral);
 }
 
 .category.wasted{
     background: color-mix(in srgb, var(--wasted) 50%, transparent);
 }
 
+.category.wasted:hover{
+    background: var(--wasted);
+}
+
 .category.vacation{
     background: color-mix(in srgb, var(--vacation) 50%, transparent);
+}
+
+.category.vacation:hover{
+    background: var(--vacation);
 }
 
 .category-color{
@@ -197,6 +296,12 @@
     background: color-mix(in srgb, var(--theme) 50%, transparent);
     color: var(--text-color);
     border-radius: 1.125rem;
+    cursor: pointer;
+    transition: background ease-in-out 250ms;
+}
+
+.save-btn:hover{
+    background: var(--theme);
 }
 
 /* CSS for screens ypx wide or smaller */
