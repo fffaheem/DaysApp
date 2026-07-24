@@ -301,6 +301,7 @@
     }
 }
 
+/*for hover*/
 @media (hover: hover) {
     .calender-back:hover{
         transform: scale(1.25);
@@ -358,6 +359,63 @@
     .save-btn:hover{
         background: var(--theme);
     }
+}
 
+/*for active on mobile*/
 
+.calender-back:active{
+    transform: scale(1.25);
+}
+
+.calender-change-btn:active{
+    transform: scale(1.25);
+}
+
+.calender-dot:active{
+    transform: scale(1.125);
+}
+
+.calender-dot.productive:active{
+    background: var(--productive);
+}
+
+.calender-dot.wasted:active{
+    background: var(--wasted);
+}
+
+.calender-dot.neutral:active{
+    background: var(--neutral);
+}
+
+.calender-dot.vacation:active{
+    background: var(--vacation);
+}
+
+.calender-dot.present:active{
+    background: var(--text-color);
+    color: var(--background);
+}
+
+.calender-dot.future:active{
+    background: var(--future);
+}
+
+.category.productive:active{
+    background: var(--productive);
+}
+
+.category.neutral:active{
+    background: var(--neutral);
+}
+
+.category.wasted:active{
+    background: var(--wasted);
+}
+
+.category.vacation:active{
+    background: var(--vacation);
+}
+
+.save-btn:active{
+    background: var(--theme);
 }
