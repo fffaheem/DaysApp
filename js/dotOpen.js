@@ -172,10 +172,13 @@
         calenderDot.classList.add("wasted");
       }else if (data[i].status.toLowerCase() === "vacation") {
         calenderDot.classList.add("vacation");
-      } else {
+      }else if (data[i].status.toLowerCase() === "future") {
         calenderDot.classList.add("future");
+      } else {
+        calenderDot.classList.add("present");
       }
       calenderDot.textContent = i + 1;
+      calenderDot.dataset.value = i + 1;
       fragment.appendChild(calenderDot);
     }
     elements.calenderDots.replaceChildren(fragment);
@@ -245,7 +248,6 @@
     elements.categoryWasted.classList.remove("active");
     elements.categoryVacation.classList.remove("active");
 
-    console.log(target,target.classList)
     if (target.classList.contains("productive")) {
       elements.categoryProductive.classList.add("active");
     } else if (target.classList.contains("neutral")) {
@@ -259,6 +261,49 @@
     const url = new URL(window.location);
     url.searchParams.set("status", target.dataset.value);
     history.replaceState({}, "", url);
+  }
+
+  function saveRecord() {
+    const url = new URL(window.location);
+    const date = url.searchParams.get("date");
+    let status = url.searchParams.get("status");
+    const note = elements.note.value;
+
+    const tx = db.transaction("HomeDots", "readwrite");
+    const store = tx.objectStore("HomeDots");
+    store.get(date).onsuccess = (e) => {
+      const record = e.target.result;
+      if (!record) {
+        console.error("Record not found");
+        return;
+      }
+      if (status) {
+        record.status = status;
+      } else {
+        status = record.status;
+      }
+      record.note = note;
+      store.put(record);
+    };
+
+    request.onerror = (e) => {
+      console.error(e.target.error);
+    };
+
+    tx.oncomplete = () => {
+
+      let dn = Number(date.split("-")[2]);
+      let d = elements.calenderDots.querySelector(`[data-value="${dn}"]`)
+      d.classList.remove("neutral");
+      d.classList.remove("productive");
+      d.classList.remove("wasted");
+      d.classList.remove("vacation");
+      d.classList.remove("future");
+      d.classList.remove("present");
+
+      d.classList.add(status.toLowerCase())
+      
+    };
   }
   
   async function init() {
@@ -294,9 +339,7 @@
     window.location.href = `./index.html`
   })
 
-  elements.saveBtn.addEventListener("click", () => {
-    console.log("save kro")
-  })
+  elements.saveBtn.addEventListener("click", saveRecord)
 
   document.addEventListener("dbReady",init)
   
