@@ -332,7 +332,7 @@
     font-size: var(--font-subtitle);
 }
 
-#productive-stat,#productivity-rate-stat,#productivity-rate-so-far-stat,#best-productive-streak-stat,.productivity-streak{
+#productive-stat,#over-all-productivity-rate-stat,#current-productive-rate-stat,#best-productive-streak-stat,.productivity-streak{
     color: var(--productive);
 }
 
