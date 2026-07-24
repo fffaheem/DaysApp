@@ -229,6 +229,14 @@
     background: var(--wasted);
 }
 
+.category.future{
+    background: color-mix(in srgb, var(--future) 50%, transparent);
+}
+
+.category.future.active{
+    background: var(--future);
+}
+
 .category.vacation{
     background: color-mix(in srgb, var(--vacation) 50%, transparent);
 }
@@ -253,6 +261,10 @@
 
 .category-color.neutral{
     background: var(--neutral);
+}
+
+.category-color.future{
+    background: var(--future);
 }
 
 .category-color.vacation{
@@ -357,6 +369,10 @@
         background: var(--wasted);
     }
     
+    .category.future:hover{
+        background: var(--future);
+    }
+    
     .category.vacation:hover{
         background: var(--vacation);
     }
@@ -405,6 +421,10 @@
     background: var(--future);
 }
 
+.category.hide{
+    display: none;
+}
+
 .category.productive:active{
     background: var(--productive);
 }
@@ -415,6 +435,10 @@
 
 .category.wasted:active{
     background: var(--wasted);
+}
+
+.category.vacation:active{
+    background: var(--future);
 }
 
 .category.vacation:active{

@@ -16,6 +16,7 @@
     categoryWasted: document.querySelector(".category.wasted"),
     categoryNeutral: document.querySelector(".category.neutral"),
     categoryVacation: document.querySelector(".category.vacation"),
+    categoryFuture: document.querySelector(".category.future"),
     calenderBack: document.querySelector(".calender-back"),
     note: document.querySelector("#note"),
     saveBtn: document.querySelector(".save-btn"),
@@ -93,6 +94,7 @@
   function populateCalenderSetter(todayData) {
     const todayDate = todayData.date;
     const date = new Date(todayDate);
+    date.setHours(0,0,0)
     const monthDayYear = date.toLocaleDateString("en-US", {
       month: "long",
       day: "2-digit",
@@ -106,11 +108,16 @@
 
     let note = todayData.note
     elements.note.value = note
-
     elements.categoryProductive.classList.remove("active");
     elements.categoryNeutral.classList.remove("active");
     elements.categoryWasted.classList.remove("active");
     elements.categoryVacation.classList.remove("active");
+    
+    elements.categoryProductive.classList.remove("hide");
+    elements.categoryNeutral.classList.remove("hide");
+    elements.categoryWasted.classList.remove("hide");
+    elements.categoryFuture.classList.add("hide");
+    
     let status = todayData.status.toLowerCase();
     if (status === "neutral") {
       elements.categoryNeutral.classList.add("active");
@@ -121,6 +128,13 @@
     } else if (status === "vacation") {
       elements.categoryVacation.classList.add("active");
     }
+    if (status === "future" || date > new Date()) {
+      elements.categoryProductive.classList.add("hide");
+      elements.categoryNeutral.classList.add("hide");
+      elements.categoryWasted.classList.add("hide");
+      elements.categoryFuture.classList.remove("hide");
+    }
+    
   }
 
   function populateCalender(todayData,data) {
@@ -251,6 +265,7 @@
     elements.categoryNeutral.classList.remove("active");
     elements.categoryWasted.classList.remove("active");
     elements.categoryVacation.classList.remove("active");
+    elements.categoryFuture.classList.remove("active");
 
     if (target.classList.contains("productive")) {
       elements.categoryProductive.classList.add("active");
@@ -260,6 +275,8 @@
       elements.categoryWasted.classList.add("active");
     } else if (target.classList.contains("vacation")) {
       elements.categoryVacation.classList.add("active");
+    } else if (target.classList.contains("future")) {
+      elements.categoryFuture.classList.add("active");
     }
     
     elements.saveBtn.dataset.value = target.dataset.value;
@@ -271,12 +288,20 @@
 
     const tx = db.transaction("HomeDots", "readwrite");
     const store = tx.objectStore("HomeDots");
-    store.get(date).onsuccess = (e) => {
+    const request = store.get(date);
+    request.onsuccess = (e) => {
       const record = e.target.result;
       if (!record) {
         console.error("Record not found");
         return;
       }
+
+      if (record.status.toLowerCase() === "future") {
+        if (status !== "future" && status !== "vacation") {
+          return;
+        }
+      }
+      
       if (status) {
         record.status = status.toUpperCase();
       } else {
