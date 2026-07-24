@@ -198,6 +198,7 @@
     padding-left: 1rem;
     border-radius: 0.5rem;
     cursor: pointer;
+    user-select: none;
 }
 
 .category.productive{

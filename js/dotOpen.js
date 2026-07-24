@@ -11,12 +11,14 @@
     calenderDots: document.querySelector(".calender-dots"),
     calenderSetter: document.querySelector("#calender-setter"),
     calenderSetterHead: document.querySelector(".calender-setter-head"),
+    categories: document.querySelector(".categories"),
     categoryProductive: document.querySelector(".category.productive"),
     categoryWasted: document.querySelector(".category.wasted"),
     categoryNeutral: document.querySelector(".category.neutral"),
     categoryVacation: document.querySelector(".category.vacation"),
-    note: document.querySelector("#note"),
     calenderBack: document.querySelector(".calender-back"),
+    note: document.querySelector("#note"),
+    saveBtn: document.querySelector(".save-btn"),
   }
 
   function isValidDate(date) {
@@ -207,8 +209,6 @@
     populateCalenderSetter(todayData);
     populateCalender(todayData,data);
   }
-
-  
   
   async function dotClick(e) {
     const target = e.target.closest(".calender-dot");
@@ -223,6 +223,7 @@
     newDate = convertToDbString(newDate);
 
     const url = new URL(window.location);
+    url.search = "";
     url.searchParams.set("date", newDate);
     history.replaceState({}, "", url);
     date = newDate;
@@ -234,8 +235,40 @@
     populateCalenderSetter(todayData);
     populateCalender(todayData,data);
   }
+
+  function categoryClick(e) {
+    const target = e.target.closest(".category");
+    if (!target) return;
+
+    elements.categoryProductive.classList.remove("active");
+    elements.categoryNeutral.classList.remove("active");
+    elements.categoryWasted.classList.remove("active");
+    elements.categoryVacation.classList.remove("active");
+
+    console.log(target,target.classList)
+    if (target.classList.contains("productive")) {
+      elements.categoryProductive.classList.add("active");
+    } else if (target.classList.contains("neutral")) {
+      elements.categoryNeutral.classList.add("active");
+    } else if (target.classList.contains("wasted")) {
+      elements.categoryWasted.classList.add("active");
+    } else if (target.classList.contains("vacation")) {
+      elements.categoryVacation.classList.add("active");
+    }
+    
+    const url = new URL(window.location);
+    url.searchParams.set("status", target.dataset.value);
+    history.replaceState({}, "", url);
+  }
   
   async function init() {
+    const url = new URL(window.location);
+    
+    if (url.searchParams.has("status")) {
+      url.searchParams.delete("status");
+      history.replaceState({}, "", url);
+    }
+
     verifyDate(date)
     let data = await getData(date);
     let todayData = data.filter((item) => {
@@ -255,8 +288,14 @@
   
   document.addEventListener("click", dotClick)
 
+  elements.categories.addEventListener("click", categoryClick);
+
   elements.calenderBack.addEventListener("click", (e) => {
     window.location.href = `./index.html`
+  })
+
+  elements.saveBtn.addEventListener("click", () => {
+    console.log("save kro")
   })
 
   document.addEventListener("dbReady",init)
