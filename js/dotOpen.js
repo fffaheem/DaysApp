@@ -4,6 +4,8 @@
 
   let elements = {
     body: document.querySelector("body"),
+    calenderMonth: document.querySelector(".calender-month"),
+    calenderYear: document.querySelector(".calender-year"),
     calenderDots: document.querySelector(".calender-dots"),
     calenderSetter: document.querySelector("#calender-setter"),
     calenderSetterHead: document.querySelector(".calender-setter-head"),
@@ -109,24 +111,64 @@
     }
     console.log(status)
   }
-  
-  async function init() {
-    verifyDate(date)
-    let data = await getData(date);
-    let todayData = data.filter((item) => {
-      return item.date === date
-    })[0]
-    populateCalenderSetter(todayData)
-    // console.log(data);
+
+  function populateCalender(todayData,data) {
+    let date = new Date(data[0].date)
+    let year = String(date.getFullYear());
+    let month = date.toLocaleDateString("en-US", {
+      month: "long",
+    });
+    let day = date.toLocaleDateString("en-US", {
+      weekday: "long",
+    }).toLowerCase();
+
+    elements.calenderMonth.textContent = month;
+    elements.calenderYear.textContent = year;
+
+    // dots
+    let empty = 0;
+    if (day === "monday") {
+      empty = 1;
+    }else if (day === "tuesday") {
+      empty = 2;
+    }else if (day === "wednesday") {
+      empty = 3;
+    }else if (day === "thursday") {
+      empty = 4;
+    }else if (day === "friday") {
+      empty = 5;
+    }else if (day === "saturday") {
+      empty = 6;
+    }
+    const fragment = document.createDocumentFragment();
+    for (let i = 0 - empty; i < data.length; i++) {
+      let calenderDot = document.createElement("div");
+      calenderDot.classList.add("calender-dot");
+      if (i < 0) {
+        fragment.appendChild(calenderDot);
+        continue;
+      }
+
+      if (data[i].date === convertToDbString(new Date(todayData.date))) {
+        calenderDot.classList.add("active");
+      }
+      
+      if (data[i].status.toLowerCase() === "productive") {
+        calenderDot.classList.add("productive");
+      }else if (data[i].status.toLowerCase() === "neutral") {
+        calenderDot.classList.add("neutral");
+      }else if (data[i].status.toLowerCase() === "wasted") {
+        calenderDot.classList.add("wasted");
+      }else if (data[i].status.toLowerCase() === "vacation") {
+        calenderDot.classList.add("vacation");
+      }
+      calenderDot.textContent = i + 1;
+      fragment.appendChild(calenderDot);
+    }
+    elements.calenderDots.replaceChildren(fragment);
   }
-  
-        
-  // const formatted = date.toLocaleDateString("en-US", {
-  //   month: "long",
-  //   day: "2-digit",
-  //   weekday: "long",
-  // }).replace(",", " -");
-  document.addEventListener("click", (e) => {
+
+  function dotClick(e) {
     const target = e.target.closest(".calender-dot");
     if (!target) return;
     if (target.classList.length < 2) return;
@@ -135,7 +177,19 @@
             block: "start"
         });
     console.log(target)
-  })
+  }
+  
+  async function init() {
+    verifyDate(date)
+    let data = await getData(date);
+    let todayData = data.filter((item) => {
+      return item.date === date
+    })[0]
+    populateCalenderSetter(todayData);
+    populateCalender(todayData,data);
+  }
+  
+  document.addEventListener("click", dotClick)
 
   elements.calenderBack.addEventListener("click", (e) => {
     window.location.href = `./index.html`

@@ -127,12 +127,20 @@
     background: var(--productive);
 }
 
+.calender-dot.productive.active{
+    background: var(--productive);
+}
+
 .calender-dot.wasted{
     border: 2px solid var(--wasted);
     background: color-mix(in srgb, var(--wasted) 50%, transparent);
 }
 
 .calender-dot.wasted:hover{
+    background: var(--wasted);
+}
+
+.calender-dot.wasted.active{
     background: var(--wasted);
 }
 
@@ -145,12 +153,20 @@
     background: var(--neutral);
 }
 
+.calender-dot.neutral.active{
+    background: var(--neutral);
+}
+
 .calender-dot.vacation{
     border: 2px solid var(--vacation);
     background: color-mix(in srgb, var(--vacation) 50%, transparent);
 }
 
 .calender-dot.vacation:hover{
+    background: var(--vacation);
+}
+
+.calender-dot.vacation.active{
     background: var(--vacation);
 }
 
@@ -164,12 +180,21 @@
     color: var(--background);
 }
 
+.calender-dot.present.active{
+    background: var(--text-color);
+    color: var(--background);
+}
+
 .calender-dot.future{
     border: 2px solid var(--future);
     background: color-mix(in srgb, var(--future) 50%, transparent);
 }
 
 .calender-dot.future:hover{
+    background: var(--future);
+}
+
+.calender-dot.future.active{
     background: var(--future);
 }
 
