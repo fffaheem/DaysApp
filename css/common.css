@@ -257,7 +257,7 @@ body{
     border-radius: 0.5rem;
 }
 
-.sidebar-mrenu-item-active{
+.sidebar-menu-item-active{
     background: var(--theme);
 }
 
