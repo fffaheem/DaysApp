@@ -142,7 +142,10 @@
         if (!cursor) {
           return;
         }
-        if (cursor.value.date === dateString && cursor.value.status === "FUTURE") {
+        if(cursor.value.date === dateString &&
+            (cursor.value.status === "PRESENT" ||
+            cursor.value.status === "FUTURE")
+          ){
           cursor.update({
             ...cursor.value,
             status: "PRESENT"
