@@ -35,6 +35,7 @@
     border: 2px solid var(--box-color);
     padding: 1rem;
     border-radius: var(--border-radius);
+    user-select: none;
 }
 
 .calender-head{
@@ -182,6 +183,10 @@
     font-weight: 700;
 }
 
+.category-out{
+    user-select: none;
+}
+
 .category-head,.note-head{
     font-size: var(--font-subtitle);
     font-weight: 700;
@@ -303,6 +308,11 @@
     border-radius: 1.125rem;
     cursor: pointer;
     transition: background ease-in-out 250ms;
+    user-select: none;
+}
+
+button{
+    user-select: none;
 }
 
 /* CSS for screens ypx wide or smaller */
