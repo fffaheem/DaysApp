@@ -297,10 +297,10 @@
         if (tempProdStreak > bestProductiveStreak) {
           bestProductiveStreak = tempProdStreak;
         }
-      } else if (status === 'vacation') {
-        // FREEZE
+      } else if (status === 'vacation' || status === 'present') {
+        // FREEZE: Ignore undecided days and vacations so they don't break the streak
       } else {
-        // BREAK
+        // BREAK: Any other status (neutral, wasted) breaks the streak
         tempProdStreak = 0;
       }
     });
@@ -312,7 +312,8 @@
     if (pastAndPresentDots.length > 0) {
       let latestIndex = pastAndPresentDots.length - 1;
       
-      while (latestIndex >= 0 && pastAndPresentDots[latestIndex].status.toLowerCase() === 'vacation') {
+      // Skip over both 'vacation' and 'present' at the end of the array to find the true anchor
+      while (latestIndex >= 0 && (pastAndPresentDots[latestIndex].status.toLowerCase() === 'vacation' || pastAndPresentDots[latestIndex].status.toLowerCase() === 'present')) {
         latestIndex--;
       }
       
@@ -324,9 +325,11 @@
           
           if (status === currentStreakType) {
             currentStreakCount++;
-          } else if (status === 'vacation') {
+          } else if (status === 'vacation' || status === 'present') {
+            // FREEZE: Skip over these statuses while counting backwards
             continue;
           } else {
+            // BREAK: We hit a different status, streak is over
             break;
           }
         }
@@ -347,7 +350,7 @@
   
     return {
       currentStreak: currentStreakString,
-      currentStreakClass: currentStreakClass, // Returning the new class
+      currentStreakClass: currentStreakClass,
       bestProductiveStreak: bestProductiveStreak
     };
   }
