@@ -303,6 +303,10 @@
 
       if (record.status.toLowerCase() === "future") {
         if (status !== "future" && status !== "vacation") {
+          elements.calenderOut.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
           return;
         }
       }
