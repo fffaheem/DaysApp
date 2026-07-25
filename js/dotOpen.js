@@ -4,6 +4,7 @@
 
   let elements = {
     body: document.querySelector("body"),
+    calenderOut: document.querySelector(".calender-out"),
     calenderMonth: document.querySelector(".calender-month"),
     calenderYear: document.querySelector(".calender-year"),
     calenderChangeLeft: document.querySelector("#calender-change-left"),
@@ -112,6 +113,7 @@
     elements.categoryNeutral.classList.remove("active");
     elements.categoryWasted.classList.remove("active");
     elements.categoryVacation.classList.remove("active");
+    elements.categoryFuture.classList.remove("active");
     
     elements.categoryProductive.classList.remove("hide");
     elements.categoryNeutral.classList.remove("hide");
@@ -127,7 +129,10 @@
       elements.categoryWasted.classList.add("active");
     } else if (status === "vacation") {
       elements.categoryVacation.classList.add("active");
+    } else if (status === "future") {
+      elements.categoryFuture.classList.add("active");
     }
+    
     if (status === "future" || date > new Date()) {
       elements.categoryProductive.classList.add("hide");
       elements.categoryNeutral.classList.add("hide");
@@ -301,21 +306,15 @@
           return;
         }
       }
-      
-      if (status) {
-        record.status = status.toUpperCase();
-      } else {
+
+      if (!status) {
         status = record.status;
+      } else {
+        record.status = status.toUpperCase();
       }
+      
       record.note = note;
       store.put(record);
-    };
-
-    request.onerror = (e) => {
-      console.error(e.target.error);
-    };
-
-    tx.oncomplete = () => {
 
       let dn = Number(date.split("-")[2]);
       let d = elements.calenderDots.querySelector(`[data-value="${dn}"]`)
@@ -327,8 +326,18 @@
       d.classList.remove("present");
 
       d.classList.add(status.toLowerCase())
+
+      elements.calenderOut.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
       
     };
+
+    request.onerror = (e) => {
+      console.error(e.target.error);
+    };
+
   }
   
   async function init() {
