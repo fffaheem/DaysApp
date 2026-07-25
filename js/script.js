@@ -13,6 +13,17 @@
     headBottomPercentage: document.querySelector(".head-bottom-percentage"),
     progressFill: document.querySelector("#progressFill"),
     dotOutBottom: document.querySelector(".dot-out-bottom"),
+    productiveStat: document.querySelector("#productive-stat"),
+    neutralStat: document.querySelector("#neutral-stat"),
+    wastedStat: document.querySelector("#wasted-stat"),
+    totalDaysStat: document.querySelector("#total-days-stat"),
+    availableDaysStat: document.querySelector("#available-days-stat"),
+    vacationStat: document.querySelector("#vacation-stat"),
+    currentProductiveRateStat: document.querySelector("#current-productive-rate-stat"),
+    currentWastedRateStat: document.querySelector("#current-wasted-rate-stat"),
+    overAllProductivityRateStat: document.querySelector("#over-all-productivity-rate-stat"),
+    currentStreakStat: document.querySelector("#current-streak-stat"),
+    bestProductiveStreakStat: document.querySelector("#best-productive-streak-stat"),
   }
 
   // For head
@@ -252,12 +263,166 @@
     document.dispatchEvent(new Event("dotsReady"));
   }
 
+  function getDefault() {
+    return new Promise((resolve) => {
+      const tx = db.transaction("Preferences", "readonly");
+      const store = tx.objectStore("Preferences");
+      const request = store.get("user_settings")
+      request.onsuccess = (e) => {
+        resolve(e.target.result.neutralWeight)
+      }
+      request.onerror = (e) => {
+        console.log(e, "Some error occured");
+      }
+    })
+      
+  }
+
+  function getStreak(dots, today) {
+    let bestProductiveStreak = 0;
+    let tempProdStreak = 0;
+    
+    const pastAndPresentDots = dots.filter(dot => {
+      let dotDate = new Date(dot.date);
+      dotDate.setHours(0, 0, 0);
+      return dotDate <= today;
+    });
+  
+    // Calculate Best Productive Streak
+    pastAndPresentDots.forEach(dot => {
+      const status = dot.status.toLowerCase();
+      
+      if (status === 'productive') {
+        tempProdStreak++;
+        if (tempProdStreak > bestProductiveStreak) {
+          bestProductiveStreak = tempProdStreak;
+        }
+      } else if (status === 'vacation') {
+        // FREEZE
+      } else {
+        // BREAK
+        tempProdStreak = 0;
+      }
+    });
+  
+    // Calculate Current Active Streak
+    let currentStreakCount = 0;
+    let currentStreakType = 'none'; // Default to lowercase 'none'
+    
+    if (pastAndPresentDots.length > 0) {
+      let latestIndex = pastAndPresentDots.length - 1;
+      
+      while (latestIndex >= 0 && pastAndPresentDots[latestIndex].status.toLowerCase() === 'vacation') {
+        latestIndex--;
+      }
+      
+      if (latestIndex >= 0) {
+        currentStreakType = pastAndPresentDots[latestIndex].status.toLowerCase();
+        
+        for (let i = latestIndex; i >= 0; i--) {
+          const status = pastAndPresentDots[i].status.toLowerCase();
+          
+          if (status === currentStreakType) {
+            currentStreakCount++;
+          } else if (status === 'vacation') {
+            continue;
+          } else {
+            break;
+          }
+        }
+      }
+    }
+  
+    // Format the output string and generate the CSS class
+    let currentStreakString = 'None';
+    let currentStreakClass = ''; // Empty string if no active streak
+    
+    if (currentStreakCount > 0 && currentStreakType !== 'none') {
+      const formattedType = currentStreakType.charAt(0).toUpperCase() + currentStreakType.slice(1);
+      currentStreakString = `${formattedType} - ${currentStreakCount} days`;
+      
+      // Generate the CSS class (e.g., 'wasted-streak')
+      currentStreakClass = `${currentStreakType}-streak`;
+    }
+  
+    return {
+      currentStreak: currentStreakString,
+      currentStreakClass: currentStreakClass, // Returning the new class
+      bestProductiveStreak: bestProductiveStreak
+    };
+  }
+  
+  async function populateStats(dots) {
+    let neutralWeight = await getDefault()
+    neutralWeight = neutralWeight / 10;
+    let productive = 0;
+    let neutral = 0;
+    let wasted = 0;
+    let vacation = 0;
+    
+    let today = new Date()
+    today.setHours(0, 0, 0);
+    
+    let elapsedDots = [];
+    let elapsedVacations = 0;
+    dots.forEach(dot => {
+      let dotDate = new Date(dot.date);
+      dotDate.setHours(0, 0, 0);
+
+      let status = dot.status.toLowerCase();
+      if (status === 'productive') productive++;
+      else if (status === 'neutral') neutral++;
+      else if (status === 'wasted') wasted++;
+      else if (status === 'vacation') vacation++;
+
+      if (['productive', 'neutral', 'wasted', 'vacation'].includes(status) && dotDate <= today) {
+        elapsedDots.push(dot);
+        if (status === 'vacation') elapsedVacations++;
+      }
+    })
+
+    const totalDays = dots.length;
+    const availableDays = totalDays - vacation; 
+      
+    const elapsedDaysCount = elapsedDots.length;
+    const elapsedAvailableDays = elapsedDaysCount - elapsedVacations;
+
+    let overallProductiveRate = 0;
+    let currentProductiveRate = 0;
+    let currentWastedRate = 0;
+    if (availableDays > 0) {
+      overallProductiveRate = (((productive * 1) + (neutral * neutralWeight)) / availableDays) * 100;
+    }
+    
+    if (elapsedAvailableDays > 0) {
+      currentProductiveRate = ( ( (productive * 1) + (neutral * neutralWeight) ) / elapsedAvailableDays ) * 100;
+      currentWastedRate = 100 - currentProductiveRate;
+    }
+    overallProductiveRate = overallProductiveRate.toFixed(2);
+    currentProductiveRate = currentProductiveRate.toFixed(2);
+    currentWastedRate = currentWastedRate.toFixed(2);
+    
+    elements.productiveStat.textContent = productive;
+    elements.neutralStat.textContent = neutral;
+    elements.wastedStat.textContent = wasted;
+    elements.totalDaysStat.textContent = totalDays;
+    elements.availableDaysStat.textContent = availableDays;
+    elements.vacationStat.textContent = vacation;
+    elements.currentProductiveRateStat.textContent = `${currentProductiveRate}%`;
+    elements.currentWastedRateStat.textContent = `${currentWastedRate}%`;
+    elements.overAllProductivityRateStat.textContent = `${overallProductiveRate}%`;
+    const { currentStreak, currentStreakClass, bestProductiveStreak } = getStreak(dots,today);
+    elements.currentStreakStat.textContent = currentStreak;
+    elements.currentStreakStat.classList.add(currentStreakClass);
+    elements.bestProductiveStreakStat.textContent = bestProductiveStreak;
+  }
+  
   async function init() {
     await updateDotsToday();
     let { dots, years } = await getDistinctYearsAndDots();
     populateTopbarYearSelector(years);
     populateDots(dots);
-
+    populateStats(dots)
     // async even listeners
     elements.topbarYearSelector.addEventListener("click", topYearSelectorHandler);
   }

@@ -333,9 +333,11 @@
 .stat{
     font-weight: 900;
     font-size: var(--font-subtitle);
+    text-align: center;
+    margin-bottom: 0.25rem;
 }
 
-#productive-stat,#over-all-productivity-rate-stat,#current-productive-rate-stat,#best-productive-streak-stat,.productivity-streak{
+#productive-stat,#over-all-productivity-rate-stat,#current-productive-rate-stat,#best-productive-streak-stat,.productive-streak{
     color: var(--productive);
 }
 
