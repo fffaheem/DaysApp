@@ -1,4 +1,4 @@
-(() => {
+(() => { 
   let elements = {
     body: document.querySelector("body"),
     right: document.querySelector(".right"),
@@ -26,6 +26,76 @@
     bestProductiveStreakStat: document.querySelector("#best-productive-streak-stat"),
   }
 
+  const params = new URLSearchParams(window.location.search);
+  let setYear = params.get("year");
+  
+  function yearSetCheckYearGetYears(year) {
+    return new Promise((resolve) => {
+      const currentYear = String(new Date().getFullYear());
+      const tx = db.transaction("HomeDots", "readonly");
+      const store = tx.objectStore("HomeDots");
+      const request = store.getAllKeys();
+      request.onsuccess = (e) => {
+        let years = [...new Set(
+            e.target.result.map(date => date.slice(0, 4))
+        )];
+        
+        years = years.map(year =>
+            year === currentYear ? `${year} (Current)` : year
+        );
+
+
+        resolve();
+
+        console.log(years);
+        
+        
+      }
+    })
+  }
+
+  // for topbar
+  function populateTopbarYearSelector(years) {
+    const fragment = document.createDocumentFragment();
+    for (const year of years) {
+      let d = document.createElement("div")
+      d.innerText = year;
+      d.dataset.value = year.split("(")[0].trim()
+      fragment.appendChild(d)
+    }
+    elements.topbarYearSelector.replaceChildren(fragment)
+  }
+  
+  function topYearSelectorHandler(e) {
+    const target = e.target.closest("div[data-value]");
+    if (!target) return;
+
+    window.location.href = `./index.html?year=${target.dataset.value}`;
+    return;
+  }
+
+  function initializeHeader() {
+    const today = new Date();
+    const year = today.getFullYear();
+    if (!setYear) {
+      setYear = year;
+    }
+    elements.rightYear.innerText = setYear;   
+    const dateSelected = new Date(setYear,11,31);
+    dateSelected.setHours(23, 59, 59, 0);
+    const yearSelected = dateSelected.getFullYear()
+    
+    if (yearSelected == year) {
+      setInterval(() => {
+        populateHead(new Date());
+      }, 1000);
+    } else {
+      populateHead(dateSelected);
+    }
+
+  }
+  // topbar end
+  
   // For head
   function getYearProgress(now) {
     const startOfYear = new Date(now.getFullYear(), 0, 1);
@@ -202,43 +272,7 @@
       }
     })
   }
-  
-  function populateTopbarYearSelector(years) {
-    const fragment = document.createDocumentFragment();
-    for (const year of years) {
-      let d = document.createElement("div")
-      d.innerText = year;
-      d.dataset.value = year.split("(")[0].trim()
-      fragment.appendChild(d)
-    }
-    elements.topbarYearSelector.replaceChildren(fragment)
-  }
 
-  function topYearSelectorHandler(e) {
-    const target = e.target.closest("div[data-value]");
-    if (!target) return;
-    
-    clearInterval(intervalId);
-    
-    const today = new Date();
-    const year = today.getFullYear();
-    
-    const dateSelected = new Date(target.dataset.value,11,31);
-    dateSelected.setHours(23, 59, 59, 0);
-    const yearSelected = dateSelected.getFullYear()
-    
-    if (yearSelected == year) {
-      intervalId = setInterval(() => {
-        populateHead(new Date());
-      }, 1000);
-    } else {
-      populateHead(dateSelected);
-    }
-    
-    elements.topbarYearSelector.classList.toggle("active");
-    elements.rightYear.innerText = target.textContent.trim();
-  }
-  
   async function populateDots(dots) {
     let today = new Date();
     const yyyy = today.getFullYear();
@@ -421,6 +455,7 @@
   }
   
   async function init() {
+    initializeHeader();
     await updateDotsToday();
     let { dots, years } = await getDistinctYearsAndDots();
     populateTopbarYearSelector(years);
@@ -445,9 +480,5 @@
   })
   
   document.addEventListener("dbReady",init)
-  let intervalId = null;
-  intervalId = setInterval(() => {
-      populateHead(new Date());
-  }, 1000);
 
 })();
