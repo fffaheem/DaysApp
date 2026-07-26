@@ -29,35 +29,45 @@
 
   const params = new URLSearchParams(window.location.search);
   let setYear = params.get("year");
-  
-  function getYearSelection() {
-    return new Promise((resolve) => {
+
+  function getAllData() {
+    return new Promise((resolve, reject) => {
       const currentYear = String(new Date().getFullYear());
       const tx = db.transaction("HomeDots", "readonly");
       const store = tx.objectStore("HomeDots");
-      const request = store.getAllKeys();
+      
+      // Fetch all records in one go. IndexedDB handles thousands of objects in milliseconds.
+      const request = store.getAll();
+  
       request.onsuccess = (e) => {
-        let years = [...new Set(
-            e.target.result.map(date => date.slice(0, 4))
-        )];
-
+        const allDots = e.target.result;
+        
+        // 1. Extract unique years
+        let yearsRaw = [...new Set(allDots.map(dot => dot.date.slice(0, 4)))];
+  
         if (!setYear) {
           setYear = currentYear;
         }
-
-        if (!years.includes(String(setYear))) {
+  
+        if (!yearsRaw.includes(String(setYear))) {
           window.location.href = "./index.html";
           return;
         }
         
-        years = years.map(year =>
-            year === currentYear ? `${year} (Current)` : year
+        // 2. Format the years for the topbar
+        let years = yearsRaw.map(year =>
+          year === currentYear ? `${year} (Current)` : year
         );
-        resolve({year: setYear, years});
-      }
-    })
+  
+        // 3. Filter dots for the selected year
+        const dots = allDots.filter(dot => dot.date.startsWith(String(setYear)));
+  
+        resolve({years, dots });
+      };
+  
+      request.onerror = (e) => reject(e.target.error);
+    });
   }
-
 
   // for topbar
   function populateTopbarYearSelector(years) {
@@ -487,10 +497,9 @@
   // stats end
   
   async function init() {
-    let { year, years } = await getYearSelection();
-    initializeHeader();
     await updateDotsToday();
-    let dots = await getDots(year);
+    let {years, dots} = await getAllData();
+    initializeHeader();
     populateTopbarYearSelector(years);
     populateDots(dots);
     populateStats(dots);
