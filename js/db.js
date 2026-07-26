@@ -133,7 +133,7 @@ function initializeLastYear(db) {
           return;
       }
   
-      const start = new Date(2025, 1, 1);
+      const start = new Date(2025, 0, 1);
       const end = new Date(2025, 11, 31);
   
       while (start <= end) {

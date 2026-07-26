@@ -29,7 +29,7 @@
   const params = new URLSearchParams(window.location.search);
   let setYear = params.get("year");
   
-  function yearSetCheckYearGetYears(year) {
+  function getYearSelection() {
     return new Promise((resolve) => {
       const currentYear = String(new Date().getFullYear());
       const tx = db.transaction("HomeDots", "readonly");
@@ -39,17 +39,20 @@
         let years = [...new Set(
             e.target.result.map(date => date.slice(0, 4))
         )];
+
+        if (!setYear) {
+          setYear = currentYear;
+        }
+
+        if (!years.includes(String(setYear))) {
+          window.location.href = "./index.html";
+          return;
+        }
         
         years = years.map(year =>
             year === currentYear ? `${year} (Current)` : year
         );
-
-
-        resolve();
-
-        console.log(years);
-        
-        
+        resolve({year: setYear, years});
       }
     })
   }
@@ -92,7 +95,6 @@
     } else {
       populateHead(dateSelected);
     }
-
   }
   // topbar end
   
@@ -189,8 +191,7 @@
   }
   // head end
 
-  // for dots and topbar year
-
+  // for dots
   function getDefaultFromSetting() {
     return new Promise((resolve, reject) => {
       let tx = db.transaction("Preferences", "readonly");
@@ -246,27 +247,23 @@
     })
   }
   
-  function getDistinctYearsAndDots() {
+  function getDots(y) {
     return new Promise((resolve, reject) => {
-      const today = new Date();
+      const today = new Date(y);
       today.setHours(0, 0, 0, 0);
       const year = today.getFullYear();
       const dots = [];
-      const years = new Set();
       const tx = db.transaction("HomeDots", "readwrite");
       const store = tx.objectStore("HomeDots");
       const request = store.openCursor();
       request.onsuccess = (e) => {
         const cursor = e.target.result;
         if (!cursor) {
-          resolve({ dots, years });
+          resolve(dots);
           return;
         }
         if (cursor.key.startsWith(year)) {
           dots.push(cursor.value);
-          years.add(`${ cursor.key.substring(0, 4) } (Current)`)
-        } else {
-          years.add(cursor.key.substring(0, 4))
         }
         cursor.continue();
       }
@@ -453,11 +450,13 @@
     elements.currentStreakStat.classList.add(currentStreakClass);
     elements.bestProductiveStreakStat.textContent = bestProductiveStreak;
   }
+  // dots end
   
   async function init() {
+    let { year, years } = await getYearSelection();
     initializeHeader();
     await updateDotsToday();
-    let { dots, years } = await getDistinctYearsAndDots();
+    let dots = await getDots(year);
     populateTopbarYearSelector(years);
     populateDots(dots);
     populateStats(dots)
@@ -478,7 +477,8 @@
       e.target.dataset.value = "full"
     }
   })
-  
+
+  // calling init function
   document.addEventListener("dbReady",init)
 
 })();
