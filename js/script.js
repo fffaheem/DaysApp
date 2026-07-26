@@ -259,29 +259,6 @@
     })
   }
   
-  function getDots(y) {
-    return new Promise((resolve, reject) => {
-      const today = new Date(y);
-      today.setHours(0, 0, 0, 0);
-      const year = today.getFullYear();
-      const dots = [];
-      const tx = db.transaction("HomeDots", "readwrite");
-      const store = tx.objectStore("HomeDots");
-      const request = store.openCursor();
-      request.onsuccess = (e) => {
-        const cursor = e.target.result;
-        if (!cursor) {
-          resolve(dots);
-          return;
-        }
-        if (cursor.key.startsWith(year)) {
-          dots.push(cursor.value);
-        }
-        cursor.continue();
-      }
-    })
-  }
-
   async function populateDots(dots) {
     let today = new Date();
     const yyyy = today.getFullYear();
