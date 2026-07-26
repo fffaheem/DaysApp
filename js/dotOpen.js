@@ -367,7 +367,8 @@
   elements.categories.addEventListener("click", categoryClick);
 
   elements.calenderBack.addEventListener("click", (e) => {
-    window.location.href = `./index.html`
+    const year = (new Date(date)).getFullYear();
+    window.location.href = `./index.html?year=${year}`;
   })
 
   elements.saveBtn.addEventListener("click", saveRecord)
