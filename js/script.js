@@ -13,6 +13,7 @@
     headBottomPercentage: document.querySelector(".head-bottom-percentage"),
     progressFill: document.querySelector("#progressFill"),
     dotOutBottom: document.querySelector(".dot-out-bottom"),
+    statBoxes: document.querySelector(".stat-boxes"),
     productiveStat: document.querySelector("#productive-stat"),
     neutralStat: document.querySelector("#neutral-stat"),
     wastedStat: document.querySelector("#wasted-stat"),
@@ -56,6 +57,7 @@
       }
     })
   }
+
 
   // for topbar
   function populateTopbarYearSelector(years) {
@@ -385,7 +387,9 @@
       bestProductiveStreak: bestProductiveStreak
     };
   }
+  // dots end
   
+  // for stats
   async function populateStats(dots) {
     let neutralWeight = await getDefault()
     neutralWeight = neutralWeight / 10;
@@ -450,7 +454,37 @@
     elements.currentStreakStat.classList.add(currentStreakClass);
     elements.bestProductiveStreakStat.textContent = bestProductiveStreak;
   }
-  // dots end
+
+  function hideUnwantedStats() {
+    elements.statBoxes.children[6].children[2].textContent = "Overall Productive Rate";
+    elements.statBoxes.children[6].style.gridColumn  = "span 3"
+    elements.statBoxes.children[7].children[2].textContent = "Overall Wasted Rate";
+    elements.statBoxes.children[7].style.gridColumn  = "span 3"
+    elements.statBoxes.children[8].style.display = "none"
+    
+    elements.statBoxes.children[9].style.display = "none"
+    elements.statBoxes.children[10].style.gridColumn = "1 / -1"
+  }
+  
+  function hideUnwantedStatsHandler() {
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    // meaning previous year
+    if (setYear) {
+      let date = new Date(setYear).getFullYear();
+      if (date < today.getFullYear()) {
+        hideUnwantedStats();
+        return
+      }
+    }
+  
+    // meaning current year
+    if (today.getMonth() === 11 && today.getDate() === 31){
+      hideUnwantedStats();
+    }
+  }
+  // stats end
   
   async function init() {
     let { year, years } = await getYearSelection();
@@ -459,7 +493,8 @@
     let dots = await getDots(year);
     populateTopbarYearSelector(years);
     populateDots(dots);
-    populateStats(dots)
+    populateStats(dots);
+    hideUnwantedStatsHandler(); // if the year is finished
     // async even listeners
     elements.topbarYearSelector.addEventListener("click", topYearSelectorHandler);
   }
