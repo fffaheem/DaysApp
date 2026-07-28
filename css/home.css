@@ -260,6 +260,10 @@
     align-items: center;
 }
 
+.checklist-item>i,.checklist-add>i{
+    font-size: var(--font-title);
+}
+
 .checklist-text.done{
     text-decoration: line-through;
 }
@@ -276,6 +280,7 @@
     color: var(--text-color);
     outline: var(--text-color);
     border-radius: 0.75rem;
+    font-size: 1rem;
 }
 
 .fa-check{
