@@ -12,7 +12,12 @@
     headBottomLeft: document.querySelector("#head-bottom-left"),
     headBottomPercentage: document.querySelector(".head-bottom-percentage"),
     progressFill: document.querySelector("#progressFill"),
+    dotOut: document.querySelector(".dot-out"),
+    dotGotoChecklistBtn: document.querySelector("#dot-goto-checklist-btn"),
     dotOutBottom: document.querySelector(".dot-out-bottom"),
+    checkOut: document.querySelector(".check-out"),
+    checkGotoOverviewBtn: document.querySelector("#check-goto-overview-btn"),
+    checkOutBottom: document.querySelector(".check-out-bottom"),
     statBoxes: document.querySelector(".stat-boxes"),
     productiveStat: document.querySelector("#productive-stat"),
     neutralStat: document.querySelector("#neutral-stat"),
@@ -499,6 +504,15 @@
     }
   })
 
+  elements.dotGotoChecklistBtn.addEventListener("click", (e) => {
+    elements.dotOut.classList.add("active");
+    elements.checkOut.classList.add("active");
+  })
+
+  elements.checkGotoOverviewBtn.addEventListener("click", (e) => {
+    elements.dotOut.classList.remove("active");
+    elements.checkOut.classList.remove("active");
+  })
   // calling init function
   document.addEventListener("dbReady",init)
 

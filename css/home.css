@@ -177,7 +177,11 @@
 /*========================================================*/
 /*Dots*/
 /*========================================================*/
-.dot-out{
+.dot-checlist-container{
+    
+}   
+
+.dot-out,.check-out{
     border: 2px solid var(--box-border);
     border-radius: var(--border-radius);
     background-color: var(--box-color);
@@ -192,16 +196,29 @@
     max-width: var(--max-width);
     user-select: none;
 }
-.dot-out-top{
+
+.dot-out.active{
+    display: none;
+}
+
+.check-out{
+    display: none;
+}
+
+.check-out.active{
+    display: flex;
+}
+
+.dot-out-top,.check-out-top{
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
-.dot-out-year{
+.dot-out-year,.check-out-year{
     font-size: var(--font-subtitle);
 }
-.dot-out-icon{
+.dot-out-icon,.check-out-icon{
     background-color: var(--theme);
     padding: 0.25rem 0.5rem;
     border-radius: 0.5rem;
