@@ -50,6 +50,8 @@
 }
 .calender-head-left{
     cursor: pointer;
+    display: flex;
+    gap: 2rem;
 }
 
 .calender-change{

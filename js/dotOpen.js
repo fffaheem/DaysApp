@@ -303,9 +303,9 @@
 
       if (record.status.toLowerCase() === "future") {
         if (status !== "future" && status !== "vacation") {
-          elements.calenderOut.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
           });
           return;
         }
@@ -331,9 +331,9 @@
 
       d.classList.add(status.toLowerCase())
 
-      elements.calenderOut.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
       });
       
     };
