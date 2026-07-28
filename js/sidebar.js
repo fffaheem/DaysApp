@@ -10,18 +10,11 @@
     goalsStatusFilterOut: document.querySelector(".goals-status-filter-out"),
   }
 
-
   elements.homeBtn.addEventListener("click", (e) => {
     elements.sidebarOut.classList.add("sidebar-active");
     elements.body.classList.add("modal-active");
     elements.sidebar.classList.add("sidebar-slide");
   })
-
-  // elements.sidebarCloseBtn.addEventListener("click", (e) => {
-  //   elements.sidebar.classList.remove("sidebar-slide");
-  //   elements.sidebarOut.classList.remove("sidebar-active");
-  //   elements.body.classList.remove("modal-active");
-  // })
 
   elements.sidebarOut.addEventListener("click", (e) => {
     if (e.target === elements.sidebarOut) {
@@ -62,7 +55,6 @@
     if (Math.abs(dy) > 50) {
       directionChanged = true;
     }
-
   })
   
   document.addEventListener("touchend", e => {

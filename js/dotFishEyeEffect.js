@@ -1,6 +1,7 @@
 
 document.addEventListener("dotsReady", () => {
 
+  const body = document.querySelector("body");
   const container = document.querySelector(".dot-out-bottom");
   const dots = [...container.querySelectorAll(".dot")];
   // --- Configuration ---
@@ -84,9 +85,7 @@ document.addEventListener("dotsReady", () => {
     if (!isActive) {
       isActive = true;
       container.classList.add("is-active");
-
-      // Disable scrolling now
-      container.style.touchAction = "none";
+      body.classList.add("modal-active");
     }
     mouseX = x;
     mouseY = y;
@@ -99,6 +98,7 @@ document.addEventListener("dotsReady", () => {
   function stopInteraction() {
     isActive = false;
     container.classList.remove("is-active");
+    body.classList.remove("modal-active");
     container.style.touchAction = "";
     if (frame !== null) {
       cancelAnimationFrame(frame);
