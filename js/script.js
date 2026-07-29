@@ -524,14 +524,16 @@
     elements.checklistItemOut.replaceChildren(fragment);
   }
 
-  function createChecklistElementAndPopulate() {
+  function createChecklistElementAndPopulate(id) {
     const item = document.createElement("div");
     item.className = "checklist-item";
     const icon = document.createElement("i");
     icon.className = "fa-regular fa-square";
+    icon.id = `icon-${id}`
     const textarea = document.createElement("textarea");
     textarea.className = "checklist-text";
     textarea.rows = 1;
+    textarea.id = id;
     textarea.value = elements.checklistAddText.value;
     item.append(icon, textarea);
 
@@ -553,12 +555,16 @@
 
     if (isAddAction && elements.checklistAddText.value.length > 0) {
       const tx = db.transaction("YearChecklist", "readwrite");
-      tx.objectStore("YearChecklist").add({
+      const store = tx.objectStore("YearChecklist");
+      const request = store.add({
           text: elements.checklistAddText.value,
           isCompleted: false,
           year: setYear
       });
-      createChecklistElementAndPopulate();
+      request.onsuccess = () => {
+          const id = request.result;
+          createChecklistElementAndPopulate(id);
+      };
     }
    
     // showing and hiding icon to add button
