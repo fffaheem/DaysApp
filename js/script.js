@@ -554,6 +554,11 @@
 
       e.target.value = ""
       elements.checklistAddTextIcon.style.display = "none"
+
+      elements.checklistItemOut.scrollTo({
+        top: elements.checklistItemOut.scrollHeight,
+        behavior: "smooth"
+      });
     }
     
     if (e.target.value.length < 1) {
@@ -582,6 +587,11 @@
 
     elements.checklistAddText.value = ""
     elements.checklistAddTextIcon.style.display = "none"
+
+    elements.checklistItemOut.scrollTo({
+      top: elements.checklistItemOut.scrollHeight,
+      behavior: "smooth"
+    });
     
   })
 
