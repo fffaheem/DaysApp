@@ -15,7 +15,8 @@ request.onupgradeneeded = (e) => {
   }
   if (!db.objectStoreNames.contains("YearChecklist")) {
     const store = db.createObjectStore("YearChecklist", {
-      keyPath: "id"
+      keyPath: "id",
+      autoIncrement: true
     });
     store.createIndex("year", "year", { unique: false });
   }

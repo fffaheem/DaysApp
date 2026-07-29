@@ -480,15 +480,101 @@
     }
   }
   // stats end
+
+  // year checklist
+  function getYearChecklistData() {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction("YearChecklist", "readonly");
+      const store = tx.objectStore("YearChecklist");
+      const index = store.index("year");
+      const request = index.getAll(setYear);
+      request.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      request.onerror = (e) => reject(e.target.error);
+    })
+  }
+
+  function populateCheckList(data) {
+    const fragment = document.createDocumentFragment();
+    for (const item of data) {
+      
+      const div = document.createElement("div");
+      div.className = "checklist-item";
+      
+      const icon = document.createElement("i");
+      if (item.isCompleted) {
+        icon.className = "fa fa-check-square";
+      } else {
+        icon.className = "fa-regular fa-square";
+      }
+      
+      const textarea = document.createElement("textarea");
+      textarea.className = "checklist-text";
+      textarea.id = item.id;
+      textarea.rows = Math.max(1, item.text.split("\n").length);
+      textarea.value = item.text;
+      
+      div.append(icon, textarea);
+      fragment.appendChild(div);
+    }
+    elements.checklistItemOut.replaceChildren(fragment);
+  }
+
+  function createChecklistElementAndPopulate() {
+    const item = document.createElement("div");
+    item.className = "checklist-item";
+    const icon = document.createElement("i");
+    icon.className = "fa-regular fa-square";
+    const textarea = document.createElement("textarea");
+    textarea.className = "checklist-text";
+    textarea.rows = 1;
+    textarea.value = elements.checklistAddText.value;
+    item.append(icon, textarea);
+
+    elements.checklistItemOut.append(item);
+
+    elements.checklistAddText.value = ""
+    elements.checklistAddTextIcon.style.display = "none"
+
+    elements.checklistItemOut.scrollTo({
+      top: elements.checklistItemOut.scrollHeight,
+      behavior: "smooth"
+    });
+  }
+  
+  function addChecklist(e) {
+    const isAddAction =
+      (e.type === "click") ||
+      (e.type === "keyup" && e.key === "Enter");
+
+    if (isAddAction && elements.checklistAddText.value.length > 0) {
+      const tx = db.transaction("YearChecklist", "readwrite");
+      tx.objectStore("YearChecklist").add({
+          text: elements.checklistAddText.value,
+          isCompleted: false,
+          year: setYear
+      });
+      createChecklistElementAndPopulate();
+    }
+   
+    // showing and hiding icon to add button
+    elements.checklistAddTextIcon.style.display = e.target.value.length > 0 ? "" : "none";
+  }
+  
+  // year checklist done 
+
   
   async function init() {
     await updateDotsToday();
     let {years, dots} = await getAllData();
+    let checklistData = await getYearChecklistData();
     initializeHeader();
     populateTopbarYearSelector(years);
     populateDots(dots);
     populateStats(dots);
     hideUnwantedStatsHandler(); // if the year is finished
+    populateCheckList(checklistData);
     // async even listeners
     elements.topbarYearSelector.addEventListener("click", topYearSelectorHandler);
   }
@@ -520,6 +606,7 @@
   // for height in textarea 
   elements.checkOutBottom.addEventListener("input", (e) => {
     if (!e.target.classList.contains("checklist-text")) return;
+    e.target.rows = "1"
     e.target.style.height = "auto";
     e.target.style.height = e.target.scrollHeight + "px";
     if (e.target.value.length < 1) {
@@ -538,62 +625,9 @@
   })
   
   // for adding checklist
-  elements.checklistAddText.addEventListener("keyup", e => {
-    if (e.key === "Enter" && e.target.value.length > 0) {
-      const item = document.createElement("div");
-      item.className = "checklist-item";
-      const icon = document.createElement("i");
-      icon.className = "fa-regular fa-square";
-      const textarea = document.createElement("textarea");
-      textarea.className = "checklist-text";
-      textarea.rows = 1;
-      textarea.value = e.target.value;
-      item.append(icon, textarea);
+  elements.checklistAddText.addEventListener("keyup", addChecklist)
 
-      elements.checklistItemOut.append(item);
-
-      e.target.value = ""
-      elements.checklistAddTextIcon.style.display = "none"
-
-      elements.checklistItemOut.scrollTo({
-        top: elements.checklistItemOut.scrollHeight,
-        behavior: "smooth"
-      });
-    }
-    
-    if (e.target.value.length < 1) {
-      elements.checklistAddTextIcon.style.display = "none"
-    } else {
-      elements.checklistAddTextIcon.style.display = ""
-    }
-  })
-
-  elements.checklistAddTextIcon.addEventListener("click", () => {
-    if (elements.checklistAddText.value.length < 1) {
-      return
-    }
-    
-    const item = document.createElement("div");
-    item.className = "checklist-item";
-    const icon = document.createElement("i");
-    icon.className = "fa-regular fa-square";
-    const textarea = document.createElement("textarea");
-    textarea.className = "checklist-text";
-    textarea.rows = 1;
-    textarea.value = elements.checklistAddText.value;
-    item.append(icon, textarea);
-
-    elements.checklistItemOut.append(item);
-
-    elements.checklistAddText.value = ""
-    elements.checklistAddTextIcon.style.display = "none"
-
-    elements.checklistItemOut.scrollTo({
-      top: elements.checklistItemOut.scrollHeight,
-      behavior: "smooth"
-    });
-    
-  })
+  elements.checklistAddTextIcon.addEventListener("click", addChecklist)
 
   
   // calling init function
