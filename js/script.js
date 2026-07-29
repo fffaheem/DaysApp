@@ -110,7 +110,11 @@
     
     if (yearSelected == year) {
       setInterval(() => {
-        populateHead(new Date());
+        let newTime = new Date();
+        if (newTime.getFullYear() > Number(setYear)) {
+          window.location.href = "./index.html"
+        }
+        populateHead(newTime);
       }, 1000);
     } else {
       populateHead(dateSelected);
@@ -446,7 +450,7 @@
     elements.overAllProductivityRateStat.textContent = `${overallProductiveRate}%`;
     const { currentStreak, currentStreakClass, bestProductiveStreak } = getStreak(dots,today);
     elements.currentStreakStat.textContent = currentStreak;
-    elements.currentStreakStat.classList.add(currentStreakClass);
+    if(currentStreakClass) elements.currentStreakStat.classList.add(currentStreakClass);
     elements.bestProductiveStreakStat.textContent = bestProductiveStreak;
   }
 
