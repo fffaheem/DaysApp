@@ -259,7 +259,6 @@
     display: flex;
     gap: 1rem;
     align-items: center;
-    overflow-x: hidden;
 }
 
 .checklist-item>i,.checklist-add>i{
@@ -459,9 +458,5 @@
 
     .info:hover{
         transform: scale(1.5);
-    }
-
-    .fa-check:hover{
-        transform: scale(1.125);
     }
 }
