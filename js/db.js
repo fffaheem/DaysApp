@@ -5,13 +5,19 @@ request.onupgradeneeded = (e) => {
   db = e.target.result;
   if (!db.objectStoreNames.contains("Preferences")) {
     db.createObjectStore("Preferences", {
-        keyPath: "id"
+      keyPath: "id"
     });
   }
   if (!db.objectStoreNames.contains("HomeDots")) {
     db.createObjectStore("HomeDots", {
-        keyPath: "date"
+      keyPath: "date"
     });
+  }
+  if (!db.objectStoreNames.contains("YearChecklist")) {
+    const store = db.createObjectStore("YearChecklist", {
+      keyPath: "id"
+    });
+    store.createIndex("year", "year", { unique: false });
   }
 }
 
