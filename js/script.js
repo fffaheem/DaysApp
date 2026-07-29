@@ -18,6 +18,9 @@
     checkOut: document.querySelector(".check-out"),
     checkGotoOverviewBtn: document.querySelector("#check-goto-overview-btn"),
     checkOutBottom: document.querySelector(".check-out-bottom"),
+    checklistItemOut: document.querySelector(".checklist-item-out"),
+    checklistAddText: document.querySelector("#checklist-add-text"),
+    checklistAddTextIcon: document.querySelector(".fa.fa-check"),
     statBoxes: document.querySelector(".stat-boxes"),
     productiveStat: document.querySelector("#productive-stat"),
     neutralStat: document.querySelector("#neutral-stat"),
@@ -513,6 +516,76 @@
     elements.dotOut.classList.remove("active");
     elements.checkOut.classList.remove("active");
   })
+
+  // for height in textarea 
+  elements.checkOutBottom.addEventListener("input", (e) => {
+    if (!e.target.classList.contains("checklist-text")) return;
+    e.target.style.height = "auto";
+    e.target.style.height = e.target.scrollHeight + "px";
+    if (e.target.value.length < 1) {
+      e.target.parentElement.remove();
+    }
+  })
+  
+  // for checklist check done toggle
+  elements.checklistItemOut.addEventListener("click", (e) => {
+    if (!e.target.matches("i")) return;
+    e.target.classList.toggle("fa-regular");
+    e.target.classList.toggle("fa");
+    e.target.classList.toggle("fa-square");
+    e.target.classList.toggle("fa-check-square");
+    e.target.parentElement.children[1].classList.toggle("done")
+  })
+  
+  // for adding checklist
+  elements.checklistAddText.addEventListener("keyup", e => {
+    if (e.key === "Enter" && e.target.value.length > 0) {
+      const item = document.createElement("div");
+      item.className = "checklist-item";
+      const icon = document.createElement("i");
+      icon.className = "fa-regular fa-square";
+      const textarea = document.createElement("textarea");
+      textarea.className = "checklist-text";
+      textarea.rows = 1;
+      textarea.value = e.target.value;
+      item.append(icon, textarea);
+
+      elements.checklistItemOut.append(item);
+
+      e.target.value = ""
+      elements.checklistAddTextIcon.style.display = "none"
+    }
+    
+    if (e.target.value.length < 1) {
+      elements.checklistAddTextIcon.style.display = "none"
+    } else {
+      elements.checklistAddTextIcon.style.display = ""
+    }
+  })
+
+  elements.checklistAddTextIcon.addEventListener("click", () => {
+    if (elements.checklistAddText.value.length < 1) {
+      return
+    }
+    
+    const item = document.createElement("div");
+    item.className = "checklist-item";
+    const icon = document.createElement("i");
+    icon.className = "fa-regular fa-square";
+    const textarea = document.createElement("textarea");
+    textarea.className = "checklist-text";
+    textarea.rows = 1;
+    textarea.value = elements.checklistAddText.value;
+    item.append(icon, textarea);
+
+    elements.checklistItemOut.append(item);
+
+    elements.checklistAddText.value = ""
+    elements.checklistAddTextIcon.style.display = "none"
+    
+  })
+
+  
   // calling init function
   document.addEventListener("dbReady",init)
 
