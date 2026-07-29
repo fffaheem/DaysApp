@@ -1,5 +1,5 @@
 (() => {
-
+  const DEBUG = true;
   let elements = {
     body: document.querySelector("body"),
     homeBtn: document.getElementById("home-btn"),
@@ -80,5 +80,32 @@
 
     currentX = startX
   });
+
+
+  if (DEBUG) {
+    let div = document.createElement("div");
+    div.className = "sidebar-debug";
+    
+    let divHead = document.createElement("div");
+    divHead.className = "sidebar-debug-heading";
+    divHead.textContent = "Debug Tools"
+    
+    let divMenu = document.createElement("div");
+    divMenu.className = "sidebar-debug-menu";
+    
+    let divMenuItem1 = document.createElement("div");
+    divMenuItem1.textContent = "Current Date";
+    divMenuItem1.id = "debug-date-change";
+    
+    let divMenuItem2 = document.createElement("div");
+    divMenuItem2.textContent = "Clear Database";
+    divMenuItem2.id = "debug-clear-database";
+    divMenu.append(divMenuItem1, divMenuItem2);
+
+    div.append(divHead, divMenu);
+    
+    elements.sidebar.appendChild(div);
+  }
+
   
 })();
