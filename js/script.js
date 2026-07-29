@@ -503,17 +503,20 @@
       div.className = "checklist-item";
       
       const icon = document.createElement("i");
-      if (item.isCompleted) {
-        icon.className = "fa fa-check-square";
-      } else {
-        icon.className = "fa-regular fa-square";
-      }
+      icon.id = `icon-${item.id}`
       
       const textarea = document.createElement("textarea");
-      textarea.className = "checklist-text";
       textarea.id = item.id;
       textarea.rows = Math.max(1, item.text.split("\n").length);
       textarea.value = item.text;
+
+      if (item.isCompleted) {
+        icon.className = "fa fa-check-square";
+        textarea.className = "checklist-text done";
+      } else {
+        icon.className = "fa-regular fa-square";
+        textarea.className = "checklist-text";
+      }
       
       div.append(icon, textarea);
       fragment.appendChild(div);
@@ -560,6 +563,28 @@
    
     // showing and hiding icon to add button
     elements.checklistAddTextIcon.style.display = e.target.value.length > 0 ? "" : "none";
+  }
+
+  function checklistDoneManagement(e) {
+    if (!e.target.matches("i")) return;
+    e.target.classList.toggle("fa-regular");
+    e.target.classList.toggle("fa");
+    e.target.classList.toggle("fa-square");
+    e.target.classList.toggle("fa-check-square");
+    e.target.parentElement.children[1].classList.toggle("done")
+    let isCompleted = e.target.parentElement.children[1].classList.contains("done");
+    let id = e.target.id.split("-")[1];
+    id = Number(id);
+    
+    const tx = db.transaction("YearChecklist", "readwrite");
+    const store = tx.objectStore("YearChecklist");
+    const request = store.get(id);
+    request.onsuccess = () => {
+      const item = request.result;
+      if (!item) return; // No record with this id
+      item.isCompleted = isCompleted;
+      store.put(item);
+    };
   }
   
   // year checklist done 
@@ -615,14 +640,7 @@
   })
   
   // for checklist check done toggle
-  elements.checklistItemOut.addEventListener("click", (e) => {
-    if (!e.target.matches("i")) return;
-    e.target.classList.toggle("fa-regular");
-    e.target.classList.toggle("fa");
-    e.target.classList.toggle("fa-square");
-    e.target.classList.toggle("fa-check-square");
-    e.target.parentElement.children[1].classList.toggle("done")
-  })
+  elements.checklistItemOut.addEventListener("click", checklistDoneManagement)
   
   // for adding checklist
   elements.checklistAddText.addEventListener("keyup", addChecklist)

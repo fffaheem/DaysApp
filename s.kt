@@ -105,3 +105,32 @@ val TutorialButtonBackground = Color(0xFF58A6FF) // "Start Tour" button
 val TutorialDismissBackground = Color(0xFFE74C3C) // Tutorial close/X button
 val TutorialOverlayScrim = Color(0xFF000000)   // Tutorial overlay dim (used at 58% alpha)
 val TutorialBorder = Color(0xFFFFFFFF)         // Tutorial card border (used at 25% alpha)
+
+
+const items = [
+    {text: "Do Assignment", isCompleted: true, year: "2025" },
+    {text: "Build Project", isCompleted: true, year: "2025" },
+    {text: "Write Dissertation", isCompleted: true, year: "2025" },
+    {text: "Write Research Paper", isCompleted: true, year: "2025" },
+    {text: "Collect Degree", isCompleted: true, year: "2025" },
+];
+
+const tx = db.transaction("YearChecklist", "readwrite");
+const store = tx.objectStore("YearChecklist");
+
+items.forEach(item => store.add(item));
+
+
+const items = [
+    {text: "Design homepage", isCompleted: true, year: "2026" },
+    {text: "Build API", isCompleted: true, year: "2026" },
+    {text: "Write docs", isCompleted: false, year: "2026" },
+    {text: "Deploy", isCompleted: false, year: "2026" },
+    {text: "Test", isCompleted: false, year: "2026" },
+    {text: "hogaya\nnhee hua\nfix kro isey", isCompleted: false, year: "2026" },
+];
+
+const tx = db.transaction("YearChecklist", "readwrite");
+const store = tx.objectStore("YearChecklist");
+
+items.forEach(item => store.add(item));
