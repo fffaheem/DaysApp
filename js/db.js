@@ -1,4 +1,58 @@
-const request = indexedDB.open("Days",1)
+(function overrideNativeDate() {
+    const offsetStr = localStorage.getItem("debug_time_offset");
+    
+    // Save the original Date object before doing anything so our tools can use it
+    const OriginalDate = window.Date;
+    window.OriginalDate = OriginalDate; 
+    
+    if (offsetStr) {
+        const offset = parseInt(offsetStr, 10);
+
+        function MockedDate(...args) {
+            if (!new.target) {
+                if (args.length === 0) {
+                    return new OriginalDate(OriginalDate.now() + offset).toString();
+                }
+                return OriginalDate(...args);
+            }
+            if (args.length === 0) {
+                // Return real time + the offset so time keeps ticking!
+                return new OriginalDate(OriginalDate.now() + offset);
+            }
+            return new OriginalDate(...args);
+        }
+
+        MockedDate.now = function () {
+            return OriginalDate.now() + offset;
+        };
+        MockedDate.parse = OriginalDate.parse;
+        MockedDate.UTC = OriginalDate.UTC;
+        MockedDate.prototype = OriginalDate.prototype;
+        
+        window.Date = MockedDate;
+    }
+})();
+
+// Tools for the UI to interact with
+window.debugTools = {
+    setMockDate: (dateTimeString) => {
+        // Calculate how far in the past or future the mock time is
+        const targetTime = new window.OriginalDate(dateTimeString).getTime();
+        const realTime = window.OriginalDate.now();
+        const offset = targetTime - realTime;
+        
+        localStorage.setItem("debug_time_offset", offset.toString());
+        localStorage.setItem("debug_mock_date_display", dateTimeString); // Saved for the UI input
+        location.reload(); 
+    },
+    clearMockDate: () => {
+        localStorage.removeItem("debug_time_offset");
+        localStorage.removeItem("debug_mock_date_display");
+        location.reload();
+    }
+};
+
+const request = indexedDB.open("Days", 1)
 let db = null;
 
 request.onupgradeneeded = (e) => {

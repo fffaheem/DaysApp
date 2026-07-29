@@ -1,4 +1,4 @@
-# python .\script.py ./ ./out.txt --not .\s.kt .\.gitignore .\script.py
+# python ./script.py ./ ./out.txt --not ./s.kt ./.gitignore ./script.py
 
 from pathlib import Path
 import sys
