@@ -565,6 +565,31 @@
     elements.checklistAddTextIcon.style.display = e.target.value.length > 0 ? "" : "none";
   }
 
+  function editChecklist(e) {
+    if (!e.target.classList.contains("checklist-text")) return;
+    const tx = db.transaction("YearChecklist", "readwrite");
+    const store = tx.objectStore("YearChecklist");
+    let id = Number(e.target.id);
+    
+    if (e.target.value.length < 1) {
+      store.delete(id);
+      e.target.parentElement.remove();
+    }
+    
+    const request = store.get(id);
+    request.onsuccess = () => {
+        const item = request.result;
+        if (!item) return;
+        item.text = e.target.value;
+        store.put(item);
+    };
+
+    // for height adjustment
+    e.target.rows = "1"
+    e.target.style.height = "auto";
+    e.target.style.height = e.target.scrollHeight + "px";
+  }
+  
   function checklistDoneManagement(e) {
     if (!e.target.matches("i")) return;
     e.target.classList.toggle("fa-regular");
@@ -628,16 +653,8 @@
     elements.checkOut.classList.remove("active");
   })
 
-  // for height in textarea 
-  elements.checkOutBottom.addEventListener("input", (e) => {
-    if (!e.target.classList.contains("checklist-text")) return;
-    e.target.rows = "1"
-    e.target.style.height = "auto";
-    e.target.style.height = e.target.scrollHeight + "px";
-    if (e.target.value.length < 1) {
-      e.target.parentElement.remove();
-    }
-  })
+  // for editing in textarea 
+  elements.checkOutBottom.addEventListener("input", editChecklist)
   
   // for checklist check done toggle
   elements.checklistItemOut.addEventListener("click", checklistDoneManagement)
