@@ -447,6 +447,30 @@
     text-align: center;
 }
 
+.stats-modal-out{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    inset: 0;
+    z-index: 1010;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.stats-modal-out.active{
+    display: flex;
+}
+
+.stats-modal{
+    background-color: var(--box-color);
+    width: 20rem;
+    height: 20rem;
+    padding: 2rem;
+    border-radius: 1.125rem;
+}
+
 @media (hover: hover){
     .dot-out-icon:hover{
         transform: scale(1.125);

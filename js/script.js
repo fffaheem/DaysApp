@@ -21,6 +21,7 @@
     checklistItemOut: document.querySelector(".checklist-item-out"),
     checklistAddText: document.querySelector("#checklist-add-text"),
     checklistAddTextIcon: document.querySelector(".fa.fa-check"),
+    statsModalOut: document.querySelector(".stats-modal-out"),
     statBoxes: document.querySelector(".stat-boxes"),
     productiveStat: document.querySelector("#productive-stat"),
     neutralStat: document.querySelector("#neutral-stat"),
@@ -673,6 +674,25 @@
   elements.checklistAddText.addEventListener("keyup", addChecklist)
 
   elements.checklistAddTextIcon.addEventListener("click", addChecklist)
+
+  elements.statBoxes.addEventListener("click", (e) => {
+    let element = e.target.closest(".info")
+    if (!element) {
+      return;
+    }
+    let parent = element.parentElement;
+    let label = parent.children[2].textContent
+
+    elements.body.classList.add("modal-active");
+    elements.statsModalOut.classList.add("active");
+  })
+
+  elements.statsModalOut.addEventListener("click", (e) => {
+    if (e.target === elements.statsModalOut) {
+      elements.body.classList.remove("modal-active");
+      elements.statsModalOut.classList.remove("active");
+    }
+  })
 
   
   // calling init function
