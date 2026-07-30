@@ -22,6 +22,7 @@
     checklistAddText: document.querySelector("#checklist-add-text"),
     checklistAddTextIcon: document.querySelector(".fa.fa-check"),
     statsModalOut: document.querySelector(".stats-modal-out"),
+    statsModalBtn: document.querySelector(".stats-modal-btn"),
     statBoxes: document.querySelector(".stat-boxes"),
     productiveStat: document.querySelector("#productive-stat"),
     neutralStat: document.querySelector("#neutral-stat"),
@@ -682,7 +683,7 @@
     }
     let parent = element.parentElement;
     let label = parent.children[2].textContent
-
+    // console.log(label)
     elements.body.classList.add("modal-active");
     elements.statsModalOut.classList.add("active");
   })
@@ -694,6 +695,10 @@
     }
   })
 
+  elements.statsModalBtn.addEventListener("click", (e) => {
+    elements.body.classList.remove("modal-active");
+    elements.statsModalOut.classList.remove("active");
+  })
   
   // calling init function
   document.addEventListener("dbReady",init)
