@@ -22,6 +22,8 @@
     checklistAddText: document.querySelector("#checklist-add-text"),
     checklistAddTextIcon: document.querySelector(".fa.fa-check"),
     statsModalOut: document.querySelector(".stats-modal-out"),
+    statsModalHead: document.querySelector(".stats-modal-head"),
+    statsModalText: document.querySelector(".stats-modal-text"),
     statsModalBtn: document.querySelector(".stats-modal-btn"),
     statBoxes: document.querySelector(".stat-boxes"),
     productiveStat: document.querySelector("#productive-stat"),
@@ -391,6 +393,56 @@
   // dots end
   
   // for stats
+  function getNeutralWeightForStatsModal() {
+    return new Promise((resolve) => {
+      const tx = db.transaction("Preferences", "readonly");
+      const store = tx.objectStore("Preferences");
+      const request = store.get("user_settings");
+      request.onsuccess = () => {
+        let neutralWeight = request.result?.neutralWeight ?? 5
+        neutralWeight *= 10;
+        resolve(`${neutralWeight}%`);
+      };
+  
+      request.onerror = () => {
+        reject(request.error);
+      };
+    })
+  }
+  
+  async function populateStatsModalTextOnClick(e) {
+    let neutralWeight = await getNeutralWeightForStatsModal();
+    console.log(neutralWeight);
+    let element = e.target.closest(".info")
+    if (!element) {
+      return;
+    }
+    let parent = element.parentElement;
+    let label = parent.children[2].textContent;
+
+    const modalDescriptions = {
+      "Productive": "Days you consider meaningfully spent.",
+      "Neutral": "Ordinary Days that were neither good nor bad.",
+      "Wasted": "Days you feel were largely unutilized or utterly unproductive.",
+      "Total Days": "Total number of days in this year.",
+      "Available Days": "Days realistically available for effort, excluding vacations.",
+      "Vacation": "Days marked as rest, breaks, or time off.",
+      "Current Productive Rate": `Your Productivity up until today, excluding vacation days.<br>Neutral Days count as ${neutralWeight}.`,
+      "Current Wasted Rate": "Your unutilized or utterly unproductive days up until today.",
+      "Overall Productive Rate": `Your Productivity calculated from available days, excluding vacations.<br>Neutral days count as ${neutralWeight}.`,
+      "Current Streak": "Your current run of similar days.",
+      "Best Productive Streak": "Your longest consecutive run of productive days this year.",
+      "Overall Wasted Rate": "Your overall percentage of unutilized or utterly unproductive days."
+    };
+    
+    modalText = modalDescriptions[label] || "";
+    elements.statsModalHead.textContent = label;
+    elements.statsModalText.innerHTML = modalText;
+    
+    elements.body.classList.add("modal-active");
+    elements.statsModalOut.classList.add("active");
+  }
+  
   async function populateStats(dots) {
     let neutralWeight = await getDefault()
     neutralWeight = neutralWeight / 10;
@@ -676,17 +728,7 @@
 
   elements.checklistAddTextIcon.addEventListener("click", addChecklist)
 
-  elements.statBoxes.addEventListener("click", (e) => {
-    let element = e.target.closest(".info")
-    if (!element) {
-      return;
-    }
-    let parent = element.parentElement;
-    let label = parent.children[2].textContent
-    // console.log(label)
-    elements.body.classList.add("modal-active");
-    elements.statsModalOut.classList.add("active");
-  })
+  elements.statBoxes.addEventListener("click", populateStatsModalTextOnClick)
 
   elements.statsModalOut.addEventListener("click", (e) => {
     if (e.target === elements.statsModalOut) {
