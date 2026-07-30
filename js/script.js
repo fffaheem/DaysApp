@@ -412,7 +412,6 @@
   
   async function populateStatsModalTextOnClick(e) {
     let neutralWeight = await getNeutralWeightForStatsModal();
-    console.log(neutralWeight);
     let element = e.target.closest(".info")
     if (!element) {
       return;
