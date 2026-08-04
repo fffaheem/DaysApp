@@ -74,6 +74,23 @@ request.onupgradeneeded = (e) => {
     });
     store.createIndex("year", "year", { unique: false });
   }
+  if (!db.objectStoreNames.contains("Goals")) {
+    db.createObjectStore("Goals", {
+      keyPath: "id",
+      autoIncrement: true
+    });
+  }
+  if (!db.objectStoreNames.contains("GoalDots")) {
+    const store = db.createObjectStore("GoalDots", { 
+      keyPath: ["goalId", "date"] 
+    });
+
+    // 1. Index to instantly fetch all dots for a single goal
+    store.createIndex("by_goal", "goalId", { unique: false });
+      
+    // 2. Index to group dots by year for the timeline dropdowns
+    store.createIndex("by_year", "year", { unique: false });
+  }
 }
 
 request.onsuccess = (e) => {
