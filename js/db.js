@@ -93,9 +93,9 @@ request.onupgradeneeded = (e) => {
   }
 }
 
-request.onsuccess = (e) => {
+request.onsuccess = async (e) => {
   db = e.target.result;
-  addDefaultSettings(db);
+  await addDefaultSettings(db);
   initializeLastYear(db);
   initializeCurrentYearDots(db);
   document.dispatchEvent(new Event("dbReady"));
@@ -108,32 +108,49 @@ request.onerror = (e) => {
 let defaultSettings = {}
 
 function addDefaultSettings(db) {
-  defaultSettings = {
+  return new Promise((resolve) => {
+    defaultSettings = {
       id: "user_settings",
       theme: "dark",
       neutralWeight: 5,
       offDays: new Set(),
       defaultDayStatus: "NEUTRAL",
       lastSynced: null
-  };
-
-  const tx = db.transaction("Preferences", "readwrite");
-  const store = tx.objectStore("Preferences");
-
-  // Check if settings already exist
-  const getRequest = store.get("user_settings");
-  getRequest.onsuccess = () => {
+    };
+  
+    const tx = db.transaction("Preferences", "readwrite");
+    const store = tx.objectStore("Preferences");
+  
+    // Check if settings already exist
+    const getRequest = store.get("user_settings");
+    getRequest.onsuccess = () => {
       // First time opening the app
       if (!getRequest.result) {
-          store.add(defaultSettings);
-          console.log("Default settings created.");
+        store.add(defaultSettings);
+        console.log("Default settings created.");
       } else {
-          console.log("Existing settings found.");
+        console.log("Existing settings found.");
       }
-  };
+      resolve();
+    };
+  })
 }
 
-function initializeCurrentYearDots(db) {
+function getOffDays() {
+  return new Promise((resolve,reject) => {
+    const tx = db.transaction("Preferences", "readonly");
+    const store = tx.objectStore("Preferences");
+    const request = store.get("user_settings");
+    request.onsuccess = (e) => {
+      resolve(e.target.result.offDays)
+    }
+    request.onerror = () => {
+        reject(request.error);
+    };
+  })
+}
+
+async function initializeCurrentYearDots(db) {
   // Today's date (without time)
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -147,48 +164,55 @@ function initializeCurrentYearDots(db) {
   
   // Check if current year already exists
   const request = store.get(firstDay);
-  
+  let offDays = await getOffDays();
+  console.log(offDays)
   request.onsuccess = () => {
-  
-      // Already initialized
-      if (request.result) {
-          console.log("Year already exists.");
-          return;
-      }
-  
-      console.log("Generating year...");
-  
-      let current = new Date(year, 0, 1);
-      const end = new Date(year, 11, 31);
-  
-      while (current <= end) {
-  
-        // Format YYYY-MM-DD in LOCAL time
-        const yyyy = current.getFullYear();
-        const mm = String(current.getMonth() + 1).padStart(2, "0");
-        const dd = String(current.getDate()).padStart(2, "0");
+    // Already initialized
+    if (request.result) {
+        console.log("Year already exists.");
+        return;
+    }
 
-        const dateString = `${yyyy}-${mm}-${dd}`;
-        let status = null;
-        if (current < today) {
-          status = defaultSettings.defaultDayStatus;
-        } else if (current > today) {
-          status = "FUTURE"
-        } else {
-          status = "PRESENT"
-        }
-  
-        store.add({
-            date: dateString,
-            status: status,
-            note: ""
-        });
-  
-        current.setDate(current.getDate() + 1);
-        
+    console.log("Generating year...");
+    let current = new Date(year, 0, 1);
+    const end = new Date(year, 11, 31);
+
+    while (current <= end) {
+
+      const dayName = current.toLocaleDateString("en-US", {
+          weekday: "short"
+      });
+
+      // Format YYYY-MM-DD in LOCAL time
+      const yyyy = current.getFullYear();
+      const mm = String(current.getMonth() + 1).padStart(2, "0");
+      const dd = String(current.getDate()).padStart(2, "0");
+
+      const dateString = `${yyyy}-${mm}-${dd}`;
+      let status = null;
+      if (current < today) {
+        status = defaultSettings.defaultDayStatus;
+      } else if (current > today) {
+        status = "FUTURE";
+      } else {
+        status = "PRESENT";
       }
-  
-      console.log("Year generated.");
+
+      if (current >= today && offDays.has(dayName)) {
+        status = "VACATION";
+      }
+
+      store.add({
+          date: dateString,
+          status: status,
+          note: ""
+      });
+
+      current.setDate(current.getDate() + 1);
+      
+    }
+
+    console.log("Year generated.");
   };
   
   request.onerror = () => {
