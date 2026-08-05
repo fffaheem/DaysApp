@@ -161,6 +161,39 @@
     }
   }
 
+  function setScheduleDayDots(offDays) {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    
+    const todayString = `${yyyy}-${mm}-${dd}`;
+
+    const tx = db.transaction("HomeDots", "readwrite");
+    const store = tx.objectStore("HomeDots");
+    const request = store.getAll(IDBKeyRange.lowerBound(todayString));
+    request.onsuccess = (e) => {
+      const records = e.target.result;
+      if (!records) return;
+      for (let record of records) {
+        const date = new Date(record.date);
+        const dayName = date.toLocaleDateString("en-US", {
+            weekday: "short"
+        });
+        if (offDays.has(dayName)) {
+            record.status = "VACATION";
+            store.put(record); 
+        } else {
+            record.status = "FUTURE";
+            store.put(record); 
+        }
+      }
+    }
+    request.onerror = () => {
+        console.error(request.error);
+    };
+  }
+  
   function setScheduleDay(d) {
     const tx = db.transaction("Preferences", "readwrite");
     const store = tx.objectStore("Preferences");
@@ -172,6 +205,7 @@
       store.put(record);
       const element = document.querySelector(`.schedule-dot[data-value="${d}"]`);
       element.classList.add("active");
+      setScheduleDayDots(record.offDays);
     }
     
     request.onerror = (e) => {
@@ -190,6 +224,7 @@
       store.put(record);
       const element = document.querySelector(`.schedule-dot[data-value="${d}"]`);
       element.classList.remove("active");
+      setScheduleDayDots(record.offDays);
     }
     
     request.onerror = (e) => {

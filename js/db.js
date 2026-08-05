@@ -165,7 +165,6 @@ async function initializeCurrentYearDots(db) {
   // Check if current year already exists
   const request = store.get(firstDay);
   let offDays = await getOffDays();
-  console.log(offDays)
   request.onsuccess = () => {
     // Already initialized
     if (request.result) {
