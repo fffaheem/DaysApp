@@ -81,7 +81,7 @@
                     <i class="fa-solid fa-sun"></i>
                     <h1>Light</h1>
                 </div>
-                <div class="appearance-dark active">
+                <div class="appearance-dark">
                     <i class="fa-solid fa-moon"></i>
                     <h1>Dark</h1>
                 </div>
@@ -114,17 +114,17 @@
                 <div class="data-subtitle">Status used for days with no recorded activitiy.</div>
                 <div class="data-first-decide">
                     <div class="data-productive">Productive</div>
-                    <div class="data-neutral active">Neutral</div>
+                    <div class="data-neutral">Neutral</div>
                     <div class="data-wasted">Wasted</div>
                 </div>
             </div>
             <div class="data-second">
                 <div class="data-title">Neutral Weight</div>
-                <div class="data-subtitle">Value of a neutral day (1-9) <div>45%</div>  </div>
+                <div class="data-subtitle">Value of a neutral day: <div class="data-second-decide-slider-current"></div>  </div>
                 <div class="data-second-decide">
-                    <div class="data-second-decide-min">10%</div>
-                    <input type="range" min="10" max="90" value="50" step="5" class="data-second-decide-slider">
-                    <div class="data-second-decide-min">90%</div>
+                    <div class="data-second-decide-min">5%</div>
+                    <input type="range" min="5" max="95" value="0" step="5" class="data-second-decide-slider">
+                    <div class="data-second-decide-min">95%</div>
                 </div>
             </div>
         </div>
@@ -139,13 +139,13 @@
             <div class="schedule-title">Weekly Off Days</div>
             <div class="schedule-subtitle">Selected days will be marked as Vacation on the home page.</div>
             <div class="schedule-dots">
-                <div class="schedule-dot">Mon</div>
-                <div class="schedule-dot">Tue</div>
-                <div class="schedule-dot">Wed</div>
-                <div class="schedule-dot">Thu</div>
-                <div class="schedule-dot">Fri</div>
-                <div class="schedule-dot">Sat</div>
-                <div class="schedule-dot active">Sun</div>
+                <div data-value="Mon" class="schedule-dot">Mon</div>
+                <div data-value="Tue" class="schedule-dot">Tue</div>
+                <div data-value="Wed" class="schedule-dot">Wed</div>
+                <div data-value="Thu" class="schedule-dot">Thu</div>
+                <div data-value="Fri" class="schedule-dot">Fri</div>
+                <div data-value="Sat" class="schedule-dot">Sat</div>
+                <div data-value="Sun" class="schedule-dot">Sun</div>
             </div>
         </div>
     </div>
@@ -153,4 +153,5 @@
 </body>
 <script src="./js/db.js"></script>
 <script src="./js/sidebar.js"></script>
+<script src="./js/settings.js"></script>
 </html>

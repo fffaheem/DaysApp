@@ -112,7 +112,7 @@ function addDefaultSettings(db) {
       id: "user_settings",
       theme: "dark",
       neutralWeight: 5,
-      offDays: [],
+      offDays: new Set(),
       defaultDayStatus: "NEUTRAL",
       lastSynced: null
   };

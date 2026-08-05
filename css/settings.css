@@ -65,7 +65,7 @@
     font-size: var(--font-subtitle);
 }
 
-.appearance-dark.active{
+.appearance-light.active,.appearance-dark.active{
     background: var(--theme);
 }
 
@@ -140,6 +140,8 @@
 
 .data-second-decide-slider{
    flex-grow: 1; 
+   background: var(--text-color);
+   accent-color:  purple;
 }
 
 .data-second-decide-min,.data-second-decide-max{
@@ -163,7 +165,7 @@
 
 .schedule-dot{
     background: var(--box-border);
-    padding: 0.5rem;
+    padding: 1rem 0.5rem;
     border-radius: 1rem;
     flex: 1;
     text-align: center;
