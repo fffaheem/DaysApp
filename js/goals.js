@@ -14,6 +14,7 @@
     addGoalBtn: document.querySelector(".add-goal-btn"),
     addModalOut: document.querySelector(".add-modal-out"),
     calenderInputOut: document.querySelector(".calender-input-out"),
+    calenderOut: document.querySelector(".calender-out"),
     calenderBox: document.querySelector(".calender-box"),
     CalenderCancelBtn: document.querySelector("#calender-cancel-btn"),
   }
@@ -94,6 +95,11 @@
     if (e.target !== elements.addModalOut) return;
     elements.body.classList.remove("modal-active");
     elements.addModalOut.classList.remove("active");
+  })
+
+  elements.calenderOut.addEventListener("click", (e) => {
+    if (!e.target.matches(".fa-solid.fa-calendar-days")) return;
+    e.target.parentElement.children[0].showPicker();
   })
 
   
