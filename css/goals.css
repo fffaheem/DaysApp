@@ -259,6 +259,7 @@
     appearance: none;
     -webkit-appearance: none;
     -webkit-text-fill-color: var(--text-color);
+    accent-color: var(--text-color);
 }
 
 .calender-box::-webkit-calendar-picker-indicator {
