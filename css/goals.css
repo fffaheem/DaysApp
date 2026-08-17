@@ -134,3 +134,189 @@
     margin: 1rem auto;
     max-width: var(--max-width);
 }
+
+.add-goal-btn{
+    font-size: var(--font-large);
+    user-select: none;
+    color: white;
+    margin: auto;
+    cursor: pointer;
+    position: fixed;
+    bottom: 2rem;
+    right: max(1rem, calc((100vw - 70rem) / 2));
+}
+
+.add-modal-out{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    inset: 0;
+    z-index: 1010;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-modal-out.active{
+    display: flex;
+}
+
+.add-modal{
+    background-color: var(--box-color);
+    padding: 2rem;
+    margin: 2rem;
+    border-radius: 1.125rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+    max-height: 80vh;
+    max-width: var(--max-width);
+}
+
+.modal-heading{
+    font-size: var(--font-medium);
+}
+
+#goal-title, #goal-desc{
+    background: none;
+    padding: 1rem;
+    border: 2px solid var(--text-color);
+    outline: none;
+    border-radius: 1rem;
+    color: var(--text-color);
+}
+
+.modal-goal-days-out{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.modal-goal-days-heading{
+    font-size: var(--font-medium-small);
+}
+
+.modal-goal-days{
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-goal-day{
+    background: var(--box-border);
+    padding: 1rem 0.5rem;
+    border-radius: 1rem;
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+.modal-goal-day.active{
+    background: var(--theme);
+}
+
+.calender-out{
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.calender-start-out, .calender-end-out{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.calender-label{
+    font-size: var(--font-medium-small);
+}
+
+.calender{
+    background: none;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.calender-input-out{
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+.calender-box{
+    background: none;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    width: 100%;
+}
+
+.calender-box::-webkit-calendar-picker-indicator {
+    opacity: 0;
+}
+
+.fa-solid.fa-calendar-days{
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+
+    color: var(--text-color);
+    pointer-events: none;
+}
+
+.calender-quick-durations-heading{
+    font-size: var(--font-medium-small);
+}
+
+.calender-quick-durations{
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.calender-quick-duration{
+    background: var(--box-border);
+    padding: 1rem 0.5rem;
+    border-radius: 1rem;
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.calender-quick-durations-out{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.calender-btns{
+    display: flex;
+    gap: 1rem;
+    justify-content: end;
+    align-items: center;
+    margin: 2rem 0 0 0;
+}
+
+.calender-btns>div{
+    background: var(--wasted);
+    padding: 1rem;
+    border-radius: 1rem;
+    text-align: center;
+    cursor: pointer;
+}
+
+#calender-start-btn{
+    background: var(--productive);
+}

@@ -70,6 +70,67 @@
         </div>
     </div>
 
+    <div class="add-modal-out">
+        <div class="add-modal">
+            
+            <h1 class="modal-heading">New Goal</h1>
+            <input id="goal-title" type="text" placeholder="Title">
+            <input id="goal-desc" type="text" placeholder="Description">
+                
+            <div class="modal-goal-days-out">
+                <h1 class="modal-goal-days-heading">Goal Days</h1>
+                <div class="modal-goal-days">
+                    <div class="modal-goal-day">Mon</div>
+                    <div class="modal-goal-day">tue</div>
+                    <div class="modal-goal-day">wed</div>
+                    <div class="modal-goal-day">thu</div>
+                    <div class="modal-goal-day">fri</div>
+                    <div class="modal-goal-day">sat</div>
+                    <div class="modal-goal-day">sun</div>
+                </div>
+            </div>
+            
+            <div class="calender-out">
+                <div class="calender-start-out">
+                    <label for="start-date" class="calender-label">Start</label>
+                    <div class="calender-input-out">
+                        <input type="date" class="calender-box" id="start-date" name="start-date" min="2026-08-17" max="2026-08-31">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+                </div>
+                <div class="calender-end-out">
+                    <label for="end-date" class="calender-label">End</label>
+                    <div class="calender-input-out">
+                        <input type="date" class="calender-box" id="end-date" name="end-date" min="2026-08-17" max="2026-08-31">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="calender-quick-durations-out">
+                <h1 class="calender-quick-durations-heading">Quick Duration</h1>
+                <div class="calender-quick-durations">
+                    <div class="calender-quick-duration" >1 week</div>
+                    <div class="calender-quick-duration" >2 week</div>
+                    <div class="calender-quick-duration" >3 week</div>
+                    <div class="calender-quick-duration" >1 Month</div>
+                    <div class="calender-quick-duration" >2 Month</div>
+                    <div class="calender-quick-duration" >3 Month</div>
+                    <div class="calender-quick-duration" >6 Month</div>
+                    <div class="calender-quick-duration" >1 Year</div>
+                    <div class="calender-quick-duration" >2 Year</div>
+                    <div class="calender-quick-duration" >3 Year</div>
+                    <div class="calender-quick-duration" >4 Year</div>
+                    <div class="calender-quick-duration" >5 Year</div>
+                </div>
+            </div>
+            <div class="calender-btns">
+                <div id="calender-cancel-btn">Cancel</div>
+                <div id="calender-start-btn" >START</div>
+            </div>
+        </div>
+    </div>
+
+    
     <div class="goals-search">
         <div class="goals-search-inputs">
             <i class="fa fa-search" aria-hidden="true"></i>
@@ -249,6 +310,10 @@
         <div class="goal-box">hee hee</div>
         <div class="goal-box">hee hee</div>
         <div class="goal-box">hee hee</div>
+    </div>
+
+    <div class="add-goal-btn">
+        <i class="fa-solid fa-circle-plus"></i>
     </div>
 </body>
 <script src="./js/db.js"></script>

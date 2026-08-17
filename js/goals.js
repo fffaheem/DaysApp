@@ -11,6 +11,11 @@
     goalYearSelectedValue: document.querySelector(".goals-year-selected-value"),
     goalYearArrow: document.querySelector(".goals-year .arrow"),
     goalYearOptions: document.querySelector(".goals-year-options"),
+    addGoalBtn: document.querySelector(".add-goal-btn"),
+    addModalOut: document.querySelector(".add-modal-out"),
+    calenderInputOut: document.querySelector(".calender-input-out"),
+    calenderBox: document.querySelector(".calender-box"),
+    CalenderCancelBtn: document.querySelector("#calender-cancel-btn"),
   }
 
   // Functions
@@ -74,5 +79,22 @@
     elements.goalYearSelectedValue.textContent = text;
     
   })
+
+  elements.addGoalBtn.addEventListener("click", (e) => {
+    elements.body.classList.add("modal-active");
+    elements.addModalOut.classList.add("active");
+  })
+
+  elements.CalenderCancelBtn.addEventListener("click", (e) => {
+    elements.body.classList.remove("modal-active");
+    elements.addModalOut.classList.remove("active");
+  })
+
+  elements.addModalOut.addEventListener("click", (e) => {
+    if (e.target !== elements.addModalOut) return;
+    elements.body.classList.remove("modal-active");
+    elements.addModalOut.classList.remove("active");
+  })
+
   
 })();
