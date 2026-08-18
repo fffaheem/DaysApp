@@ -267,7 +267,34 @@
     if (!end) {
       alert("Please select end date");
     }
-    console.log(title, desc, goalDays, start, end);
+
+    const [year, month] = end.split("-").map(Number);
+    let obj = {
+      title: title,
+      description: desc,
+      startDate: start,
+      originalEndDate: end,
+      currentEndDate: end,
+      goalYear: year,
+      goalMonth: month,
+      delayStartDate: null, 
+      scheduledDays: goalDays, 
+      status: "ONGOING",
+      history: []
+    }
+
+    const transaction = db.transaction("Goals", "readwrite");
+    const store = transaction.objectStore("Goals");
+    
+    const request = store.add(obj);
+    
+    request.onsuccess = function (event) {
+      window.location.reload();
+    };
+    
+    request.onerror = function (event) {
+      console.error("Failed to add goal:", event.target.error);
+    };
     
   })
 

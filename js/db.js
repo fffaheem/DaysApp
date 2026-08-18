@@ -75,10 +75,15 @@ request.onupgradeneeded = (e) => {
     store.createIndex("year", "year", { unique: false });
   }
   if (!db.objectStoreNames.contains("Goals")) {
-    db.createObjectStore("Goals", {
+    const store = db.createObjectStore("Goals", {
       keyPath: "id",
       autoIncrement: true
     });
+
+    store.createIndex("by_year", "goalYear", { unique: false });
+    store.createIndex("by_goal_period", ["goalYear", "goalMonth"], { unique: false });
+    store.createIndex("by_status", "status", { unique: false });
+    
   }
   if (!db.objectStoreNames.contains("GoalDots")) {
     const store = db.createObjectStore("GoalDots", { 
