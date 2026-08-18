@@ -26,7 +26,40 @@
     CalenderStartBtn: document.querySelector("#calender-start-btn"),
   }
 
+  // =======================
   // Functions
+  // =======================
+  function setGoalStatusFilter(e) {
+    if (!e.target.classList.contains("goals-status")) return;
+
+    elements.goalStatusFilter.querySelectorAll('.goals-status.active')
+            .forEach(el => el.classList.remove('active'));
+    
+    e.target.classList.add("active");
+  }
+
+  function setGoalMonthFilter(e) {
+    if (!e.target.classList.contains("goals-month-option"))
+      return
+
+    let text = e.target.textContent;
+    let value = e.target.dataset.value;
+
+    elements.goalMonthSelectedValue.dataset.value = value;
+    elements.goalMonthSelectedValue.textContent = text;
+  }
+
+  function setGoalYearFilter(e) {
+    if (!e.target.classList.contains("goals-year-option"))
+      return
+
+    let text = e.target.textContent;
+    let value = e.target.dataset.value;
+
+    elements.goalYearSelectedValue.dataset.value = value;
+    elements.goalYearSelectedValue.textContent = text;
+  }
+  // For Modal
   function getFormattedTime(date) {
     const formattedDate = [
         date.getFullYear(),
@@ -62,97 +95,8 @@
     elements.endDate.min = currentNext;
     elements.endDate.max = maxEnd;
   }
-  
-  function init() {
-    setDates();
-  }
-  
 
-  // Event Listener
-
-  elements.goalStatusFilter.addEventListener("click", (e) => {
-    if (!e.target.classList.contains("goals-status")) return;
-
-    elements.goalStatusFilter.querySelectorAll('.goals-status.active')
-            .forEach(el => el.classList.remove('active'));
-    
-    e.target.classList.add("active");
-
-  })
-  
-  
-  elements.goalMonth.addEventListener("click", (e) => {
-    if (elements.goalMonthOptions.classList.contains("active")) {
-      elements.goalMonthOptions.classList.remove("active");
-      elements.goalMonthArrow.textContent = "▼";
-      return;
-    }
-    elements.goalMonthOptions.classList.add("active");
-    elements.goalMonthArrow.textContent = "▲";
-  })
-
-  elements.goalMonthOptions.addEventListener("click", (e) => {
-    if (!e.target.classList.contains("goals-month-option"))
-      return
-
-    let text = e.target.textContent;
-    let value = e.target.dataset.value;
-
-    elements.goalMonthSelectedValue.dataset.value = value;
-    elements.goalMonthSelectedValue.textContent = text;
-    
-  })
-
-  elements.goalYear.addEventListener("click", (e) => {
-    if (elements.goalYearOptions.classList.contains("active")) {
-      elements.goalYearOptions.classList.remove("active");
-      elements.goalYearArrow.textContent = "▼";
-      return;
-    }
-    elements.goalYearOptions.classList.add("active");
-    elements.goalYearArrow.textContent = "▲";
-  })
-
-  elements.goalYearOptions.addEventListener("click", (e) => {
-    if (!e.target.classList.contains("goals-year-option"))
-      return
-
-    let text = e.target.textContent;
-    let value = e.target.dataset.value;
-
-    elements.goalYearSelectedValue.dataset.value = value;
-    elements.goalYearSelectedValue.textContent = text;
-    
-  })
-
-  elements.addGoalBtn.addEventListener("click", (e) => {
-    elements.body.classList.add("modal-active");
-    elements.addModalOut.classList.add("active");
-  })
-
-  elements.CalenderCancelBtn.addEventListener("click", (e) => {
-    elements.body.classList.remove("modal-active");
-    elements.addModalOut.classList.remove("active");
-  })
-
-  elements.addModalOut.addEventListener("click", (e) => {
-    if (e.target !== elements.addModalOut) return;
-    elements.body.classList.remove("modal-active");
-    elements.addModalOut.classList.remove("active");
-  })
-
-  elements.calenderOut.addEventListener("click", (e) => {
-    if (!e.target.matches(".fa-solid.fa-calendar-days")) return;
-    e.target.parentElement.children[0].showPicker();
-  })
-
-  elements.modalGoalDays.addEventListener("click", (e) => {
-    let target = e.target.closest(".modal-goal-day");
-    if (!target) return;
-    target.classList.toggle("active");
-  })
-  
-  elements.calenderQuickDurations.addEventListener("click", (e) => {
+  function setQuickDuration(e) {
     let target = e.target.closest(".calender-quick-duration");
     if (!target) return;
     elements.calenderQuickDurations.querySelectorAll('.calender-quick-duration.active')
@@ -171,9 +115,9 @@
     }
     startDate = getFormattedTime(startDate);
     elements.endDate.value = startDate;
-  })
+  }
 
-  elements.startDate.addEventListener("change", (e) => {
+  function setCalenderStartOnChange(e) {
     const { min, current,currentNext, max, maxEnd } = getDates();
     let setDateValue = e.target.value;
     let setDate = new Date(setDateValue);
@@ -198,9 +142,9 @@
     ||  new Date(elements.endDate.value) > new Date(maxEnd)) {
       elements.endDate.value = endDateMinFormatted;
     }
-  })
-  
-  elements.startDate.addEventListener("focusout", (e) => {
+  }
+
+  function setCalenderStartOnFocusOut(e) {
     const { min, current, currentNext, max, maxEnd } = getDates();
     let setDateValue = e.target.value;
     let setDate = new Date(setDateValue);
@@ -227,9 +171,9 @@
     ||  new Date(elements.endDate.value) > new Date(maxEnd)) {
       elements.endDate.value = endDateMinFormatted;
     }
-  })
+  }
 
-  elements.endDate.addEventListener("focusout", (e) => {
+  function setCalenderEndOnChange(e) {
     let setDateValue = e.target.value;
     let setDate = new Date(setDateValue);
 
@@ -239,14 +183,9 @@
     if (setDate < startDate) {
       e.target.value = getFormattedTime(startDate);
     }
-  })
+  }
 
-  elements.endDate.addEventListener("change", (e) => {
-    elements.calenderQuickDurations.querySelectorAll('.calender-quick-duration.active')
-            .forEach(el => el.classList.remove('active'));
-  })
-
-  elements.CalenderStartBtn.addEventListener("click", (e) => {
+  function addGoal(){
     let title = elements.goalTitle.value;
     let desc = elements.goalDesc.value;
     if (title.length < 3) {
@@ -288,15 +227,102 @@
     
     const request = store.add(obj);
     
-    request.onsuccess = function (event) {
+    request.onsuccess = (e)=>{
       window.location.reload();
     };
     
-    request.onerror = function (event) {
-      console.error("Failed to add goal:", event.target.error);
+    request.onerror = (e)=>{
+      console.error("Failed to add goal:", e.target.error);
     };
     
+  }
+  
+  function init() {
+    setDates();
+  }
+  
+  // =======================
+  // Event Listener
+  // =======================
+
+  elements.goalStatusFilter.addEventListener("click", setGoalStatusFilter);
+  
+  elements.goalMonth.addEventListener("click", (e) => {
+    if (elements.goalMonthOptions.classList.contains("active")) {
+      elements.goalMonthOptions.classList.remove("active");
+      elements.goalMonthArrow.textContent = "▼";
+      return;
+    }
+    elements.goalMonthOptions.classList.add("active");
+    elements.goalMonthArrow.textContent = "▲";
   })
+
+  elements.goalMonthOptions.addEventListener("click", setGoalMonthFilter)
+
+  elements.goalYear.addEventListener("click", (e) => {
+    if (elements.goalYearOptions.classList.contains("active")) {
+      elements.goalYearOptions.classList.remove("active");
+      elements.goalYearArrow.textContent = "▼";
+      return;
+    }
+    elements.goalYearOptions.classList.add("active");
+    elements.goalYearArrow.textContent = "▲";
+  })
+
+  elements.goalYearOptions.addEventListener("click",setGoalYearFilter)
+
+  // Open Modal
+  elements.addGoalBtn.addEventListener("click", (e) => {
+    elements.body.classList.add("modal-active");
+    elements.addModalOut.classList.add("active");
+  })
+
+  // Close Modal
+  elements.CalenderCancelBtn.addEventListener("click", (e) => {
+    elements.body.classList.remove("modal-active");
+    elements.addModalOut.classList.remove("active");
+  })
+
+  // Close Modal
+  elements.addModalOut.addEventListener("click", (e) => {
+    if (e.target !== elements.addModalOut) return;
+    elements.body.classList.remove("modal-active");
+    elements.addModalOut.classList.remove("active");
+  })
+
+  // Open Calender Picker
+  elements.calenderOut.addEventListener("click", (e) => {
+    if (!e.target.matches(".fa-solid.fa-calendar-days")) return;
+    e.target.parentElement.children[0].showPicker();
+  })
+
+  // set Goal Days as active
+  elements.modalGoalDays.addEventListener("click", (e) => {
+    let target = e.target.closest(".modal-goal-day");
+    if (!target) return;
+    target.classList.toggle("active");
+  })
+
+  // set Quick Duration
+  elements.calenderQuickDurations.addEventListener("click", setQuickDuration)
+
+  // set Calender start Date works when user change via keybaord or calender picker
+  elements.startDate.addEventListener("change",setCalenderStartOnChange)
+
+  // set Calender start Date works 
+  // if on every change we correct date user wont be able to enter date via keybaord 
+  // so this fixes the issue when user focus out
+  elements.startDate.addEventListener("focusout",setCalenderStartOnFocusOut)
+
+  elements.endDate.addEventListener("focusout",setCalenderEndOnChange)
+
+  elements.endDate.addEventListener("change", (e) => {
+    elements.calenderQuickDurations.querySelectorAll('.calender-quick-duration.active')
+            .forEach(el => el.classList.remove('active'));
+  })
+
+  // Add Goal
+  elements.CalenderStartBtn.addEventListener("click",addGoal)
 
   document.addEventListener("dbReady",init)
   
