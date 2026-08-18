@@ -177,6 +177,7 @@
 
 .modal-heading{
     font-size: var(--font-medium);
+    user-select: none;
 }
 
 #goal-title, #goal-desc{
@@ -196,6 +197,7 @@
 
 .modal-goal-days-heading{
     font-size: var(--font-medium-small);
+    user-select: none;
 }
 
 .modal-goal-days{
@@ -233,6 +235,7 @@
 
 .calender-label{
     font-size: var(--font-medium-small);
+    user-select: none;
 }
 
 .calender{
@@ -279,6 +282,7 @@
 
 .calender-quick-durations-heading{
     font-size: var(--font-medium-small);
+    user-select: none;
 }
 
 .calender-quick-durations{
@@ -298,6 +302,10 @@
     user-select: none;
 }
 
+.calender-quick-duration.active{
+    background: var(--theme);
+}
+
 .calender-quick-durations-out{
     display: flex;
     flex-direction: column;
@@ -314,10 +322,11 @@
 
 .calender-btns>div{
     background: var(--wasted);
-    padding: 1rem;
+    padding: 0.5rem;
     border-radius: 1rem;
     text-align: center;
     cursor: pointer;
+    user-select: none;
 }
 
 #calender-start-btn{
