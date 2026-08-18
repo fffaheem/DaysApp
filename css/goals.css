@@ -133,6 +133,21 @@
 .goal-box{
     margin: 1rem auto;
     max-width: var(--max-width);
+    background: var(--box-color);
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.nothing-goal-box{
+    margin: 1rem auto;
+    max-width: var(--max-width);
+    background: var(--box-color);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .add-goal-btn{
