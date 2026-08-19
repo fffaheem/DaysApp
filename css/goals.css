@@ -29,6 +29,12 @@
     top: 50%;
     left: 1rem;
     transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.goals-search-inputs > i.active{
+    left: unset;
+    right: 1rem;
 }
 
 #goal-search-input{
@@ -40,6 +46,11 @@
     padding-left: 3rem;
     border-radius: 0.75rem;
     font-size: var(--font-subtitle);
+}
+
+#goal-search-input.active{
+    padding-left: 0.75rem;
+    padding-right: 3rem;
 }
 
 .goals-status-filter-out{ /* had to use this outer container because of weird css bug due to justify content center*/
@@ -130,13 +141,25 @@
     margin-top: 16rem;
 }
 
+/*TEMP CSS*/
 .goal-box{
     margin: 1rem auto;
     max-width: var(--max-width);
     background: var(--box-color);
     padding: 1rem;
     border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
+
+.id,.title,.start,.org-end,.end,.delete{
+    cursor: pointer;
+    background: var(--theme);
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+}
+
 
 .nothing-goal-box{
     margin: 1rem auto;

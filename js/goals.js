@@ -1,7 +1,11 @@
 (() => {
+
+  const params = new URLSearchParams(window.location.search);
   
   let elements = {
     body: document.querySelector("body"),
+    goalSearchInput: document.querySelector("#goal-search-input"),
+    goalSearchInputIcon: document.querySelector(".fa.fa-search"),
     goalStatusFilter: document.querySelector(".goals-status-filter"),
     goalMonth: document.querySelector(".goals-month"),
     goalMonthSelectedValue: document.querySelector(".goals-month-selected-value"),
@@ -11,6 +15,7 @@
     goalYearSelectedValue: document.querySelector(".goals-year-selected-value"),
     goalYearArrow: document.querySelector(".goals-year .arrow"),
     goalYearOptions: document.querySelector(".goals-year-options"),
+    goalsOut: document.querySelector(".goals-out"),
     addGoalBtn: document.querySelector(".add-goal-btn"),
     addModalOut: document.querySelector(".add-modal-out"),
     goalTitle: document.querySelector("#goal-title"),
@@ -29,36 +34,232 @@
   // =======================
   // Functions
   // =======================
+    
+  function populateGoals(targets) {
+    if (targets.length < 1) return;
+    const fragment = document.createDocumentFragment();
+    for (const item of targets) {
+      let goalBox = document.createElement("div");
+      goalBox.classList.add("goal-box");
+
+      let div = document.createElement("div")
+      let id = document.createElement("div")
+      id.classList.add("id");
+      id.textContent = item.id;
+      
+      let title = document.createElement("div")
+      title.classList.add("title");
+      title.textContent = item.title;
+      
+      let start = document.createElement("div")
+      start.classList.add("start");
+      start.textContent = item.startDate
+      
+      let orgEnd = document.createElement("div")
+      orgEnd.classList.add("org-end");
+      orgEnd.textContent = item.originalEndDate;
+      
+      let end = document.createElement("div")
+      end.classList.add("end");
+      end.textContent = item.currentEndDate;
+
+      div.append(id, title, start, orgEnd, end);
+      
+      let dlt = document.createElement("div");
+      dlt.classList.add("delete");
+      dlt.textContent = "Delete";
+
+      goalBox.append(div, dlt);
+      fragment.append(goalBox);
+    }
+    elements.goalsOut.replaceChildren(fragment);
+  }
+  
+  async function getFilteredGoals(params) {
+    const search = (params.get("search") || "").trim().toLowerCase();
+    const status = params.get("status") || "all";
+    const year = params.get("year") || "all";
+    const month = params.get("month") || "all";
+  
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction("Goals", "readonly");
+      const store = transaction.objectStore("Goals");
+  
+      let request;
+  
+      // Year + Month
+      if (year !== "all" && month !== "all") {
+        request = store
+          .index("by_goal_period")
+          .getAll([
+            Number(year),
+            Number(month)
+          ]);
+      }
+  
+      // Year only
+      else if (year !== "all") {
+        request = store
+          .index("by_year")
+          .getAll(Number(year));
+      }
+  
+      // Month only
+      else if (month !== "all") {
+        request = store
+          .index("by_month")
+          .getAll(Number(month));
+      }
+  
+      // Status only
+      else if (status !== "all") {
+        request = store
+          .index("by_status")
+          .getAll(status);
+      }
+  
+      // No IndexedDB filters
+      else {
+        request = store.getAll();
+      }
+  
+      request.onsuccess = () => {
+        let goals = request.result;
+  
+        // Status filter
+        // This is needed when status is combined
+        // with year/month.
+        if (status !== "all") {
+          goals = goals.filter(
+            goal => goal.status === status
+          );
+        }
+  
+        // Search filter
+        if (search) {
+          goals = goals.filter(goal => {
+            const title = (goal.title || "").toLowerCase();
+            const description = (goal.description || "").toLowerCase();
+  
+            return (
+              title.includes(search) ||
+              description.includes(search)
+            );
+          });
+        }
+  
+        resolve(goals);
+      };
+  
+      request.onerror = () => {
+        reject(request.error);
+      };
+    });
+  }
+  
+  // when user click filters
+  function goalSearchInputSearch(e, event) {
+    if (event === "keydown" && e.key !== "Enter") {
+      return;
+    }
+    let searchText = elements.goalSearchInput.value;
+
+    let search = searchText
+    let status = params.get("status");
+    let year = params.get("year");
+    let month = params.get("month");
+
+    if (!status) status = "all";
+    if (!year) year = "all";
+    if (!month) month = "all";
+
+    params.set("search", search);
+    params.set("status", status);
+    params.set("year", year);
+    params.set("month", month);
+    
+    window.location.search = params.toString();
+  }
+  
   function setGoalStatusFilter(e) {
     if (!e.target.classList.contains("goals-status")) return;
 
-    elements.goalStatusFilter.querySelectorAll('.goals-status.active')
-            .forEach(el => el.classList.remove('active'));
+    // elements.goalStatusFilter.querySelectorAll('.goals-status.active')
+    //         .forEach(el => el.classList.remove('active'));
     
-    e.target.classList.add("active");
+    // e.target.classList.add("active");
+
+    let search = params.get("search");
+    let status = e.target.dataset.value
+    let year = params.get("year");
+    let month = params.get("month");
+
+    if (!search) search = "";
+    if (!year) year = "all";
+    if (!month) month = "all";
+
+    params.set("search", search);
+    params.set("status", status);
+    params.set("month", month);
+    params.set("year", year);
+    
+    window.location.search = params.toString();
   }
 
   function setGoalMonthFilter(e) {
     if (!e.target.classList.contains("goals-month-option"))
       return
 
-    let text = e.target.textContent;
-    let value = e.target.dataset.value;
+    // let text = e.target.textContent;
+    // let value = e.target.dataset.value;
 
-    elements.goalMonthSelectedValue.dataset.value = value;
-    elements.goalMonthSelectedValue.textContent = text;
+    // elements.goalMonthSelectedValue.dataset.value = value;
+    // elements.goalMonthSelectedValue.textContent = text;
+    
+    let search = params.get("search");
+    let status = params.get("status");
+    let month = e.target.dataset.value;
+    let year = params.get("year");
+
+    if (!search) search = "";
+    if (!status) status = "all";
+    if (!year) year = "all";
+
+    params.set("search", search);
+    params.set("status", status);
+    params.set("month", month);
+    params.set("year", year);
+    
+    window.location.search = params.toString();
   }
 
   function setGoalYearFilter(e) {
     if (!e.target.classList.contains("goals-year-option"))
       return
 
-    let text = e.target.textContent;
-    let value = e.target.dataset.value;
+    // let text = e.target.textContent;
+    // let value = e.target.dataset.value;
 
-    elements.goalYearSelectedValue.dataset.value = value;
-    elements.goalYearSelectedValue.textContent = text;
+    // elements.goalYearSelectedValue.dataset.value = value;
+    // elements.goalYearSelectedValue.textContent = text;
+    
+    let search = params.get("search");
+    let status = params.get("status");
+    let month = params.get("month");
+    let year = e.target.dataset.value;
+
+    if (!search) search = "";
+    if (!status) status = "all";
+    if (!month) month = "all";
+
+    params.set("search", search);
+    params.set("status", status);
+    params.set("month", month);
+    params.set("year", year);
+    
+    window.location.search = params.toString();
   }
+  
   // For Modal
   function getFormattedTime(date) {
     const formattedDate = [
@@ -85,7 +286,8 @@
     maxEnd = getFormattedTime(maxEnd);
     return { min, current, currentNext, max, maxEnd };
   }
-
+  
+  // setting modal dates
   function setDates() {
     const { min, current, currentNext, max, maxEnd }  = getDates();
     elements.startDate.min = min;
@@ -207,6 +409,18 @@
       alert("Please select end date");
     }
 
+    let status = "active";
+    
+    const startt = new Date(start);
+    const today = new Date();
+    
+    today.setHours(0, 0, 0, 0);
+    startt.setHours(0, 0, 0, 0);
+    
+    if (startt > today) {
+      status = "upcoming";
+    }
+
     const [year, month] = end.split("-").map(Number);
     let obj = {
       title: title,
@@ -218,7 +432,7 @@
       goalMonth: month,
       delayStartDate: null, 
       scheduledDays: goalDays, 
-      status: "ONGOING",
+      status: status,
       history: []
     }
 
@@ -236,14 +450,41 @@
     };
     
   }
+
   
-  function init() {
+  // Initializing function
+  async function init() {
+    const goals = await getFilteredGoals(params);
+    populateGoals(goals);
     setDates();
+
+  
   }
   
   // =======================
   // Event Listener
   // =======================
+  
+  elements.goalSearchInput.addEventListener("input", (e) => {
+    let searchText = e.target.value;
+
+    if (searchText.length > 0) {
+      elements.goalSearchInput.classList.add("active")
+      elements.goalSearchInputIcon.classList.add("active")
+      return
+    }
+
+    elements.goalSearchInput.classList.remove("active")
+    elements.goalSearchInputIcon.classList.remove("active")
+  })
+
+  elements.goalSearchInput.addEventListener("keydown", (e) => {
+    goalSearchInputSearch(e, "keydown");
+  });
+
+  elements.goalSearchInputIcon.addEventListener("click", (e) => {
+    goalSearchInputSearch(e, "click");
+  })
 
   elements.goalStatusFilter.addEventListener("click", setGoalStatusFilter);
   

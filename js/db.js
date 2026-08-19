@@ -81,6 +81,7 @@ request.onupgradeneeded = (e) => {
     });
 
     store.createIndex("by_year", "goalYear", { unique: false });
+    store.createIndex("by_month", "goalMonth", { unique: false });
     store.createIndex("by_goal_period", ["goalYear", "goalMonth"], { unique: false });
     store.createIndex("by_status", "status", { unique: false });
     
