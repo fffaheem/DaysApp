@@ -34,7 +34,7 @@
   // =======================
   // Functions
   // =======================
-    
+  // this is temporary 
   function populateGoals(targets) {
     if (targets.length < 1) return;
     const fragment = document.createDocumentFragment();
@@ -73,6 +73,92 @@
       fragment.append(goalBox);
     }
     elements.goalsOut.replaceChildren(fragment);
+  }
+
+  function populateYearFilter() {
+    return new Promise(resolve => {
+      
+      const tx = db.transaction("Goals", "readonly");
+      const store = tx.objectStore("Goals");
+      const index = store.index("by_year");
+      const request = index.getAll();
+      request.onsuccess = (e) => {
+        let arr = e.target.result
+        arr =  [...new Set(arr.map(goal => goal.goalYear))]
+          .sort((a, b) => a - b);
+  
+        const fragment = document.createDocumentFragment();
+        let allDiv = document.createElement("div");
+        allDiv.dataset.value = "all";
+        allDiv.textContent = "All Years";
+        allDiv.classList.add("goals-year-option")
+        fragment.appendChild(allDiv)
+        
+        for (const item of arr) {
+          let div = document.createElement("div");
+          div.dataset.value = item;
+          div.textContent = item;
+          div.classList.add("goals-year-option")
+          fragment.appendChild(div)
+        }
+  
+        elements.goalYearOptions.replaceChildren(fragment);
+
+        resolve();
+      }
+    })
+  }
+  
+  function populateFiltersActive() {
+    let search = params.get("search");
+    let status = params.get("status");
+    let month = params.get("month");
+    let year = params.get("year");
+
+    if (!search) search = "";
+    if (!status) status = "all";
+    if (!year) year = "all";
+    if (!month) month = "all";
+
+    elements.goalSearchInput.value = search;
+    if (status === "all") {
+      elements.goalStatusFilter.children[0].classList.add("active");
+    } else if (status === "active") {
+      elements.goalStatusFilter.children[1].classList.add("active");
+    } else if (status === "upcoming") {
+      elements.goalStatusFilter.children[2].classList.add("active");
+    } else if (status === "completed") {
+      elements.goalStatusFilter.children[3].classList.add("active");
+    } else if (status === "failed") {
+      elements.goalStatusFilter.children[4].classList.add("active");
+    }
+
+    let monthElem;
+    if (month === "all") {
+      monthElem = elements.goalMonthOptions.children[0]
+    } else {
+      monthElem = elements.goalMonthOptions.children[Number(month)]
+    }
+
+    let monthText = monthElem.textContent;
+    let monthValue = monthElem.dataset.value;
+
+    elements.goalMonthSelectedValue.textContent = monthText;
+    elements.goalMonthSelectedValue.dataset.value = monthValue;
+
+    let yearElem;
+    if (year === "all") {
+      yearElem = elements.goalYearOptions.children[0]
+    } else {
+      yearElem = document.querySelector(`.goals-year-option[data-value="${year}"]`)
+    }
+    let yearText = yearElem.textContent;
+    let yearValue = yearElem.dataset.value;
+
+    elements.goalYearSelectedValue.textContent = yearText;
+    elements.goalYearSelectedValue.dataset.value = yearValue;
+    
+    
   }
   
   async function getFilteredGoals(params) {
@@ -209,12 +295,6 @@
   function setGoalMonthFilter(e) {
     if (!e.target.classList.contains("goals-month-option"))
       return
-
-    // let text = e.target.textContent;
-    // let value = e.target.dataset.value;
-
-    // elements.goalMonthSelectedValue.dataset.value = value;
-    // elements.goalMonthSelectedValue.textContent = text;
     
     let search = params.get("search");
     let status = params.get("status");
@@ -237,12 +317,6 @@
     if (!e.target.classList.contains("goals-year-option"))
       return
 
-    // let text = e.target.textContent;
-    // let value = e.target.dataset.value;
-
-    // elements.goalYearSelectedValue.dataset.value = value;
-    // elements.goalYearSelectedValue.textContent = text;
-    
     let search = params.get("search");
     let status = params.get("status");
     let month = params.get("month");
@@ -454,10 +528,11 @@
   
   // Initializing function
   async function init() {
+    await populateYearFilter();
+    populateFiltersActive();
     const goals = await getFilteredGoals(params);
     populateGoals(goals);
     setDates();
-
   
   }
   
