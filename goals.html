@@ -75,18 +75,18 @@
             
             <h1 class="modal-heading">New Goal</h1>
             <input id="goal-title" type="text" placeholder="Title">
-            <input id="goal-desc" type="text" placeholder="Description">
+            <textarea id="goal-desc" type="text" placeholder="Description (Optional)"></textarea>
                 
             <div class="modal-goal-days-out">
                 <h1 class="modal-goal-days-heading">Goal Days</h1>
                 <div class="modal-goal-days">
-                    <div data-value="1" class="modal-goal-day">Mon</div>
-                    <div data-value="2" class="modal-goal-day">Tue</div>
-                    <div data-value="3" class="modal-goal-day">Wed</div>
-                    <div data-value="4" class="modal-goal-day">Thu</div>
-                    <div data-value="5" class="modal-goal-day">Fri</div>
-                    <div data-value="6" class="modal-goal-day">Sat</div>
-                    <div data-value="0" class="modal-goal-day">Sun</div>
+                    <div data-value="1" class="modal-goal-day active">Mon</div>
+                    <div data-value="2" class="modal-goal-day active">Tue</div>
+                    <div data-value="3" class="modal-goal-day active">Wed</div>
+                    <div data-value="4" class="modal-goal-day active">Thu</div>
+                    <div data-value="5" class="modal-goal-day active">Fri</div>
+                    <div data-value="6" class="modal-goal-day active">Sat</div>
+                    <div data-value="0" class="modal-goal-day active">Sun</div>
                 </div>
             </div>
             
@@ -123,6 +123,37 @@
                     <div data-type="y" data-value="5" class="calender-quick-duration" >5 Y</div>
                 </div>
             </div>
+
+            <div class="total-working-days">
+                <h1>Total Working Days</h1>
+                <div>Total Working Days are : 12</div>
+            </div>
+
+            <div class="summary">
+              <div class="summary-title">Goal Summary</div>
+              <div class="summary-grid">
+                <div class="metric">
+                  <div class="metric-label">Start</div>
+                  <div class="metric-value" id="summaryStart">—</div>
+                </div>
+                <div class="metric">
+                  <div class="metric-label" id="summaryMiddleLabel">End</div>
+                  <div class="metric-value" id="summaryEnd">—</div>
+                  <div class="metric-sub" id="summaryEndSub"></div>
+                </div>
+                <div class="metric">
+                  <div class="metric-label">Working Days</div>
+                  <div class="metric-value" id="summaryWork">—</div>
+                  <div class="metric-sub" id="summaryWorkSub"></div>
+                </div>
+                <div class="metric">
+                  <div class="metric-label">Calendar Span</div>
+                  <div class="metric-value" id="summarySpan">—</div>
+                  <div class="metric-sub" id="summarySpanSub"></div>
+                </div>
+              </div>
+            </div>
+            
             <div class="calender-btns">
                 <div id="calender-cancel-btn">Cancel</div>
                 <div id="calender-start-btn" >START</div>

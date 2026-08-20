@@ -40,7 +40,8 @@
 #goal-search-input{
     width: 100%;
     background: var(--background);
-    border: 2px solid var(--box-color);
+    /*border: 2px solid var(--box-color);*/
+    border: 1px solid var(--box-border-1);
     color: var(--text-color);
     padding: 0.75rem 1rem;
     padding-left: 3rem;
@@ -164,7 +165,7 @@
 .nothing-goal-box{
     margin: 1rem auto;
     max-width: var(--max-width);
-    background: var(--box-color);
+    /*background: var(--box-color);*/
     padding: 1rem;
     border-radius: 0.5rem;
     height: 50vh;
@@ -194,6 +195,7 @@
     display: none;
     justify-content: center;
     align-items: center;
+    border: 1px solid var(--box-border-1);
 }
 
 .add-modal-out.active{
@@ -221,10 +223,16 @@
 #goal-title, #goal-desc{
     background: none;
     padding: 1rem;
-    border: 2px solid var(--text-color);
+    /*border: 2px solid var(--text-color);*/
+    border: 1px solid var(--box-border-2);
     outline: none;
     border-radius: 1rem;
     color: var(--text-color);
+}
+
+#goal-desc{
+    min-height: 15rem;
+    resize: none;
 }
 
 .modal-goal-days-out{
@@ -248,7 +256,8 @@
 
 .modal-goal-day{
     background: var(--box-border);
-    padding: 1rem 0.5rem;
+    /*padding: 1rem 0.5rem;*/
+    padding: 0.5rem 1rem;
     border-radius: 1rem;
     text-align: center;
     cursor: pointer;
@@ -293,7 +302,8 @@
 .calender-box{
     background: none;
     color: var(--text-color);
-    border: 2px solid var(--text-color);
+    /*border: 2px solid var(--text-color);*/
+    border: 1px solid var(--box-border-2);
     padding: 0.5rem;
     border-radius: 0.5rem;
     width: 100%;
@@ -350,6 +360,20 @@
     gap: 0.5rem;
 }
 
+.summary{
+  margin-top:22px;border:1px solid #3e2659;border-radius:16px;
+  background:linear-gradient(110deg,rgba(124,58,237,.12),rgba(168,85,247,.03));
+  padding:20px;
+}
+.summary-title{font-weight:750;font-size:16px;margin-bottom:15px}
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.metric{padding-right:15px;border-right:1px solid #34343a}
+.metric:last-child{border-right:0}
+.metric-label{font-size:12px;color:var(--muted);margin-bottom:5px}
+.metric-value{font-size:16px;font-weight:750}
+.metric-sub{font-size:12px;color:var(--muted);margin-top:3px}
+
+
 .calender-btns{
     display: flex;
     gap: 1rem;
@@ -359,14 +383,16 @@
 }
 
 .calender-btns>div{
-    background: var(--wasted);
-    padding: 0.5rem;
+    /*background: var(--wasted);*/
+    background: #252529;
+    padding: 0.5rem 1rem;
     border-radius: 1rem;
     text-align: center;
     cursor: pointer;
     user-select: none;
+    border: 1px solid var(--box-border-3)
 }
 
 #calender-start-btn{
-    background: var(--productive);
+    background: var(--theme);
 }

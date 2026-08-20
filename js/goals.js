@@ -270,11 +270,6 @@
   function setGoalStatusFilter(e) {
     if (!e.target.classList.contains("goals-status")) return;
 
-    // elements.goalStatusFilter.querySelectorAll('.goals-status.active')
-    //         .forEach(el => el.classList.remove('active'));
-    
-    // e.target.classList.add("active");
-
     let search = params.get("search");
     let status = e.target.dataset.value
     let year = params.get("year");
@@ -616,7 +611,16 @@
   elements.modalGoalDays.addEventListener("click", (e) => {
     let target = e.target.closest(".modal-goal-day");
     if (!target) return;
-    target.classList.toggle("active");
+    let activeElemsCount = elements.modalGoalDays.querySelectorAll(".modal-goal-day.active").length;
+    if (!target.classList.contains("active")) {
+      target.classList.add("active");
+      return;
+    }
+    if (activeElemsCount < 2) return;
+    if (target.classList.contains("active")) {
+      target.classList.remove("active");
+    }
+    // target.classList.toggle("active");
   })
 
   // set Quick Duration
