@@ -394,6 +394,7 @@
 
 .total-working-days-count-out > i{
     cursor: pointer;
+    font-size: var(--font-medium-small);
 }
 
 .summary {

@@ -610,15 +610,35 @@
     }
   
     const workingDayNumbers = goalDays.map(Number);
-    const date = new Date(`${start}T00:00:00`);
+  
+    const startDate = new Date(`${start}T00:00:00`);
+    const date = new Date(startDate);
+  
+    // Maximum allowed date = 5 years from the start year,
+    // ending on December 31.
+    //
+    // Example:
+    // start = 2026-09-11
+    // max   = 2031-12-31
+    const maxDate = new Date(
+      startDate.getFullYear() + 5,
+      11,
+      31
+    );
   
     let count = 0;
   
     while (count < workingDays) {
+      // Don't allow the calculation to enter the 6th year.
+      if (date > maxDate) {
+        return null;
+      }
+  
       if (workingDayNumbers.includes(date.getDay())) {
         count++;
       }
   
+      // We found the final working day.
       if (count === workingDays) {
         break;
       }
@@ -626,6 +646,7 @@
       date.setDate(date.getDate() + 1);
     }
   
+    // Return YYYY-MM-DD
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
