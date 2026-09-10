@@ -125,33 +125,51 @@
             </div>
 
             <div class="total-working-days">
-                <h1>Total Working Days</h1>
-                <div>Total Working Days are : 12</div>
+                <h1 class="total-working-days-heading">Total Working Days</h1>
+                <div class="total-working-days-count-out">
+                    <div class="total-working-days-count">0</div>
+                    <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                </div>
             </div>
 
             <div class="summary">
               <div class="summary-title">Goal Summary</div>
               <div class="summary-grid">
                 <div class="metric">
-                  <div class="metric-label">Start</div>
-                  <div class="metric-value" id="summaryStart">—</div>
+                  <div class="metric-label">Start Date</div>
+                  <div class="metric-value" id="summary-start">—</div>
                 </div>
+                
                 <div class="metric">
-                  <div class="metric-label" id="summaryMiddleLabel">End</div>
-                  <div class="metric-value" id="summaryEnd">—</div>
-                  <div class="metric-sub" id="summaryEndSub"></div>
+                  <div class="metric-label">Effective Start Date</div>
+                  <div class="metric-value" id="summary-effective-start">—</div>
                 </div>
+                
+                <div class="metric">
+                  <div class="metric-label">End Date</div>
+                  <div class="metric-value" id="summary-end">—</div>
+                </div>
+                
+                <div class="metric">
+                  <div class="metric-label">Effective End Date</div>
+                  <div class="metric-value" id="summary-effective-end">—</div>
+                </div>
+                
                 <div class="metric">
                   <div class="metric-label">Working Days</div>
-                  <div class="metric-value" id="summaryWork">—</div>
-                  <div class="metric-sub" id="summaryWorkSub"></div>
+                  <div class="metric-value" id="summary-work">—</div>
                 </div>
+                
                 <div class="metric">
                   <div class="metric-label">Calendar Span</div>
-                  <div class="metric-value" id="summarySpan">—</div>
-                  <div class="metric-sub" id="summarySpanSub"></div>
+                  <div class="metric-value" id="summary-span">—</div>
                 </div>
               </div>
+            </div>
+
+            <div id="validation" class="validation error">
+                No selected working days fall inside this date range. Select more working days or change the dates.
             </div>
             
             <div class="calender-btns">

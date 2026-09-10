@@ -1,5 +1,5 @@
- .goals-search{
-     display: flex;
+.goals-search {
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -18,13 +18,13 @@
     transform: translateX(-50%);
 }
 
-.goals-search-inputs{
+.goals-search-inputs {
     position: relative;
     width: 100%;
     max-width: var(--max-width);
 }
 
-.goals-search-inputs > i{
+.goals-search-inputs > i {
     position: absolute;
     top: 50%;
     left: 1rem;
@@ -32,12 +32,12 @@
     cursor: pointer;
 }
 
-.goals-search-inputs > i.active{
+.goals-search-inputs > i.active {
     left: unset;
     right: 1rem;
 }
 
-#goal-search-input{
+#goal-search-input {
     width: 100%;
     background: var(--background);
     /*border: 2px solid var(--box-color);*/
@@ -49,12 +49,13 @@
     font-size: var(--font-subtitle);
 }
 
-#goal-search-input.active{
+#goal-search-input.active {
     padding-left: 0.75rem;
     padding-right: 3rem;
 }
 
-.goals-status-filter-out{ /* had to use this outer container because of weird css bug due to justify content center*/
+.goals-status-filter-out {
+    /* had to use this outer container because of weird css bug due to justify content center*/
     width: 100%;
     display: flex;
     justify-content: center;
@@ -62,7 +63,7 @@
     max-width: var(--max-width);
 }
 
-.goals-status-filter{
+.goals-status-filter {
     display: flex;
     gap: 1rem;
     align-items: center;
@@ -75,19 +76,18 @@
     display: none;
 }
 
-
-.goals-status{
+.goals-status {
     padding: 0.5rem;
     border-radius: 0.5rem;
     border: 2px solid var(--box-color);
     cursor: pointer;
 }
 
-.goals-status.active{
+.goals-status.active {
     background: var(--theme);
 }
 
-.goals-month-year-filter{
+.goals-month-year-filter {
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -97,7 +97,7 @@
     user-select: none;
 }
 
-.goals-month-year-filter button{
+.goals-month-year-filter button {
     padding: 0.75rem 1rem;
     background: var(--background);
     border-radius: 0.5rem;
@@ -109,12 +109,14 @@
     align-items: center;
 }
 
-.goals-month, .goals-year{
+.goals-month,
+.goals-year {
     flex-grow: 1;
     position: relative;
 }
 
-.goals-month-options, .goals-year-options{
+.goals-month-options,
+.goals-year-options {
     padding: 1rem;
     flex-direction: column;
     gap: 1rem;
@@ -128,22 +130,24 @@
     width: 100%;
 }
 
-.goals-month-options.active, .goals-year-options.active{
+.goals-month-options.active,
+.goals-year-options.active {
     display: flex;
 }
 
-.goals-month-option, .goals-year-option{
+.goals-month-option,
+.goals-year-option {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     cursor: pointer;
 }
 
-.goals-out{
+.goals-out {
     margin-top: 16rem;
 }
 
 /*TEMP CSS*/
-.goal-box{
+.goal-box {
     margin: 1rem auto;
     max-width: var(--max-width);
     background: var(--box-color);
@@ -154,15 +158,19 @@
     justify-content: space-between;
 }
 
-.id,.title,.start,.org-end,.end,.delete{
+.id,
+.title,
+.start,
+.org-end,
+.end,
+.delete {
     cursor: pointer;
     background: var(--theme);
     padding: 0.5rem 1rem;
     margin-bottom: 1rem;
 }
 
-
-.nothing-goal-box{
+.nothing-goal-box {
     margin: 1rem auto;
     max-width: var(--max-width);
     /*background: var(--box-color);*/
@@ -174,7 +182,7 @@
     align-items: center;
 }
 
-.add-goal-btn{
+.add-goal-btn {
     font-size: var(--font-large);
     user-select: none;
     color: white;
@@ -185,7 +193,7 @@
     right: max(1rem, calc((100vw - 70rem) / 2));
 }
 
-.add-modal-out{
+.add-modal-out {
     position: fixed;
     height: 100%;
     width: 100%;
@@ -198,11 +206,11 @@
     border: 1px solid var(--box-border-1);
 }
 
-.add-modal-out.active{
+.add-modal-out.active {
     display: flex;
 }
 
-.add-modal{
+.add-modal {
     background-color: var(--box-color);
     padding: 2rem;
     margin: 2rem;
@@ -215,12 +223,13 @@
     max-width: var(--max-width);
 }
 
-.modal-heading{
+.modal-heading {
     font-size: var(--font-medium);
     user-select: none;
 }
 
-#goal-title, #goal-desc{
+#goal-title,
+#goal-desc {
     background: none;
     padding: 1rem;
     /*border: 2px solid var(--text-color);*/
@@ -230,23 +239,23 @@
     color: var(--text-color);
 }
 
-#goal-desc{
+#goal-desc {
     min-height: 15rem;
     resize: none;
 }
 
-.modal-goal-days-out{
+.modal-goal-days-out {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-.modal-goal-days-heading{
+.modal-goal-days-heading {
     font-size: var(--font-medium-small);
     user-select: none;
 }
 
-.modal-goal-days{
+.modal-goal-days {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
@@ -254,7 +263,7 @@
     align-items: center;
 }
 
-.modal-goal-day{
+.modal-goal-day {
     background: var(--box-border);
     /*padding: 1rem 0.5rem;*/
     padding: 0.5rem 1rem;
@@ -263,29 +272,30 @@
     cursor: pointer;
     user-select: none;
 }
-.modal-goal-day.active{
+.modal-goal-day.active {
     background: var(--theme);
 }
 
-.calender-out{
+.calender-out {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
 }
 
-.calender-start-out, .calender-end-out{
+.calender-start-out,
+.calender-end-out {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     flex: 1;
 }
 
-.calender-label{
+.calender-label {
     font-size: var(--font-medium-small);
     user-select: none;
 }
 
-.calender{
+.calender {
     background: none;
     color: var(--text-color);
     border: 2px solid var(--text-color);
@@ -293,13 +303,13 @@
     border-radius: 0.5rem;
 }
 
-.calender-input-out{
+.calender-input-out {
     position: relative;
     cursor: pointer;
     user-select: none;
 }
 
-.calender-box{
+.calender-box {
     background: none;
     color: var(--text-color);
     /*border: 2px solid var(--text-color);*/
@@ -318,7 +328,7 @@
     -webkit-appearance: none;
 }
 
-.fa-solid.fa-calendar-days{
+.fa-solid.fa-calendar-days {
     position: absolute;
     right: 0.75rem;
     top: 50%;
@@ -328,12 +338,12 @@
     /*pointer-events: none;*/
 }
 
-.calender-quick-durations-heading{
+.calender-quick-durations-heading {
     font-size: var(--font-medium-small);
     user-select: none;
 }
 
-.calender-quick-durations{
+.calender-quick-durations {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
@@ -341,7 +351,7 @@
     align-items: center;
 }
 
-.calender-quick-duration{
+.calender-quick-duration {
     background: var(--box-border);
     padding: 1rem 0.5rem;
     border-radius: 1rem;
@@ -350,31 +360,107 @@
     user-select: none;
 }
 
-.calender-quick-duration.active{
+.calender-quick-duration.active {
     background: var(--theme);
 }
 
-.calender-quick-durations-out{
+.calender-quick-durations-out {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-.summary{
-  margin-top:22px;border:1px solid #3e2659;border-radius:16px;
-  background:linear-gradient(110deg,rgba(124,58,237,.12),rgba(168,85,247,.03));
-  padding:20px;
+.total-working-days{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
 }
-.summary-title{font-weight:750;font-size:16px;margin-bottom:15px}
-.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
-.metric{padding-right:15px;border-right:1px solid #34343a}
-.metric:last-child{border-right:0}
-.metric-label{font-size:12px;color:var(--muted);margin-bottom:5px}
-.metric-value{font-size:16px;font-weight:750}
-.metric-sub{font-size:12px;color:var(--muted);margin-top:3px}
 
+.total-working-days-heading{
+    font-size: var(--font-medium-small);
+}
 
-.calender-btns{
+.total-working-days-count-out{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.total-working-days-count{
+    font-size: var(--font-title);
+}
+
+.total-working-days-count-out > i{
+    cursor: pointer;
+}
+
+.summary {
+    margin-top: 22px;
+    border: 1px solid #3e2659;
+    border-radius: 16px;
+    background: linear-gradient(
+        110deg,
+        rgba(124, 58, 237, 0.12),
+        rgba(168, 85, 247, 0.03)
+    );
+    padding: 20px;
+}
+
+.summary-title {
+    font-weight: 750;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+.summary-grid {
+    display: grid;
+    /*grid-template-columns: repeat(4, 1fr);*/
+    gap: 15px;
+}
+.metric {
+    padding-right: 15px;
+    /*border-right: 1px solid #34343a;*/
+}
+.metric:last-child {
+    border-right: 0;
+}
+.metric-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 5px;
+}
+.metric-value {
+    font-size: 16px;
+    font-weight: 750;
+}
+.metric-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+}
+
+.validation {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 11px;
+    font-size: 13px;
+    display: none;
+}
+.validation.ok {
+    display: block;
+    color: #86efac;
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+.validation.error {
+    display: block;
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.calender-btns {
     display: flex;
     gap: 1rem;
     justify-content: end;
@@ -382,7 +468,7 @@
     margin: 2rem 0 0 0;
 }
 
-.calender-btns>div{
+.calender-btns > div {
     /*background: var(--wasted);*/
     background: #252529;
     padding: 0.5rem 1rem;
@@ -390,9 +476,9 @@
     text-align: center;
     cursor: pointer;
     user-select: none;
-    border: 1px solid var(--box-border-3)
+    border: 1px solid var(--box-border-3);
 }
 
-#calender-start-btn{
+#calender-start-btn {
     background: var(--theme);
 }

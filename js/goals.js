@@ -27,6 +27,13 @@
     startDate: document.querySelector("#start-date"),
     endDate: document.querySelector("#end-date"),
     calenderQuickDurations: document.querySelector(".calender-quick-durations"),
+    totalWorkingDaysCount: document.querySelector(".total-working-days-count"),
+    summaryStart: document.querySelector("#summary-start"),
+    summaryEffectiveStart: document.querySelector("#summary-effective-start"),
+    summaryEnd: document.querySelector("#summary-end"),
+    summaryEffectiveEnd: document.querySelector("#summary-effective-end"),
+    summaryWork: document.querySelector("#summary-work"),
+    summarySpan: document.querySelector("#summary-span"),
     CalenderCancelBtn: document.querySelector("#calender-cancel-btn"),
     CalenderStartBtn: document.querySelector("#calender-start-btn"),
   }
@@ -386,6 +393,7 @@
     }
     startDate = getFormattedTime(startDate);
     elements.endDate.value = startDate;
+    getGoalSummary();
   }
 
   function setCalenderStartOnChange(e) {
@@ -413,6 +421,7 @@
     ||  new Date(elements.endDate.value) > new Date(maxEnd)) {
       elements.endDate.value = endDateMinFormatted;
     }
+    getGoalSummary();
   }
 
   function setCalenderStartOnFocusOut(e) {
@@ -422,6 +431,7 @@
     
     if (Number.isNaN(setDate.getTime())) {
         setDates();
+        getGoalSummary();
         return;
     }
     
@@ -442,6 +452,7 @@
     ||  new Date(elements.endDate.value) > new Date(maxEnd)) {
       elements.endDate.value = endDateMinFormatted;
     }
+    getGoalSummary();
   }
 
   function setCalenderEndOnChange(e) {
@@ -454,26 +465,132 @@
     if (setDate < startDate) {
       e.target.value = getFormattedTime(startDate);
     }
+    getGoalSummary();
   }
 
-  function addGoal(){
+  function getDetails() {
     let title = elements.goalTitle.value;
     let desc = elements.goalDesc.value;
+    let goalDays = elements.modalGoalDays.querySelectorAll(".modal-goal-day.active");
+    goalDays = [...goalDays].map((d) => d.dataset.value);
+    let start = elements.startDate.value;
+    let end = elements.endDate.value;
+
+    return { title, desc, goalDays, start, end }
+  }
+
+  function getGoalSummary() {
+    const details = getDetails();
+  
+    const start = details.start;
+    const end = details.end;
+    const goalDays = details.goalDays.map(Number);
+  
+    if (!start) {
+      return null;
+    }
+  
+    const isWorkingDay = (date) => {
+      return goalDays.includes(date.getDay());
+    };
+  
+    const getNextWorkingDay = (date) => {
+      const result = new Date(date);
+  
+      while (!isWorkingDay(result)) {
+        result.setDate(result.getDate() + 1);
+      }
+  
+      return result;
+    };
+  
+    const getPreviousWorkingDay = (date) => {
+      const result = new Date(date);
+  
+      while (!isWorkingDay(result)) {
+        result.setDate(result.getDate() - 1);
+      }
+  
+      return result;
+    };
+  
+    const formatDate = (date) => {
+      if (!date) return null;
+  
+      return date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+    };
+  
+    const startDate = new Date(`${start}T00:00:00`);
+    const scheduledStart = getNextWorkingDay(startDate);
+  
+    let scheduledEnd = null;
+    let workingDays = 0;
+    let calendarDays = 0;
+  
+    if (end) {
+      const endDate = new Date(`${end}T00:00:00`);
+  
+      scheduledEnd = getPreviousWorkingDay(endDate);
+  
+      if (scheduledStart <= scheduledEnd) {
+        const current = new Date(scheduledStart);
+  
+        while (current <= scheduledEnd) {
+          if (isWorkingDay(current)) {
+            workingDays++;
+          }
+  
+          current.setDate(current.getDate() + 1);
+        }
+  
+        calendarDays =
+          Math.floor(
+            (scheduledEnd - scheduledStart) / (1000 * 60 * 60 * 24)
+          ) + 1;
+      }
+    }
+  
+    const data = {
+      startDate: formatDate(startDate),
+      scheduledStart: formatDate(scheduledStart),
+      endDate: end ? formatDate(new Date(`${end}T00:00:00`)) : null,
+      scheduledEnd: formatDate(scheduledEnd),
+      workingDays,
+      calendarDays,
+    };
+
+    elements.totalWorkingDaysCount.textContent = data.workingDays;
+    elements.summaryStart.textContent  = data.startDate;
+    elements.summaryEffectiveStart.textContent  = data.scheduledStart;
+    elements.summaryEnd.textContent  = data.endDate;
+    elements.summaryEffectiveEnd.textContent  = data.scheduledEnd;
+    elements.summaryWork.textContent  = data.workingDays;
+    elements.summarySpan.textContent  = data.calendarDays;
+    return data;
+  }
+  
+  function addGoal() {
+    let details = getDetails();
+    let title = details.title;
+    let desc = details.desc;
     if (title.length < 3) {
       alert("Title should be atleast max 3 word");
       return;
     }
     
-    let goalDays = elements.modalGoalDays.querySelectorAll(".modal-goal-day.active");
-    goalDays = [...goalDays].map((d) => d.dataset.value);
+    let goalDays = details.goalDays
     
     if (goalDays.length < 1) {
       alert("Please Select at least one goal day");
       return;
     }
 
-    let start = elements.startDate.value;
-    let end = elements.endDate.value;
+    let start = details.start
+    let end = details.end
     if (!end) {
       alert("Please select end date");
     }
@@ -614,12 +731,15 @@
     let activeElemsCount = elements.modalGoalDays.querySelectorAll(".modal-goal-day.active").length;
     if (!target.classList.contains("active")) {
       target.classList.add("active");
+      getGoalSummary();
       return;
     }
     if (activeElemsCount < 2) return;
     if (target.classList.contains("active")) {
       target.classList.remove("active");
     }
+
+    getGoalSummary();
     // target.classList.toggle("active");
   })
 
@@ -639,6 +759,7 @@
   elements.endDate.addEventListener("change", (e) => {
     elements.calenderQuickDurations.querySelectorAll('.calender-quick-duration.active')
             .forEach(el => el.classList.remove('active'));
+    getGoalSummary();
   })
 
   // Add Goal
