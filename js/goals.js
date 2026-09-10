@@ -34,6 +34,7 @@
     summaryEffectiveEnd: document.querySelector("#summary-effective-end"),
     summaryWork: document.querySelector("#summary-work"),
     summarySpan: document.querySelector("#summary-span"),
+    validation: document.querySelector("#validation"),
     CalenderCancelBtn: document.querySelector("#calender-cancel-btn"),
     CalenderStartBtn: document.querySelector("#calender-start-btn"),
   }
@@ -490,25 +491,59 @@
       return null;
     }
   
+    const DAY_MS = 1000 * 60 * 60 * 24;
+  
     const isWorkingDay = (date) => {
       return goalDays.includes(date.getDay());
     };
   
-    const getNextWorkingDay = (date) => {
+    // Find first working day ON OR AFTER start,
+    // but don't go beyond end.
+    const getNextWorkingDay = (date, maxDate = null) => {
       const result = new Date(date);
   
+      while (isWorkingDay(result)) {
+        return result;
+      }
+  
+      result.setDate(result.getDate() + 1);
+  
       while (!isWorkingDay(result)) {
+        if (maxDate && result > maxDate) {
+          return null;
+        }
+  
         result.setDate(result.getDate() + 1);
+      }
+  
+      if (maxDate && result > maxDate) {
+        return null;
       }
   
       return result;
     };
   
-    const getPreviousWorkingDay = (date) => {
+    // Find last working day ON OR BEFORE end,
+    // but don't go before start.
+    const getPreviousWorkingDay = (date, minDate = null) => {
       const result = new Date(date);
   
+      while (isWorkingDay(result)) {
+        return result;
+      }
+  
+      result.setDate(result.getDate() - 1);
+  
       while (!isWorkingDay(result)) {
+        if (minDate && result < minDate) {
+          return null;
+        }
+  
         result.setDate(result.getDate() - 1);
+      }
+  
+      if (minDate && result < minDate) {
+        return null;
       }
   
       return result;
@@ -518,6 +553,7 @@
       if (!date) return null;
   
       return date.toLocaleDateString("en-GB", {
+        weekday: "long",
         day: "2-digit",
         month: "short",
         year: "numeric",
@@ -525,21 +561,25 @@
     };
   
     const startDate = new Date(`${start}T00:00:00`);
-    const scheduledStart = getNextWorkingDay(startDate);
   
+    let endDate = null;
+    let scheduledStart = null;
     let scheduledEnd = null;
     let workingDays = 0;
     let calendarDays = 0;
   
     if (end) {
-      const endDate = new Date(`${end}T00:00:00`);
+      endDate = new Date(`${end}T00:00:00`);
   
-      scheduledEnd = getPreviousWorkingDay(endDate);
+      // Calendar span is the user's actual selected range.
+      if (startDate <= endDate) {
+        calendarDays =
+          Math.floor((endDate - startDate) / DAY_MS) + 1;
   
-      if (scheduledStart <= scheduledEnd) {
-        const current = new Date(scheduledStart);
+        // Count working days ONLY within selected range.
+        const current = new Date(startDate);
   
-        while (current <= scheduledEnd) {
+        while (current <= endDate) {
           if (isWorkingDay(current)) {
             workingDays++;
           }
@@ -547,52 +587,67 @@
           current.setDate(current.getDate() + 1);
         }
   
-        calendarDays =
-          Math.floor(
-            (scheduledEnd - scheduledStart) / (1000 * 60 * 60 * 24)
-          ) + 1;
+        // Effective dates must also stay inside selected range.
+        if (workingDays > 0) {
+          scheduledStart = getNextWorkingDay(startDate, endDate);
+          scheduledEnd = getPreviousWorkingDay(endDate, startDate);
+        }
       }
+    } else {
+      // No end date: effective start can be the next working day.
+      scheduledStart = getNextWorkingDay(startDate);
     }
   
     const data = {
       startDate: formatDate(startDate),
       scheduledStart: formatDate(scheduledStart),
-      endDate: end ? formatDate(new Date(`${end}T00:00:00`)) : null,
+      endDate: formatDate(endDate),
       scheduledEnd: formatDate(scheduledEnd),
       workingDays,
       calendarDays,
     };
-
+  
     elements.totalWorkingDaysCount.textContent = data.workingDays;
-    elements.summaryStart.textContent  = data.startDate;
-    elements.summaryEffectiveStart.textContent  = data.scheduledStart;
-    elements.summaryEnd.textContent  = data.endDate;
-    elements.summaryEffectiveEnd.textContent  = data.scheduledEnd;
-    elements.summaryWork.textContent  = data.workingDays;
-    elements.summarySpan.textContent  = data.calendarDays;
+    elements.summaryStart.textContent = data.startDate;
+    elements.summaryEffectiveStart.textContent =
+      data.scheduledStart ?? "—";
+    elements.summaryEnd.textContent =
+      data.endDate ?? "—";
+    elements.summaryEffectiveEnd.textContent =
+      data.scheduledEnd ?? "—";
+    elements.summaryWork.textContent = data.workingDays;
+    elements.summarySpan.textContent = data.calendarDays;
+  
     return data;
   }
-  
+
   function addGoal() {
     let details = getDetails();
     let title = details.title;
     let desc = details.desc;
     if (title.length < 3) {
-      alert("Title should be atleast max 3 word");
+      elements.validation.classList.add("error");
+      elements.validation.textContent = "Title should be atleast max 3 word";
+      // alert("Title should be atleast max 3 word");
       return;
     }
     
     let goalDays = details.goalDays
     
     if (goalDays.length < 1) {
-      alert("Please Select at least one goal day");
+      elements.validation.classList.add("error");
+      elements.validation.textContent = "Please Select at least one goal day";
+      // alert("Please Select at least one goal day");
       return;
     }
 
     let start = details.start
     let end = details.end
     if (!end) {
-      alert("Please select end date");
+      elements.validation.classList.add("error");
+      elements.validation.textContent = "Please select end date";
+      // alert("Please select end date");
+      return;
     }
 
     let status = "active";
@@ -740,7 +795,6 @@
     }
 
     getGoalSummary();
-    // target.classList.toggle("active");
   })
 
   // set Quick Duration
