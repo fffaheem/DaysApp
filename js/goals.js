@@ -28,6 +28,8 @@
     endDate: document.querySelector("#end-date"),
     calenderQuickDurations: document.querySelector(".calender-quick-durations"),
     totalWorkingDaysCount: document.querySelector(".total-working-days-count"),
+    totalWorkingDaysCountUp: document.querySelector("#total-working-days-count-up"),
+    totalWorkingDaysCountDown: document.querySelector("#total-working-days-count-down"),
     summaryStart: document.querySelector("#summary-start"),
     summaryEffectiveStart: document.querySelector("#summary-effective-start"),
     summaryEnd: document.querySelector("#summary-end"),
@@ -491,62 +493,10 @@
       return null;
     }
   
-    const DAY_MS = 1000 * 60 * 60 * 24;
+    const DAY_MS = 24 * 60 * 60 * 1000;
   
     const isWorkingDay = (date) => {
       return goalDays.includes(date.getDay());
-    };
-  
-    // Find first working day ON OR AFTER start,
-    // but don't go beyond end.
-    const getNextWorkingDay = (date, maxDate = null) => {
-      const result = new Date(date);
-  
-      while (isWorkingDay(result)) {
-        return result;
-      }
-  
-      result.setDate(result.getDate() + 1);
-  
-      while (!isWorkingDay(result)) {
-        if (maxDate && result > maxDate) {
-          return null;
-        }
-  
-        result.setDate(result.getDate() + 1);
-      }
-  
-      if (maxDate && result > maxDate) {
-        return null;
-      }
-  
-      return result;
-    };
-  
-    // Find last working day ON OR BEFORE end,
-    // but don't go before start.
-    const getPreviousWorkingDay = (date, minDate = null) => {
-      const result = new Date(date);
-  
-      while (isWorkingDay(result)) {
-        return result;
-      }
-  
-      result.setDate(result.getDate() - 1);
-  
-      while (!isWorkingDay(result)) {
-        if (minDate && result < minDate) {
-          return null;
-        }
-  
-        result.setDate(result.getDate() - 1);
-      }
-  
-      if (minDate && result < minDate) {
-        return null;
-      }
-  
-      return result;
     };
   
     const formatDate = (date) => {
@@ -563,64 +513,126 @@
     const startDate = new Date(`${start}T00:00:00`);
   
     let endDate = null;
-    let scheduledStart = null;
-    let scheduledEnd = null;
+    let effectiveStart = null;
+    let effectiveEnd = null;
     let workingDays = 0;
     let calendarDays = 0;
   
+    // --------------------------------------------------
+    // If an end date exists, calculate the complete range
+    // --------------------------------------------------
     if (end) {
       endDate = new Date(`${end}T00:00:00`);
   
-      // Calendar span is the user's actual selected range.
       if (startDate <= endDate) {
+        // Inclusive calendar-day count.
+        //
+        // Example:
+        // 11 Sep -> 14 Sep = 4 days
+        //
         calendarDays =
           Math.floor((endDate - startDate) / DAY_MS) + 1;
   
-        // Count working days ONLY within selected range.
+        // Find working days ONLY inside the selected range.
         const current = new Date(startDate);
   
         while (current <= endDate) {
           if (isWorkingDay(current)) {
             workingDays++;
+  
+            // First working day in the selected range.
+            if (!effectiveStart) {
+              effectiveStart = new Date(current);
+            }
+  
+            // Keep updating so this ends up being
+            // the last working day in the selected range.
+            effectiveEnd = new Date(current);
           }
   
           current.setDate(current.getDate() + 1);
         }
-  
-        // Effective dates must also stay inside selected range.
-        if (workingDays > 0) {
-          scheduledStart = getNextWorkingDay(startDate, endDate);
-          scheduledEnd = getPreviousWorkingDay(endDate, startDate);
-        }
       }
     } else {
-      // No end date: effective start can be the next working day.
-      scheduledStart = getNextWorkingDay(startDate);
+      // --------------------------------------------------
+      // No end date:
+      // Find the first working day on/after the start.
+      // --------------------------------------------------
+      const current = new Date(startDate);
+  
+      while (!isWorkingDay(current)) {
+        current.setDate(current.getDate() + 1);
+      }
+  
+      effectiveStart = current;
     }
   
     const data = {
       startDate: formatDate(startDate),
-      scheduledStart: formatDate(scheduledStart),
+      scheduledStart: formatDate(effectiveStart),
       endDate: formatDate(endDate),
-      scheduledEnd: formatDate(scheduledEnd),
+      scheduledEnd: formatDate(effectiveEnd),
       workingDays,
       calendarDays,
     };
   
-    elements.totalWorkingDaysCount.textContent = data.workingDays;
-    elements.summaryStart.textContent = data.startDate;
+    // --------------------------------------------------
+    // Update UI
+    // --------------------------------------------------
+  
+    elements.totalWorkingDaysCount.textContent =
+      data.workingDays;
+  
+    elements.summaryStart.textContent =
+      data.startDate;
+  
     elements.summaryEffectiveStart.textContent =
       data.scheduledStart ?? "—";
+  
     elements.summaryEnd.textContent =
       data.endDate ?? "—";
+  
     elements.summaryEffectiveEnd.textContent =
       data.scheduledEnd ?? "—";
-    elements.summaryWork.textContent = data.workingDays;
-    elements.summarySpan.textContent = data.calendarDays;
+  
+    elements.summaryWork.textContent =
+      data.workingDays;
+  
+    elements.summarySpan.textContent =
+      data.calendarDays;
   
     return data;
   }
 
+  function calculateEndDate(start, workingDays, goalDays) {
+    if (!start || workingDays <= 0 || !goalDays?.length) {
+      return null;
+    }
+  
+    const workingDayNumbers = goalDays.map(Number);
+    const date = new Date(`${start}T00:00:00`);
+  
+    let count = 0;
+  
+    while (count < workingDays) {
+      if (workingDayNumbers.includes(date.getDay())) {
+        count++;
+      }
+  
+      if (count === workingDays) {
+        break;
+      }
+  
+      date.setDate(date.getDate() + 1);
+    }
+  
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+  
+    return `${year}-${month}-${day}`;
+  }
+  
   function addGoal() {
     let details = getDetails();
     let title = details.title;
@@ -647,6 +659,14 @@
       elements.validation.classList.add("error");
       elements.validation.textContent = "Please select end date";
       // alert("Please select end date");
+      return;
+    }
+
+    let count = elements.totalWorkingDaysCount.textContent;
+    count = Number(count);
+    if (count < 1) {
+      elements.validation.classList.add("error");
+      elements.validation.textContent = "Total Working Days Cannot be 0";
       return;
     }
 
@@ -816,6 +836,30 @@
     getGoalSummary();
   })
 
+  elements.totalWorkingDaysCountUp.addEventListener("click", (e) => {
+    let count = elements.totalWorkingDaysCount.textContent;
+    count = Number(count) + 1;
+    elements.totalWorkingDaysCount.textContent = count;
+
+    let details = getDetails();
+    let end = calculateEndDate(details.start, count, details.goalDays);
+    elements.endDate.value = end;
+    getGoalSummary();
+    
+  })
+  
+  elements.totalWorkingDaysCountDown.addEventListener("click", (e) => {
+    let count = elements.totalWorkingDaysCount.textContent;
+    count = Number(count);
+    if (count < 2) return;
+    count -= 1;
+    elements.totalWorkingDaysCount.textContent = count;
+    let details = getDetails();
+    let end = calculateEndDate(details.start, count, details.goalDays);
+    elements.endDate.value = end;
+    getGoalSummary();
+  })
+  
   // Add Goal
   elements.CalenderStartBtn.addEventListener("click",addGoal)
 
